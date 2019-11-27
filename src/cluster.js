@@ -20,7 +20,7 @@ const setupWorkerProcesses = () => {
       let newCluster = cluster.fork();
 
       newCluster.on("message", function(message) {
-        console.log(message);
+        console.log(`Worker message: ${message}`)
       });
     }
     cluster.on("online", function(worker) {

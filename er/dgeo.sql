@@ -1,5 +1,7 @@
 BEGIN;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE SCHEMA dgeo;
 
 CREATE TABLE dgeo.usuario(

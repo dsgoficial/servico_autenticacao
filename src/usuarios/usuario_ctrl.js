@@ -8,36 +8,27 @@ const bcrypt = require("bcryptjs");
 
 const controller = {};
 
-req.body.login,
-req.body.senha,
-req.body.nome,
-req.body.nome_guerra,
-req.body.administrador,
-req.body.ativo,
-req.body.tipo_turno_id,
-req.body.tipo_posto_grad_id
-
 controller.criaUsuario = async (login, senha, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId) => {
   const hash = await bcrypt.hash(senha, 10);
 
-  return await db.none(
+  return await db.conn.none(
     `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id)
-     VALUES ($<login>, $<senha>, $<nomeGuerra>, FALSE, FALSE, $<tipoTurnoId>, $<tipoPostoGradId>)`,
+     VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoTurnoId>, $<tipoPostoGradId>)`,
     { login, hash, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId }
   );
 };
 
 controller.getInfoPublicaUsuarios = async () => {
-  return await db.any(
+  return await db.conn.any(
     `SELECT uuid, nome, nome_guerra, tipo_turno_id, tipo_posto_grad_id
     FROM dgeo.usuario WHERE ativo IS TRUE`
   );
 };
 
 controller.getUsuario = async (uuid) => {
-  const usuario = await db.any(
+  const usuario = await db.conn.any(
     `SELECT uuid, login, nome, nome_guerra, tipo_turno_id, tipo_posto_grad_id
-    FROM dgeo.usuario WHERE uuid = $<usuarioUUID> AND ativo IS TRUE`, {uuid}
+    FROM dgeo.usuario WHERE uuid = $<uuid> AND ativo IS TRUE`, {uuid}
   );
 
   if(!usuario){
@@ -48,7 +39,7 @@ controller.getUsuario = async (uuid) => {
 };
 
 controller.updateUsuario = async (uuid, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId) => {
-  const result = await db.result(
+  const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, tipo_posto_grad_id = $<tipoPostoGradId>
     WHERE uuid = $<uuid> AND ativo IS TRUE`,
@@ -62,9 +53,9 @@ controller.updateUsuario = async (uuid, nome, nomeGuerra, tipoTurnoId, tipoPosto
 controller.updateSenha = async (uuid, senha) => {
   const hash = await bcrypt.hash(senha, 10);
 
-  const result = await db.result(
+  const result = await db.conn.result(
     `UPDATE dgeo.usuario
-    SET senha = $<senha>
+    SET senha = $<hash>
     WHERE uuid = $<uuid> AND ativo IS TRUE`,
     {uuid, hash}
   );
@@ -74,48 +65,48 @@ controller.updateSenha = async (uuid, senha) => {
 };
 
 controller.deletaUsuarios = async (usuariosUUID) => {
-  return db.tx(async t => {
+  return db.conn.tx(async t => {
     await t.none(
       `DELETE FROM dgeo.login WHERE usuario_id IN 
-      (SELECT id FROM dgeo.usuario WHERE uuid IN (($<usuariosUUID>:csv))`,
+      (SELECT id FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID:csv>))`,
       {usuariosUUID}
     );
     await t.none(
-      `DELETE FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID>:csv)`,
+      `DELETE FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID:csv>)`,
       {usuariosUUID}
     );
   })
 };
 
-controller.resetaSenhaUsuarios = async (usuariosUUID) => {
-  return db.tx(async t => {
+controller.resetaSenhaUsuarios = async usuariosUUID => {
+  return db.conn.tx(async t => {
     const logins = await t.any(
-      `SELECT login FROM dgeo.usuario WHERE uuid IN (($<usuariosUUID>:csv)`,
+      `SELECT id, login FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID:csv>)`,
       {usuariosUUID}
     );
     if(!logins){
       throw new AppError("Usuários não encontrados", httpCode.NotFound);
     }
 
-    const table = new db.helpers.TableName({
+    const table = new db.pgp.helpers.TableName({
       table: "usuario",
       schema: "dgeo"
     });
   
-    const cs = new db.helpers.ColumnSet(["?uuid", "senha"], { table });
+    const cs = new db.pgp.helpers.ColumnSet(["?id", "senha"], { table });
   
     const values = [];
 
-    for (const {login} of logins) {
+    for (const {id, login} of logins) {
       const senha = await bcrypt.hash(login, 10);
       values.push({
-        login,
+        id,
         senha
       })
     }
   
     const query =
-      db.helpers.update(values, cs, null, {
+      db.pgp.helpers.update(values, cs, null, {
         tableAlias: "X",
         valueAlias: "Y"
       }) + "WHERE Y.id = X.id";
@@ -125,16 +116,26 @@ controller.resetaSenhaUsuarios = async (usuariosUUID) => {
 };
 
 controller.modificaAutorizacao = async (usuariosUUID, ativo) => {
-  return await db.none(
+  return await db.conn.none(
     `UPDATE dgeo.usuario
     SET ativo = $<ativo>
-    WHERE uuid IN ($<uuid>:csv)`,
+    WHERE uuid IN ($<usuariosUUID:csv>)`,
     {usuariosUUID, ativo}
   );
 };
 
+controller.modificaNivelAcesso = async (usuarioUUID, administrador) => {
+  return await db.conn.none(
+    `UPDATE dgeo.usuario
+    SET administrador = $<administrador>
+    WHERE uuid = $<usuarioUUID>`,
+    {usuarioUUID, administrador}
+  );
+};
+
 controller.getUsuarios = async (autorizados, administradores) => {
-  const whereConditions = []
+  const whereConditions = [];
+
   if(!(autorizados == null)){
     whereConditions.push(`ativo IS ${autorizados}`)
   }
@@ -142,14 +143,14 @@ controller.getUsuarios = async (autorizados, administradores) => {
     whereConditions.push(`administrador IS ${administradores}`)
   }
   let usuarios
-  if(whereCondition.length > 0){
+  if(whereConditions.length > 0){
     const whereCondition = `WHERE ${whereConditions.join(' AND ')}`
-    usuarios = await db.any(
+    usuarios = await db.conn.any(
       `SELECT uuid, login, nome, nome_guerra, ativo, administrador, tipo_turno_id, tipo_posto_grad_id
-      FROM dgeo.usuario $<whereCondition>:raw`, {whereCondition}
+      FROM dgeo.usuario $<whereCondition:raw>`, {whereCondition}
     );
   } else {
-    usuarios = await db.any(
+    usuarios = await db.conn.any(
       `SELECT uuid, login, nome, nome_guerra, ativo, administrador, tipo_turno_id, tipo_posto_grad_id
       FROM dgeo.usuario`
     );
@@ -159,7 +160,7 @@ controller.getUsuarios = async (autorizados, administradores) => {
 };
 
 controller.updateUsuarioCompleto = async (uuid, login, nome, nomeGuerra, administrador, ativo, tipoTurnoId, tipoPostoGradId) => {
-  const result = await db.result(
+  const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET login = $<login>, nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, 
     tipo_posto_grad_id = $<tipoPostoGradId>, ativo = $<ativo>, administrador = $<administrador>

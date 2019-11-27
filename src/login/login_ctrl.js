@@ -13,9 +13,9 @@ const { AppError, httpCode } = require("../utils");
 const controller = {};
 
 const gravaLogin = async usuarioId => {
-  await db.any(
+  await db.conn.any(
     `
-      INSERT INTO dgeo.login(usuario_id, data_login) VALUES($<usuario_id>, now())
+      INSERT INTO dgeo.login(usuario_id, data_login) VALUES($<usuarioId>, now())
       `,
     { usuarioId }
   );
@@ -44,7 +44,7 @@ const verifyPassword = async (senhaFornecida, senhaDb) => {
 };
 
 controller.login = async (usuario, senha) => {
-  const usuarioDb = await db.oneOrNone(
+  const usuarioDb = await db.conn.oneOrNone(
     `SELECT id, uuid, administrador, senha FROM dgeo.usuario WHERE login = $<usuario> and ativo IS TRUE`,
     { usuario }
   );

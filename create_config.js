@@ -17,7 +17,7 @@ const pgp = require("pg-promise")(initOptions);
 
 const readSqlFile = file => {
   const fullPath = path.join(__dirname, file);
-  return new pgp.QueryFile(fullPath, { minify: true });
+  return new db.pgp.QueryFile(fullPath, { minify: true });
 };
 
 const verifyDotEnv = () => {
@@ -35,11 +35,11 @@ const createDotEnv = (
   const secret = crypto.randomBytes(64).toString("hex");
 
   const env = `PORT=${port}
-dbServer=${dbServer}
-dbPort=${dbPort}
-dbName=${dbName}
-dbUser=${dbUser}
-dbPassword=${dbPassword}
+DB_SERVER=${dbServer}
+DB_PORT=${dbPort}
+DB_NAME=${dbName}
+DB_USER=${dbUser}
+DB_PASSWORD=${dbPassword}
 JWT_SECRET=${secret}`;
 
   fs.writeFileSync("config.env", env);
@@ -55,7 +55,7 @@ const givePermission = async ({
 }) => {
   if (!connection) {
     const connectionString = `postgres://${dbUser}:${dbPassword}@${dbServer}:${dbPort}/${dbName}`;
-
+  
     connection = pgp(connectionString);
   }
   await connection.none(readSqlFile("./er/permissao.sql"), [dbUser]);
@@ -67,9 +67,9 @@ const createAdminUser = async (login, senha, connection) => {
   return await connection.none(
     `
     INSERT INTO dgeo.usuario (login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id) VALUES
-    ($<login>, $<senha>, $<login>, $<login>, TRUE, TRUE, 3, 13)
+    ($<login>, $<hash>, $<login>, $<login>, TRUE, TRUE, 3, 13)
   `,
-    [login, hash]
+    {login, hash}
   );
 };
 
@@ -86,11 +86,11 @@ const createDatabase = async (dbUser, dbPassword, dbPort, dbServer, dbName) => {
   const connectionString = `postgres://${dbUser}:${dbPassword}@${dbServer}:${dbPort}/${dbName}`;
 
   const db = pgp(connectionString);
-  await db.tx(async t => {
+  await db.conn.tx(async t => {
     await t.none(readSqlFile("./er/version.sql"));
     await t.none(readSqlFile("./er/dominio.sql"));
     await t.none(readSqlFile("./er/dgeo.sql"));
-    await givePermission({ connection: t });
+    await givePermission({ dbUser, connection: t });
     await createAdminUser(dbUser, dbPassword, t);
   });
 };
@@ -169,13 +169,13 @@ const createConfig = async () => {
         type: "input",
         name: "dbName",
         message: "Qual o nome do banco de dados do Serviço de Autenticação ?",
-        default: "sap"
+        default: "servico_autenticacao"
       },
       {
         type: "input",
         name: "port",
         message: "Qual a porta do serviço do Serviço de Autenticação ?",
-        default: 3013
+        default: 3012
       },
       {
         type: "confirm",

@@ -5,7 +5,7 @@ const Joi = require("joi");
 const models = {};
 
 models.login = Joi.object().keys({
-  usuario: Joi.string().required(),
+  login: Joi.string().required(),
   senha: Joi.string().required()
 });
 

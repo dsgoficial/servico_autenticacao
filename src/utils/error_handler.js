@@ -6,7 +6,7 @@ const logger = require("./logger");
 
 const httpCode = require("./http_code");
 
-const errorHandler = (err, req = null, res = null, next = null) => {
+const errorHandler = (err, res = null) => {
   const statusCode = err.statusCode || httpCode.InternalError;
   const message = err.message || "Erro no servidor";
   const errorTrace = err.errorTrace || serializeError(err) || null;
