@@ -17,7 +17,7 @@ const pgp = require("pg-promise")(initOptions);
 
 const readSqlFile = file => {
   const fullPath = path.join(__dirname, file);
-  return new db.pgp.QueryFile(fullPath, { minify: true });
+  return new pgp.QueryFile(fullPath, { minify: true });
 };
 
 const verifyDotEnv = () => {
@@ -85,8 +85,8 @@ const createDatabase = async (dbUser, dbPassword, dbPort, dbServer, dbName) => {
 
   const connectionString = `postgres://${dbUser}:${dbPassword}@${dbServer}:${dbPort}/${dbName}`;
 
-  const db = pgp(connectionString);
-  await db.conn.tx(async t => {
+  const conn = pgp(connectionString);
+  await conn.tx(async t => {
     await t.none(readSqlFile("./er/version.sql"));
     await t.none(readSqlFile("./er/dominio.sql"));
     await t.none(readSqlFile("./er/dgeo.sql"));

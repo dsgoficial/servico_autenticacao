@@ -18,7 +18,7 @@ const errorHandler = (err, res = null) => {
   logger.error(message, {
     information: errorTrace,
     statusCode: statusCode,
-    sucess: false
+    success: false
   });
   //exit node with error
   process.exit(1);

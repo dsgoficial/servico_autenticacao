@@ -5,18 +5,18 @@ const logger = require("./logger");
 const { VERSION } = require("../config");
 
 const sendJsonAndLogMiddleware = (req, res, next) => {
-  res.sendJsonAndLog = (sucess, message, status, dados = null) => {
+  res.sendJsonAndLog = (success, message, status, dados = null) => {
     const url = req.protocol + "://" + req.get("host") + req.originalUrl;
 
     logger.info(message, {
       url,
       information: req.body,
       status,
-      sucess
+      success
     });
     const jsonData = {
       version: VERSION,
-      sucess: sucess,
+      success: success,
       message: message,
       dados
     };

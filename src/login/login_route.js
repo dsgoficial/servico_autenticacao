@@ -14,7 +14,7 @@ router.post(
   schemaValidation({ body: loginSchema.login }),
   asyncHandler(async (req, res, next) => {
     const { token, administrador } = await loginCtrl.login(
-      req.body.login,
+      req.body.usuario,
       req.body.senha
     );
 
