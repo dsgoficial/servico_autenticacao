@@ -44,7 +44,17 @@ models.atualizacaoUsuario = Joi.object().keys({
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),
   tipo_turno_id: Joi.number().integer().strict().required(),
-  tipo_posto_grad_id: Joi.number().integer().strict().required()
+  tipo_posto_grad_id: Joi.number().integer().strict().required(),
+  cpf: Joi.string().required(),
+  identidade: Joi.string().required(),
+  validade_identidade: Joi.string().required(),
+  orgao_expeditor: Joi.string().required(),
+  banco: Joi.string().required(),
+  agencia: Joi.string().required(),
+  conta_bancaria: Joi.string().required(),
+  data_nascimento: Joi.string().required(),
+  celular: Joi.string().required(),
+  email_eb: Joi.string().required()
 });
 
 models.atualizacaoSenha = Joi.object().keys({
@@ -58,7 +68,17 @@ models.atualizacaoAdmUsuario = Joi.object().keys({
   administrador: Joi.boolean().strict().required(),
   ativo: Joi.boolean().strict().required(),
   tipo_turno_id: Joi.number().integer().strict().required(),
-  tipo_posto_grad_id: Joi.number().integer().strict().required()
+  tipo_posto_grad_id: Joi.number().integer().strict().required(),
+  cpf: Joi.string().required(),
+  identidade: Joi.string().required(),
+  validade_identidade: Joi.string().required(),
+  orgao_expeditor: Joi.string().required(),
+  banco: Joi.string().required(),
+  agencia: Joi.string().required(),
+  conta_bancaria: Joi.string().required(),
+  data_nascimento: Joi.string().required(),
+  celular: Joi.string().required(),
+  email_eb: Joi.string().required()
 });
 
 module.exports = models;

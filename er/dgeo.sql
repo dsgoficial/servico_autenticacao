@@ -14,7 +14,17 @@ CREATE TABLE dgeo.usuario(
   ativo BOOLEAN NOT NULL DEFAULT FALSE,
   tipo_turno_id INTEGER NOT NULL REFERENCES dominio.tipo_turno (code),
   tipo_posto_grad_id INTEGER NOT NULL REFERENCES dominio.tipo_posto_grad (code),
-  uuid UUID NOT NULL DEFAULT uuid_generate_v4()
+  uuid UUID NOT NULL DEFAULT uuid_generate_v4(),
+  cpf VARCHAR(255) NOT NULL,
+  identidade VARCHAR(255) NOT NULL,
+  validade_identidade VARCHAR(255) NOT NULL,
+  orgao_expeditor VARCHAR(255) NOT NULL,
+  banco VARCHAR(255) NOT NULL,
+  agencia VARCHAR(255),
+  conta_bancaria VARCHAR(255),
+  data_nascimento VARCHAR(255),
+  celular VARCHAR(255),
+  email_eb VARCHAR(255) 
 );
 
 CREATE TABLE dgeo.login(

@@ -27,7 +27,9 @@ controller.getInfoPublicaUsuarios = async () => {
 
 controller.getUsuario = async (uuid) => {
   const usuario = await db.conn.any(
-    `SELECT uuid, login, nome, nome_guerra, tipo_turno_id, tipo_posto_grad_id
+    `SELECT uuid, login, nome, nome_guerra, tipo_turno_id, tipo_posto_grad_id,
+    cpf, identidade, validade_identidade, orgao_expeditor, banco, agencia,
+    conta_bancaria, data_nascimento, celular, email_eb
     FROM dgeo.usuario WHERE uuid = $<uuid> AND ativo IS TRUE`, {uuid}
   );
 
@@ -41,7 +43,10 @@ controller.getUsuario = async (uuid) => {
 controller.updateUsuario = async (uuid, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId) => {
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
-    SET nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, tipo_posto_grad_id = $<tipoPostoGradId>
+    SET nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, tipo_posto_grad_id = $<tipoPostoGradId>,
+    cpf = $<cpf>, identidade = $<identidade>, validade_identidade = $<validadeIdentidade>, orgao_expeditor = $<orgaoExpeditor>,
+    banco = $<banco>, agencia = $<agencia>, conta_bancaria = $<contaBancaria>, data_nascimento = $<dataNascimento>, 
+    celular = $<celular>, email_eb = $<emailEb>
     WHERE uuid = $<uuid> AND ativo IS TRUE`,
     {uuid, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId}
   );
@@ -143,29 +148,37 @@ controller.getUsuarios = async (autorizados, administradores) => {
     whereConditions.push(`administrador IS ${administradores}`)
   }
   let usuarios
+
+  let sql =  `SELECT uuid, login, nome, nome_guerra, ativo, administrador, tipo_turno_id, tipo_posto_grad_id,
+  cpf, identidade, validade_identidade, orgao_expeditor, banco, agencia, conta_bancaria, data_nascimento, celular,
+  email_eb
+  FROM dgeo.usuario`
+
   if(whereConditions.length > 0){
     const whereCondition = `WHERE ${whereConditions.join(' AND ')}`
-    usuarios = await db.conn.any(
-      `SELECT uuid, login, nome, nome_guerra, ativo, administrador, tipo_turno_id, tipo_posto_grad_id
-      FROM dgeo.usuario $<whereCondition:raw>`, {whereCondition}
-    );
+
+    sql = `${sql} $<whereCondition:raw>`
+    usuarios = await db.conn.any(sql, {whereCondition});
   } else {
-    usuarios = await db.conn.any(
-      `SELECT uuid, login, nome, nome_guerra, ativo, administrador, tipo_turno_id, tipo_posto_grad_id
-      FROM dgeo.usuario`
-    );
+    usuarios = await db.conn.any(sql);
   }
 
   return usuarios;
 };
 
-controller.updateUsuarioCompleto = async (uuid, login, nome, nomeGuerra, administrador, ativo, tipoTurnoId, tipoPostoGradId) => {
+controller.updateUsuarioCompleto = async (uuid, login, nome, nomeGuerra, administrador, ativo, tipoTurnoId, tipoPostoGradId,
+  cpf, identidade, validadeIdentidade, orgaoExpeditor, banco, agencia, contaBancaria, dataNascimento, celular, emailEb) => {
+
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET login = $<login>, nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, 
-    tipo_posto_grad_id = $<tipoPostoGradId>, ativo = $<ativo>, administrador = $<administrador>
+    tipo_posto_grad_id = $<tipoPostoGradId>, ativo = $<ativo>, administrador = $<administrador>,
+    cpf = $<cpf>, identidade = $<identidade>, validade_identidade = $<validadeIdentidade>, orgao_expeditor = $<orgaoExpeditor>,
+    banco = $<banco>, agencia = $<agencia>, conta_bancaria = $<contaBancaria>, data_nascimento = $<dataNascimento>, 
+    celular = $<celular>, email_eb = $<emailEb>
     WHERE uuid = $<uuid>`,
-    {uuid, login, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId, ativo, administrador}
+    {uuid, login, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId, ativo, administrador,
+    cpf, identidade, validadeIdentidade, orgaoExpeditor, banco, agencia, contaBancaria, dataNascimento, celular, emailEb}
   );
 
   if (!result.rowCount || result.rowCount < 1) {

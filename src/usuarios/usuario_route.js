@@ -40,7 +40,17 @@ router.put(
       req.body.administrador,
       req.body.ativo,
       req.body.tipo_turno_id,
-      req.body.tipo_posto_grad_id
+      req.body.tipo_posto_grad_id,
+      req.body.cpf,
+      req.body.identidade,
+      req.body.validade_identidade,
+      req.body.orgao_expeditor,
+      req.body.banco,
+      req.body.agencia,
+      req.body.conta_bancaria,
+      req.body.data_nascimento,
+      req.body.celular,
+      req.body.email_eb
     );
 
     const msg = "Usuário atualizado com sucesso";
@@ -150,7 +160,17 @@ router.put(
       req.body.nome,
       req.body.nome_guerra,
       req.body.tipo_turno_id,
-      req.body.tipo_posto_grad_id
+      req.body.tipo_posto_grad_id,
+      req.body.cpf,
+      req.body.identidade,
+      req.body.validade_identidade,
+      req.body.orgao_expeditor,
+      req.body.banco,
+      req.body.agencia,
+      req.body.conta_bancaria,
+      req.body.data_nascimento,
+      req.body.celular,
+      req.body.email_eb
     );
 
     const msg = "Usuário atualizado com sucesso";
