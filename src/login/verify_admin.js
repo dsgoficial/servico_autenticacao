@@ -27,6 +27,8 @@ const verifyAdmin = asyncHandler(async (req, res, next) => {
       httpCode.Forbidden
     );
   }
+  req.body.usuarioUuid = decoded.uuid;
+
   next();
 });
 
