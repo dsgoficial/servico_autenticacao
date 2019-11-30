@@ -9,11 +9,9 @@ const promise = require("bluebird");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
-const initOptions = {
+const pgp = require("pg-promise")({
   promiseLib: promise
-};
-
-const pgp = require("pg-promise")(initOptions);
+});
 
 const readSqlFile = file => {
   const fullPath = path.join(__dirname, file);
@@ -24,14 +22,7 @@ const verifyDotEnv = () => {
   return fs.existsSync("config.env");
 };
 
-const createDotEnv = (
-  port,
-  dbServer,
-  dbPort,
-  dbName,
-  dbUser,
-  dbPassword
-) => {
+const createDotEnv = (port, dbServer, dbPort, dbName, dbUser, dbPassword) => {
   const secret = crypto.randomBytes(64).toString("hex");
 
   const env = `PORT=${port}
@@ -55,7 +46,7 @@ const givePermission = async ({
 }) => {
   if (!connection) {
     const connectionString = `postgres://${dbUser}:${dbPassword}@${dbServer}:${dbPort}/${dbName}`;
-  
+
     connection = pgp(connectionString);
   }
   await connection.none(readSqlFile("./er/permissao.sql"), [dbUser]);
@@ -69,7 +60,7 @@ const createAdminUser = async (login, senha, connection) => {
     INSERT INTO dgeo.usuario (login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id) VALUES
     ($<login>, $<hash>, $<login>, $<login>, TRUE, TRUE, 3, 13)
   `,
-    {login, hash}
+    { login, hash }
   );
 };
 
@@ -198,23 +189,23 @@ const createConfig = async () => {
     if (dbCreate) {
       await createDatabase(dbUser, dbPassword, dbPort, dbServer, dbName);
 
-      console.log("Banco de dados do Serviço de Autenticação criado com sucesso!".blue);
-      console.log("O serviço pode ser acesso utilizando o mesmo usuário e senha fornecido.".blue);
-
+      console.log(
+        "Banco de dados do Serviço de Autenticação criado com sucesso!".blue
+      );
+      console.log(
+        "O serviço pode ser acesso utilizando o mesmo usuário e senha fornecido."
+          .blue
+      );
     } else {
       await givePermission({ dbUser, dbPassword, dbPort, dbServer, dbName });
 
-      console.log(`Permissão ao banco de dados adicionada com sucesso ao usuário ${dbUser}`.blue);
+      console.log(
+        `Permissão ao banco de dados adicionada com sucesso ao usuário ${dbUser}`
+          .blue
+      );
     }
 
-    createDotEnv(
-      port,
-      dbServer,
-      dbPort,
-      dbName,
-      dbUser,
-      dbPassword
-    );
+    createDotEnv(port, dbServer, dbPort, dbName, dbUser, dbPassword);
 
     console.log(
       "Arquivo de configuração (config.env) criado com sucesso!".blue

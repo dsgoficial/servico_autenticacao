@@ -15,7 +15,11 @@ const validationError = (error, context) => {
   );
 };
 
-const middleware = ({ body: bodySchema, query: querySchema, params: paramsSchema }) => {
+const middleware = ({
+  body: bodySchema,
+  query: querySchema,
+  params: paramsSchema
+}) => {
   return (req, res, next) => {
     if (querySchema) {
       const { error } = querySchema.validate(req.query, {

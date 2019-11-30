@@ -23,4 +23,5 @@ const errorHandler = (err, res = null) => {
   //exit node with error
   process.exit(1);
 };
+
 module.exports = errorHandler;

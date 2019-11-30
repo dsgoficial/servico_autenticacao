@@ -2,9 +2,11 @@
 
 const jwt = require("jsonwebtoken");
 
-const { JWT_SECRET } = require("../config");
-
-const { AppError, httpCode } = require("../utils");
+const {
+  AppError,
+  httpCode,
+  config: { JWT_SECRET }
+} = require("../utils");
 
 const decodeJwt = (token, secret) => {
   return new Promise((resolve, reject) => {
@@ -29,6 +31,6 @@ const validateToken = async token => {
   }
 
   return await decodeJwt(token, JWT_SECRET);
-}
+};
 
-module.exports = validateToken
+module.exports = validateToken;

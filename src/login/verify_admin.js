@@ -2,9 +2,9 @@
 
 const { AppError, asyncHandler, httpCode } = require("../utils");
 
-const { db } = require("../database")
+const { db } = require("../database");
 
-const validateToken = require("./validate_token")
+const validateToken = require("./validate_token");
 
 //middleware para verificar se o usuário é administrador
 const verifyAdmin = asyncHandler(async (req, res, next) => {

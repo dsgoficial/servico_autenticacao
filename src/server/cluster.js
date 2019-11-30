@@ -4,23 +4,24 @@ const colors = require("colors"); //colors for console
 
 const setupWorkerProcesses = () => {
   if (cluster.isMaster) {
-    const argv = require('minimist')(process.argv.slice(2));
+    const argv = require("minimist")(process.argv.slice(2));
 
     let numCores;
-    if("multicore" in argv && argv["multicore"]){
+    if ("multicore" in argv && argv["multicore"]) {
       numCores = os.cpus().length;
     } else {
-      numCores = 1
+      numCores = 1;
     }
 
     console.log(
-      `O Serviço irá iniciar em modo cluster com ${numCores} worker(s)`.bold.blue
+      `O Serviço irá iniciar em modo cluster com ${numCores} worker(s)`.bold
+        .blue
     );
     for (let i = 0; i < numCores; i++) {
       let newCluster = cluster.fork();
 
       newCluster.on("message", function(message) {
-        console.log(`Worker message: ${message}`)
+        console.log(`Worker message: ${message}`);
       });
     }
     cluster.on("online", function(worker) {

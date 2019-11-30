@@ -19,9 +19,9 @@ const {
   errorHandler,
   sendJsonAndLogMiddleware,
   httpCode
-} = require("./utils");
+} = require("../utils");
 
-const { databaseVersion } = require("./database");
+const { databaseVersion } = require("../database");
 
 const routes = require("./routes");
 
@@ -50,34 +50,31 @@ const limiter = rateLimit({
 //apply limit all requests
 app.use(limiter);
 
+//All routes used by the App
+routes(app);
+
 //prevent browser from request favicon
 app.get("/favicon.ico", function(req, res) {
   res.status(httpCode.NoContent);
 });
 
 //informa que o serviço de dados do SAP está operacional
-app.get(
-  "/",
-  (req, res, next) => {
-    return res.sendJsonAndLog(
-      true,
-      "Serviço de autenticação operacional",
-      httpCode.OK,
-      {
-        database_version: databaseVersion.nome
-      }
-    );
-  }
-);
+app.get("/", (req, res, next) => {
+  return res.sendJsonAndLog(
+    true,
+    "Serviço de autenticação operacional",
+    httpCode.OK,
+    {
+      database_version: databaseVersion.nome
+    }
+  );
+});
 
 //Serve SwaggerDoc
 app.use("/api_docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Serve JSDocs
 app.use("/js_docs", express.static(path.join(__dirname, "js_docs")));
-
-//All routes used by the App
-routes(app);
 
 //Handle missing URL
 app.use((req, res, next) => {

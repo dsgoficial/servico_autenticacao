@@ -30,7 +30,10 @@ router.get(
 router.put(
   "/completo/:uuid",
   verifyAdmin,
-  schemaValidation({ body: usuarioSchema.atualizacaoAdmUsuario, params: usuarioSchema.uuidParams }),
+  schemaValidation({
+    body: usuarioSchema.atualizacaoAdmUsuario,
+    params: usuarioSchema.uuidParams
+  }),
   asyncHandler(async (req, res, next) => {
     await usuarioCtrl.updateUsuarioCompleto(
       req.params.uuid,
@@ -64,9 +67,7 @@ router.post(
   verifyAdmin,
   schemaValidation({ body: usuarioSchema.listaUsuarios }),
   asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.deletaUsuarios(
-      req.body.usuariosUuid
-    );
+    await usuarioCtrl.deletaUsuarios(req.body.usuariosUuid);
 
     const msg = "Usuários deletados com sucesso";
 
@@ -79,9 +80,7 @@ router.post(
   verifyAdmin,
   schemaValidation({ body: usuarioSchema.listaUsuarios }),
   asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.resetaSenhaUsuarios(
-      req.body.usuariosUuid
-    );
+    await usuarioCtrl.resetaSenhaUsuarios(req.body.usuariosUuid);
 
     const msg = "Senha resetada com sucesso";
 
@@ -92,7 +91,10 @@ router.post(
 router.post(
   "/autorizar/:ativo",
   verifyAdmin,
-  schemaValidation({ body: usuarioSchema.listaUsuarios, params: usuarioSchema.ativoParams }),
+  schemaValidation({
+    body: usuarioSchema.listaUsuarios,
+    params: usuarioSchema.ativoParams
+  }),
   asyncHandler(async (req, res, next) => {
     await usuarioCtrl.modificaAutorizacao(
       req.body.usuariosUuid,
@@ -123,13 +125,13 @@ router.post(
 
 router.put(
   "/:uuid/senha",
-  schemaValidation({ body: usuarioSchema.atualizacaoSenha, params: usuarioSchema.uuidParams }),
+  schemaValidation({
+    body: usuarioSchema.atualizacaoSenha,
+    params: usuarioSchema.uuidParams
+  }),
   verifyLogin,
   asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.updateSenha(
-      req.params.uuid,
-      req.body.senha
-    );
+    await usuarioCtrl.updateSenha(req.params.uuid, req.body.senha);
 
     const msg = "Senha do usuário atualizada com sucesso";
 
@@ -152,7 +154,10 @@ router.get(
 
 router.put(
   "/:uuid",
-  schemaValidation({ body: usuarioSchema.atualizacaoUsuario, params: usuarioSchema.uuidParams }),
+  schemaValidation({
+    body: usuarioSchema.atualizacaoUsuario,
+    params: usuarioSchema.uuidParams
+  }),
   verifyLogin,
   asyncHandler(async (req, res, next) => {
     await usuarioCtrl.updateUsuario(

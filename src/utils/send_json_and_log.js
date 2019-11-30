@@ -1,8 +1,7 @@
 "use strict";
 
 const logger = require("./logger");
-
-const { VERSION } = require("../config");
+const { VERSION } = require("./config");
 
 const sendJsonAndLogMiddleware = (req, res, next) => {
   res.sendJsonAndLog = (success, message, status, dados = null) => {
@@ -14,10 +13,12 @@ const sendJsonAndLogMiddleware = (req, res, next) => {
       status,
       success
     });
+
+    const userMessage = status === 500 ? "Erro no servidor" : message;
     const jsonData = {
       version: VERSION,
       success: success,
-      message: message,
+      message: userMessage,
       dados
     };
 
