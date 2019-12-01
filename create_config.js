@@ -64,7 +64,15 @@ const createAdminUser = async (login, senha, connection) => {
   );
 };
 
-const createDatabase = async (dbUser, dbPassword, dbPort, dbServer, dbName) => {
+const createDatabase = async (
+  dbUser,
+  dbPassword,
+  dbPort,
+  dbServer,
+  dbName,
+  AuthUser,
+  AuthPassword
+) => {
   const config = {
     user: dbUser,
     password: dbPassword,
@@ -82,7 +90,7 @@ const createDatabase = async (dbUser, dbPassword, dbPort, dbServer, dbName) => {
     await t.none(readSqlFile("./er/dominio.sql"));
     await t.none(readSqlFile("./er/dgeo.sql"));
     await givePermission({ dbUser, connection: t });
-    await createAdminUser(dbUser, dbPassword, t);
+    await createAdminUser(AuthUser, AuthPassword, t);
   });
 };
 
@@ -153,6 +161,7 @@ const createConfig = async () => {
       {
         type: "password",
         name: "dbPassword",
+        mask: "*",
         message:
           "Qual a senha do usuário do PostgreSQL para interação com o Serviço de Autenticação ?"
       },
@@ -173,8 +182,68 @@ const createConfig = async () => {
         name: "dbCreate",
         message: "Deseja criar o banco de dados do Serviço de Autenticação ?",
         default: true
+      },
+      {
+        type: "input",
+        name: "AuthUser",
+        message:
+          "Qual o nome que deseja para o usuário administrador do Serviço de Autenticação?",
+        when(answers) {
+          return answers.dbCreate;
+        }
+      },
+      {
+        type: "password",
+        name: "AuthPassword",
+        mask: "*",
+        message:
+          "Qual a senha que deseja para o usuário administrador do Serviço de Autenticação?",
+        when(answers) {
+          return answers.dbCreate;
+        }
+      },
+      {
+        type: "password",
+        name: "AuthPasswordConfirm",
+        mask: "*",
+        message:
+          "Confirme a senha para o usuário administrador do Serviço de Autenticação?",
+        when(answers) {
+          return answers.dbCreate;
+        }
       }
     ];
+
+    const confirmPassword = [
+      {
+        type: "password",
+        name: "AuthPassword",
+        mask: "*",
+        message:
+          "Qual a senha que deseja para o usuário administrador do Serviço de Autenticação?"
+      },
+      {
+        type: "password",
+        name: "AuthPasswordConfirm",
+        mask: "*",
+        message:
+          "Confirme a senha para o usuário administrador do Serviço de Autenticação?"
+      }
+    ];
+    const validatePassword = async () => {
+      console.log(
+        "As senhas devem ser as mesmas. Por favor informe novamente.".red
+      );
+      let { AuthPassword, AuthPasswordConfirm } = await inquirer.prompt(
+        confirmPassword
+      );
+      const check = AuthPassword === AuthPasswordConfirm;
+
+      if (!check) {
+        AuthPassword = await validatePassword();
+      }
+      return AuthPassword;
+    };
 
     const {
       port,
@@ -183,11 +252,29 @@ const createConfig = async () => {
       dbName,
       dbUser,
       dbPassword,
-      dbCreate
-    } = await inquirer.prompt(questions);
+      dbCreate,
+      AuthUser,
+      AuthPassword
+    } = await inquirer.prompt(questions).then(async answers => {
+      if (
+        answers.dbCreate &&
+        answers.AuthPassword != answers.AuthPasswordConfirm
+      ) {
+        answers.AuthPassword = await validatePassword();
+      }
+      return answers;
+    });
 
     if (dbCreate) {
-      await createDatabase(dbUser, dbPassword, dbPort, dbServer, dbName);
+      await createDatabase(
+        dbUser,
+        dbPassword,
+        dbPort,
+        dbServer,
+        dbName,
+        AuthUser,
+        AuthPassword
+      );
 
       console.log(
         "Banco de dados do Serviço de Autenticação criado com sucesso!".blue
