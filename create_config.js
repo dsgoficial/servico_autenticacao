@@ -70,8 +70,8 @@ const createDatabase = async (
   dbPort,
   dbServer,
   dbName,
-  AuthUser,
-  AuthPassword
+  authUser,
+  authPassword
 ) => {
   const config = {
     user: dbUser,
@@ -90,7 +90,7 @@ const createDatabase = async (
     await t.none(readSqlFile("./er/dominio.sql"));
     await t.none(readSqlFile("./er/dgeo.sql"));
     await givePermission({ dbUser, connection: t });
-    await createAdminUser(AuthUser, AuthPassword, t);
+    await createAdminUser(authUser, authPassword, t);
   });
 };
 
@@ -185,7 +185,7 @@ const createConfig = async () => {
       },
       {
         type: "input",
-        name: "AuthUser",
+        name: "authUser",
         message:
           "Qual o nome que deseja para o usuário administrador do Serviço de Autenticação?",
         when(answers) {
@@ -194,7 +194,7 @@ const createConfig = async () => {
       },
       {
         type: "password",
-        name: "AuthPassword",
+        name: "authPassword",
         mask: "*",
         message:
           "Qual a senha que deseja para o usuário administrador do Serviço de Autenticação?",
@@ -204,7 +204,7 @@ const createConfig = async () => {
       },
       {
         type: "password",
-        name: "AuthPasswordConfirm",
+        name: "authPasswordConfirm",
         mask: "*",
         message:
           "Confirme a senha para o usuário administrador do Serviço de Autenticação?",
@@ -217,14 +217,14 @@ const createConfig = async () => {
     const confirmPassword = [
       {
         type: "password",
-        name: "AuthPassword",
+        name: "authPassword",
         mask: "*",
         message:
           "Qual a senha que deseja para o usuário administrador do Serviço de Autenticação?"
       },
       {
         type: "password",
-        name: "AuthPasswordConfirm",
+        name: "authPasswordConfirm",
         mask: "*",
         message:
           "Confirme a senha para o usuário administrador do Serviço de Autenticação?"
@@ -234,15 +234,15 @@ const createConfig = async () => {
       console.log(
         "As senhas devem ser as mesmas. Por favor informe novamente.".red
       );
-      let { AuthPassword, AuthPasswordConfirm } = await inquirer.prompt(
+      let { authPassword, authPasswordConfirm } = await inquirer.prompt(
         confirmPassword
       );
-      const check = AuthPassword === AuthPasswordConfirm;
+      const check = authPassword === authPasswordConfirm;
 
       if (!check) {
-        AuthPassword = await validatePassword();
+        authPassword = await validatePassword();
       }
-      return AuthPassword;
+      return authPassword;
     };
 
     const {
@@ -253,14 +253,14 @@ const createConfig = async () => {
       dbUser,
       dbPassword,
       dbCreate,
-      AuthUser,
-      AuthPassword
+      authUser,
+      authPassword
     } = await inquirer.prompt(questions).then(async answers => {
       if (
         answers.dbCreate &&
-        answers.AuthPassword != answers.AuthPasswordConfirm
+        answers.authPassword != answers.authPasswordConfirm
       ) {
-        answers.AuthPassword = await validatePassword();
+        answers.authPassword = await validatePassword();
       }
       return answers;
     });
@@ -272,8 +272,8 @@ const createConfig = async () => {
         dbPort,
         dbServer,
         dbName,
-        AuthUser,
-        AuthPassword
+        authUser,
+        authPassword
       );
 
       console.log(
