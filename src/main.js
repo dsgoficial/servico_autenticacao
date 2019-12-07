@@ -9,10 +9,10 @@ if (isMaster) {
 } else {
   const { errorHandler } = require("./utils");
   const { startServer, createDocumentation } = require("./server");
-  const { databaseVersion } = require("./database");
+  const { db, databaseVersion } = require("./database");
 
-  databaseVersion
-    .load()
+  db.createConn()
+    .then(databaseVersion.load)
     .then(createDocumentation)
     .then(startServer)
     .catch(errorHandler);
