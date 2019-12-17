@@ -34,7 +34,7 @@ models.listaUsuarios = Joi.object().keys({
 });
 
 models.criacaoUsuario = Joi.object().keys({
-  login: Joi.string().required(),
+  usuario: Joi.string().required(),
   senha: Joi.string().required(),
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),

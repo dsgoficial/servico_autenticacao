@@ -1,49 +1,63 @@
 import styled from "styled-components";
 
-export const Center = styled.div`
-  background-color: #1abc9c;
-  position: absolute;
-  height: 100%;
-  width: 100%;
+export const Container = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
 `;
 
-export const Card = styled.div`
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 0.8rem;
-
-  form {
-    display: flex;
-    flex-direction: column;
+export const Form = styled.form`
+  width: 400px;
+  background: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  img {
+    width: 100px;
+    margin: 10px 0 40px;
   }
-
-  h1 {
+  p {
+    color: #ff3333;
+    margin-bottom: 15px;
+    border: 1px solid #ff3333;
+    padding: 10px;
+    width: 100%;
     text-align: center;
-    margin-top: 0;
-    margin-bottom: 10px;
   }
-`;
-
-export const FormItem = styled.input`
-  padding: 5px;
-  margin-bottom: 2rem;
-  height: 30px;
-  width: 16rem;
-  border: 1px solid grey;
-`;
-export const FormSubmit = styled.input`
-  height: 35px;
-  color: #fff;
-  background-color: #1abc9c;
-  border: none;
-  letter-spacing: 0.2rem;
-  transition: 0.3s opacity ease;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.6;
+  input {
+    display: flex;
+    height: 46px;
+    margin-bottom: 15px;
+    padding: 0 20px;
+    color: #777;
+    font-size: 15px;
+    width: 100%;
+    border: 1px solid #ddd;
+    &::placeholder {
+      color: #999;
+    }
+  }
+  button {
+    color: #fff;
+    font-size: 16px;
+    background: #fc6963;
+    height: 56px;
+    border: 0;
+    border-radius: 5px;
+    width: 100%;
+  }
+  hr {
+    margin: 20px 0;
+    border: none;
+    border-bottom: 1px solid #cdcdcd;
+    width: 100%;
+  }
+  a {
+    font-size: 16;
+    font-weight: bold;
+    color: #999;
+    text-decoration: none;
   }
 `;

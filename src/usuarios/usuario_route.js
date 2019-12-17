@@ -200,7 +200,7 @@ router.post(
   schemaValidation({ body: usuarioSchema.criacaoUsuario }),
   asyncHandler(async (req, res, next) => {
     await usuarioCtrl.criaUsuario(
-      req.body.login,
+      req.body.usuario,
       req.body.senha,
       req.body.nome,
       req.body.nome_guerra,
