@@ -31,7 +31,6 @@ const app = express();
 app.use(sendJsonAndLogMiddleware);
 
 app.use(bodyParser.json()); //parsear POST em JSON
-app.use(xss()); //sanitize body input
 app.use(hpp()); //protection against parameter polution
 
 //CORS middleware
