@@ -16,9 +16,18 @@ controller.criaUsuario = async (
   tipoTurnoId,
   tipoPostoGradId
 ) => {
+  const usuarioExiste = await db.conn.oneOrNone(
+    `SELECT id FROM dgeo.usuario WHERE login = $<login>`,
+    { login }
+  );
+
+  if (usuarioExiste) {
+    throw new AppError("Usuário com esse login já existe", httpCode.BadRequest);
+  }
+
   const hash = await bcrypt.hash(senha, 10);
 
-  return await db.conn.none(
+  return db.conn.none(
     `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id)
      VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoTurnoId>, $<tipoPostoGradId>)`,
     { login, hash, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId }
@@ -26,9 +35,23 @@ controller.criaUsuario = async (
 };
 
 controller.getInfoPublicaUsuarios = async () => {
-  return await db.conn.any(
+  return db.conn.any(
     `SELECT uuid, nome, nome_guerra, tipo_turno_id, tipo_posto_grad_id
     FROM dgeo.usuario WHERE ativo IS TRUE`
+  );
+};
+
+controller.getTipoPostoGrad = async () => {
+  return db.conn.any(
+    `SELECT code, nome, nome_abrev
+    FROM dominio.tipo_posto_grad`
+  );
+};
+
+controller.getTipoTurno = async () => {
+  return db.conn.any(
+    `SELECT code, nome
+    FROM dominio.tipo_turno`
   );
 };
 
@@ -135,7 +158,7 @@ controller.resetaSenhaUsuarios = async usuariosUUID => {
 };
 
 controller.modificaAutorizacao = async (usuariosUUID, ativo) => {
-  return await db.conn.none(
+  return db.conn.none(
     `UPDATE dgeo.usuario
     SET ativo = $<ativo>
     WHERE uuid IN ($<usuariosUUID:csv>)`,
@@ -144,7 +167,7 @@ controller.modificaAutorizacao = async (usuariosUUID, ativo) => {
 };
 
 controller.modificaNivelAcesso = async (usuarioUUID, administrador) => {
-  return await db.conn.none(
+  return db.conn.none(
     `UPDATE dgeo.usuario
     SET administrador = $<administrador>
     WHERE uuid = $<usuarioUUID>`,

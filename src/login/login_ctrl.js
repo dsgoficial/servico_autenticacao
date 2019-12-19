@@ -42,7 +42,7 @@ const signJWT = (data, secret) => {
 };
 
 const verifyPassword = async (senhaFornecida, senhaDb) => {
-  return await bcrypt.compare(senhaFornecida, senhaDb);
+  return bcrypt.compare(senhaFornecida, senhaDb);
 };
 
 controller.login = async (usuario, senha) => {

@@ -14,7 +14,7 @@ let dbVersion = {};
 const validate = dbv => {
   if (semver.lt(semver.coerce(dbv), semver.coerce(MIN_DATABASE_VERSION))) {
     throw new AppError(
-      `Versão do banco de dados (${database_version}) não compatível com o serviço. A versão deve ser superior a ${MIN_DATABASE_VERSION}.`
+      `Versão do banco de dados (${dbv}) não compatível com o serviço. A versão deve ser superior a ${MIN_DATABASE_VERSION}.`
     );
   }
 };

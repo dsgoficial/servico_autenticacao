@@ -55,7 +55,7 @@ const givePermission = async ({
 const createAdminUser = async (login, senha, connection) => {
   const hash = await bcrypt.hash(senha, 10);
 
-  return await connection.none(
+  return connection.none(
     `
     INSERT INTO dgeo.usuario (login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id) VALUES
     ($<login>, $<hash>, $<login>, $<login>, TRUE, TRUE, 3, 13)

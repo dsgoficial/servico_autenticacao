@@ -26,7 +26,8 @@ export const Form = styled.form`
     width: 100%;
     text-align: center;
   }
-  input {
+  input,
+  select {
     display: flex;
     height: 46px;
     margin-bottom: 15px;
@@ -39,6 +40,7 @@ export const Form = styled.form`
       color: #999;
     }
   }
+
   button {
     color: #fff;
     font-size: 16px;

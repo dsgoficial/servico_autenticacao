@@ -37,7 +37,7 @@ router.put(
   asyncHandler(async (req, res, next) => {
     await usuarioCtrl.updateUsuarioCompleto(
       req.params.uuid,
-      req.body.login,
+      req.body.usuario,
       req.body.nome,
       req.body.nome_guerra,
       req.body.administrador,
@@ -104,6 +104,28 @@ router.post(
     const msg = "Autorização atualizada com sucesso";
 
     return res.sendJsonAndLog(true, msg, httpCode.OK);
+  })
+);
+
+router.get(
+  "/tipo_posto_grad",
+  asyncHandler(async (req, res, next) => {
+    const dados = await usuarioCtrl.getTipoPostoGrad();
+
+    const msg = "Tipos de Posto e Graduação retornados com sucesso";
+
+    return res.sendJsonAndLog(true, msg, httpCode.OK, dados);
+  })
+);
+
+router.get(
+  "/tipo_turno",
+  asyncHandler(async (req, res, next) => {
+    const dados = await usuarioCtrl.getTipoTurno();
+
+    const msg = "Tipos de Turno retornados com sucesso";
+
+    return res.sendJsonAndLog(true, msg, httpCode.OK, dados);
   })
 );
 

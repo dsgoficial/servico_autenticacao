@@ -30,7 +30,7 @@ const validateToken = async token => {
     token = token.slice(7, token.length);
   }
 
-  return await decodeJwt(token, JWT_SECRET);
+  return decodeJwt(token, JWT_SECRET);
 };
 
 module.exports = validateToken;

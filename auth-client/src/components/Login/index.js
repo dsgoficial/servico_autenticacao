@@ -1,60 +1,73 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 
 import api from "../../services/api";
-import { login } from "../../services/auth";
+import { setToken } from "../../services/auth";
 
 import { Form, Container } from "./styles";
 
-class Login extends Component {
-  state = {
-    usuario: "",
-    senha: "",
-    error: ""
-  };
+const Login = withRouter(props => {
+  const [usuario, setUsuario] = useState("");
+  const [senha, setSenha] = useState("");
+  const [error, setError] = useState("");
 
-  handleSignIn = async e => {
+  const handleSignIn = async e => {
     e.preventDefault();
-    const { usuario, senha } = this.state;
     if (!usuario || !senha) {
-      this.setState({ error: "Preencha o usuário e a senha para continuar!" });
+      setError("Preencha o usuário e a senha para continuar!");
     } else {
       try {
         const response = await api.post("/login", { usuario, senha });
-        login(response.data.token);
-        this.props.history.push("/app");
+        if (
+          !response ||
+          response.status !== 201 ||
+          !("data" in response) ||
+          !("dados" in response.data) ||
+          !("token" in response.data.dados)
+        ) {
+          throw new Error();
+        }
+        setToken(response.data.dados.token);
+        setError("");
+        props.history.push("/app");
       } catch (err) {
-        this.setState({
-          error:
+        if (
+          "response" in err &&
+          "data" in err.response &&
+          "message" in err.response.data
+        ) {
+          setError(err.response.data.message);
+        } else {
+          setError(
             "Houve um problema com o login, verifique suas credenciais."
-        });
+          );
+        }
       }
     }
   };
 
-  render() {
-    return (
-      <Container>
-        <Form onSubmit={this.handleSignIn}>
-          <h1>Serviço de Autenticação</h1>
-          {this.state.error && <p>{this.state.error}</p>}
-          <input
-            type="text"
-            placeholder="Usuário"
-            onChange={e => this.setState({ usuario: e.target.value })}
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            onChange={e => this.setState({ senha: e.target.value })}
-          />
-          <button type="submit">Entrar</button>
-          <hr />
-          <Link to="/cadastro">Criar novo usuário</Link>
-        </Form>
-      </Container>
-    );
-  }
-}
+  return (
+    <Container>
+      <Form onSubmit={handleSignIn}>
+        <h1>Serviço de Autenticação</h1>
+        <br />
+        {error && <p>{error}</p>}
+        <input
+          type="text"
+          placeholder="Usuário"
+          onChange={e => setUsuario(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          onChange={e => setSenha(e.target.value)}
+        />
+        <button type="submit">Entrar</button>
+        <hr />
+        <Link to="/cadastro">Criar novo usuário</Link>
+      </Form>
+    </Container>
+  );
+});
 
-export default withRouter(Login);
+export default Login;

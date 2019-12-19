@@ -22,8 +22,8 @@ dotenv.config({
   path: configFile
 });
 
-const VERSION = "0.0.1";
-const MIN_DATABASE_VERSION = "0.0.1";
+const VERSION = "1.0.0";
+const MIN_DATABASE_VERSION = "1.0.0";
 
 const configSchema = Joi.object().keys({
   PORT: Joi.number()
