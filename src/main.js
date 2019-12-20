@@ -13,7 +13,6 @@ if (isMaster) {
 
   db.createConn()
     .then(databaseVersion.load)
-    .then(createDocumentation)
     .then(startServer)
     .catch(errorHandler);
 }
