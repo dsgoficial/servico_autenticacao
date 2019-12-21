@@ -32,6 +32,7 @@ app.use(sendJsonAndLogMiddleware);
 
 app.use(bodyParser.json()); //parsear POST em JSON
 app.use(hpp()); //protection against parameter polution
+app.use(xss());
 
 //CORS middleware
 app.use(cors());
@@ -73,7 +74,7 @@ app.get("/", (req, res, next) => {
 app.use("/api_docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Serve JSDocs
-app.use("/js_docs", express.static(path.join(__dirname, "js_docs")));
+app.use("/js_docs", express.static(path.join(__dirname, "../js_docs")));
 
 //Handle missing URL
 app.use((req, res, next) => {
