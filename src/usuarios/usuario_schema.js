@@ -1,37 +1,37 @@
-"use strict";
+'use strict'
 
-const Joi = require("joi");
+const Joi = require('joi')
 
-const models = {};
+const models = {}
 
 models.uuidParams = Joi.object().keys({
   uuid: Joi.string()
     .guid()
     .required()
-});
+})
 
 models.admParams = Joi.object().keys({
   uuid: Joi.string()
     .guid()
     .required(),
-  administrador: Joi.string().valid("true", "false")
-});
+  administrador: Joi.string().valid('true', 'false')
+})
 
 models.ativoParams = Joi.object().keys({
-  ativo: Joi.string().valid("true", "false")
-});
+  ativo: Joi.string().valid('true', 'false')
+})
 
 models.filtroUsuariosQuery = Joi.object().keys({
-  autorizados: Joi.string().valid("true", "false"),
-  administradores: Joi.string().valid("true", "false")
-});
+  autorizados: Joi.string().valid('true', 'false'),
+  administradores: Joi.string().valid('true', 'false')
+})
 
 models.listaUsuarios = Joi.object().keys({
   usuariosUuid: Joi.array()
     .items(Joi.string().guid())
     .required()
     .min(1)
-});
+})
 
 models.criacaoUsuario = Joi.object().keys({
   usuario: Joi.string().required(),
@@ -46,7 +46,7 @@ models.criacaoUsuario = Joi.object().keys({
     .integer()
     .strict()
     .required()
-});
+})
 
 models.atualizacaoUsuario = Joi.object().keys({
   nome: Joi.string().required(),
@@ -69,11 +69,11 @@ models.atualizacaoUsuario = Joi.object().keys({
   data_nascimento: Joi.string().required(),
   celular: Joi.string().required(),
   email_eb: Joi.string().required()
-});
+})
 
 models.atualizacaoSenha = Joi.object().keys({
   senha: Joi.string().required()
-});
+})
 
 models.atualizacaoAdmUsuario = Joi.object().keys({
   usuario: Joi.string().required(),
@@ -103,6 +103,6 @@ models.atualizacaoAdmUsuario = Joi.object().keys({
   data_nascimento: Joi.string().required(),
   celular: Joi.string().required(),
   email_eb: Joi.string().required()
-});
+})
 
-module.exports = models;
+module.exports = models

@@ -102,7 +102,7 @@ sap_config.qgs~
 
 *.env
 
-/src/js_docs
+src/js_docs/
 
 config.env
 

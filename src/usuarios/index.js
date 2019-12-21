@@ -1,5 +1,5 @@
-"use strict";
+'use strict'
 
 module.exports = {
-  usuariosRoute: require("./usuario_route")
-};
+  usuariosRoute: require('./usuario_route')
+}

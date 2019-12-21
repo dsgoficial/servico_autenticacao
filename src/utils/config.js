@@ -1,29 +1,29 @@
-"use strict";
+'use strict'
 
-const dotenv = require("dotenv");
-const Joi = require("joi");
-const fs = require("fs");
+const dotenv = require('dotenv')
+const Joi = require('joi')
+const fs = require('fs')
 
-const AppError = require("./App_error");
-const errorHandler = require("./error_handler");
+const AppError = require('./App_error')
+const errorHandler = require('./error_handler')
 
 const configFile =
-  process.env.NODE_ENV === "test" ? "config_testing.env" : "config.env";
+  process.env.NODE_ENV === 'test' ? 'config_testing.env' : 'config.env'
 
 if (!fs.existsSync(configFile)) {
   errorHandler(
     new AppError(
-      `Arquivo de configuração não encontrado. Configure o serviço primeiro.`
+      'Arquivo de configuração não encontrado. Configure o serviço primeiro.'
     )
-  );
+  )
 }
 
 dotenv.config({
   path: configFile
-});
+})
 
-const VERSION = "1.0.0";
-const MIN_DATABASE_VERSION = "1.0.0";
+const VERSION = '1.0.0'
+const MIN_DATABASE_VERSION = '1.0.0'
 
 const configSchema = Joi.object().keys({
   PORT: Joi.number()
@@ -39,7 +39,7 @@ const configSchema = Joi.object().keys({
   JWT_SECRET: Joi.string().required(),
   VERSION: Joi.string().required(),
   MIN_DATABASE_VERSION: Joi.string().required()
-});
+})
 
 const config = {
   PORT: process.env.PORT,
@@ -51,22 +51,22 @@ const config = {
   JWT_SECRET: process.env.JWT_SECRET,
   VERSION,
   MIN_DATABASE_VERSION
-};
+}
 
 const { error } = configSchema.validate(config, {
   abortEarly: false
-});
+})
 if (error) {
-  const { details } = error;
-  const message = details.map(i => i.message).join(",");
+  const { details } = error
+  const message = details.map(i => i.message).join(',')
 
   errorHandler(
     new AppError(
-      `Arquivo de configuração inválido. Configure novamente o serviço.`,
+      'Arquivo de configuração inválido. Configure novamente o serviço.',
       null,
       message
     )
-  );
+  )
 }
 
-module.exports = config;
+module.exports = config
