@@ -88,7 +88,7 @@ const createDatabase = async (
 
   const conn = pgp(connectionString)
   await conn.tx(async t => {
-    await t.none(readSqlFile('./er/version.sql'))
+    await t.none(readSqlFile('./er/versao.sql'))
     await t.none(readSqlFile('./er/dominio.sql'))
     await t.none(readSqlFile('./er/dgeo.sql'))
     await givePermission({ dbUser, connection: t })
