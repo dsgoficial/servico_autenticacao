@@ -11,6 +11,8 @@ const promise = require('bluebird')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 
+const buildDocumentation = require('./create_documentation')
+
 const pgp = require('pg-promise')({
   promiseLib: promise
 })
@@ -190,7 +192,7 @@ const createConfig = async () => {
         name: 'authUser',
         message:
           'Qual o nome que deseja para o usuário administrador do Serviço de Autenticação?',
-        when (answers) {
+        when(answers) {
           return answers.dbCreate
         }
       },
@@ -200,7 +202,7 @@ const createConfig = async () => {
         mask: '*',
         message:
           'Qual a senha que deseja para o usuário administrador do Serviço de Autenticação?',
-        when (answers) {
+        when(answers) {
           return answers.dbCreate
         }
       },
@@ -210,7 +212,7 @@ const createConfig = async () => {
         mask: '*',
         message:
           'Confirme a senha para o usuário administrador do Serviço de Autenticação?',
-        when (answers) {
+        when(answers) {
           return answers.dbCreate
         }
       }
@@ -300,7 +302,7 @@ const createConfig = async () => {
       'Arquivo de configuração (config.env) criado com sucesso!'.blue
     )
 
-    require('./create_documentation')
+    buildDocumentation()
   } catch (e) {
     handleError(e)
   }
