@@ -8,4 +8,4 @@ Serviço em Node.js para autenticação de usuários. Sua utilização é necess
 - Sistema de Pedidos Mapoteca
 - DSGDocs
 
-O cliente web para o serviço pode ser encontrado em [auth_client](https://github.com/1cgeo/auth_client).
+O serviço possui um client web.

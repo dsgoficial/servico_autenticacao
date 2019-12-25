@@ -9,9 +9,14 @@ yarn-error.log*
 .npm
 
 # Dependency directories
-/node_modules
+node_modules
 /jspm_packages
 /bower_components
+/.pnp
+.pnp.js
+
+# testing
+/coverage
 
 # Yarn Integrity file
 .yarn-integrity

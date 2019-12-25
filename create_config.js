@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const inquirer = require('inquirer')
-const colors = require('colors') // colors for console
+const colors = require('colors')
 colors.enable()
 
 const pgtools = require('pgtools')
@@ -10,8 +10,6 @@ const path = require('path')
 const promise = require('bluebird')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
-
-const buildDocumentation = require('./create_documentation')
 
 const pgp = require('pg-promise')({
   promiseLib: promise
@@ -23,7 +21,7 @@ const readSqlFile = file => {
 }
 
 const verifyDotEnv = () => {
-  return fs.existsSync('config.env')
+  return fs.existsSync('./server/config.env')
 }
 
 const createDotEnv = (port, dbServer, dbPort, dbName, dbUser, dbPassword) => {
@@ -37,7 +35,7 @@ DB_USER=${dbUser}
 DB_PASSWORD=${dbPassword}
 JWT_SECRET=${secret}`
 
-  fs.writeFileSync('config.env', env)
+  fs.writeFileSync('./server/config.env', env)
 }
 
 const givePermission = async ({
@@ -302,7 +300,6 @@ const createConfig = async () => {
       'Arquivo de configuração (config.env) criado com sucesso!'.blue
     )
 
-    buildDocumentation()
   } catch (e) {
     handleError(e)
   }

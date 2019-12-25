@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'>
+  <title>auth-server 1.0.0 | Documentation</title>
+  <meta name='description' content='Serviço de Autenticação'>
+  <meta name='viewport' content='width=device-width,initial-scale=1'>
+  <link href='assets/bass.css' rel='stylesheet'>
+  <link href='assets/style.css' rel='stylesheet'>
+  <link href='assets/github.css' rel='stylesheet'>
+  <link href='assets/split.css' rel='stylesheet'>
+</head>
+<body class='documentation m0'>
+    <div class='flex'>
+      <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
+        <div class='py1 px2'>
+          <h3 class='mb0 no-anchor'>auth-server</h3>
+          <div class='mb1'><code>1.0.0</code></div>
+          <input
+            placeholder='Filter'
+            id='filter-input'
+            class='col12 block input'
+            type='text' />
+          <div id='toc'>
+            <ul class='list-reset h5 py1-ul'>
+              
+                
+                <li><a
+                  href='#_applyremainingdefaultoptions'
+                  class="">
+                  _applyRemainingDefaultOptions
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#istouchdevice'
+                  class="">
+                  isTouchDevice
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#add'
+                  class="">
+                  add
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#remove'
+                  class="">
+                  remove
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#removeall'
+                  class="">
+                  removeAll
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#urlify'
+                  class="">
+                  urlify
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#hasanchorjslink'
+                  class="">
+                  hasAnchorJSLink
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#_getelements'
+                  class="">
+                  _getElements
+                  
+                </a>
+                
+                </li>
+              
+                
+                <li><a
+                  href='#_addbaselinestyles'
+                  class="">
+                  _addBaselineStyles
+                  
+                </a>
+                
+                </li>
+              
+            </ul>
+          </div>
+          <div class='mt1 h6 quiet'>
+            <a href='https://documentation.js.org/reading-documentation.html'>Need help reading this?</a>
+          </div>
+        </div>
+      </div>
+      <div id='split-right' class='relative overflow-auto height-viewport-100'>
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='_applyremainingdefaultoptions'>
+      _applyRemainingDefaultOptions
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Assigns options to the internal options object, and provides defaults.</p>
+
+    <div class='pre p1 fill-light mt0'>_applyRemainingDefaultOptions(opts: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>opts</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
+	    Options object
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='istouchdevice'>
+      isTouchDevice
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Checks to see if this device supports touch. Uses criteria pulled from Modernizr:
+<a href="https://github.com/Modernizr/Modernizr/blob/da22eb27631fc4957f67607fe6042e85c0a84656/feature-detects/touchevents.js#L40">https://github.com/Modernizr/Modernizr/blob/da22eb27631fc4957f67607fe6042e85c0a84656/feature-detects/touchevents.js#L40</a></p>
+
+    <div class='pre p1 fill-light mt0'>isTouchDevice(): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        true if the current device supports touch.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='add'>
+      add
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Add anchor links to page elements.</p>
+
+    <div class='pre p1 fill-light mt0'>add(selector: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | <a href="https://developer.mozilla.org/docs/Web/API/NodeList">Nodelist</a>)): this</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>selector</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | <a href="https://developer.mozilla.org/docs/Web/API/NodeList">Nodelist</a>))</code>
+	    A CSS selector for targeting the elements you wish to add anchor links
+to. Also accepts an array or nodeList containing the relavant elements.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>this</code>:
+        The AnchorJS object
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='remove'>
+      remove
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Removes all anchorjs-links from elements targed by the selector.</p>
+
+    <div class='pre p1 fill-light mt0'>remove(selector: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | <a href="https://developer.mozilla.org/docs/Web/API/NodeList">Nodelist</a>)): this</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>selector</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | <a href="https://developer.mozilla.org/docs/Web/API/NodeList">Nodelist</a>))</code>
+	    A CSS selector string targeting elements with anchor links,
+OR a nodeList / array containing the DOM elements.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code>this</code>:
+        The AnchorJS object
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='removeall'>
+      removeAll
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Removes all anchorjs links. Mostly used for tests.</p>
+
+    <div class='pre p1 fill-light mt0'>removeAll()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='urlify'>
+      urlify
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Urlify - Refine text so it makes a good ID.</p>
+<p>To do this, we remove apostrophes, replace nonsafe characters with hyphens,
+remove extra hyphens, truncate, trim hyphens, and make lowercase.</p>
+
+    <div class='pre p1 fill-light mt0'>urlify(text: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>text</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code>
+	    Any text. Usually pulled from the webpage element we are linking to.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></code>:
+        hyphen-delimited text for use in IDs and URLs.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='hasanchorjslink'>
+      hasAnchorJSLink
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Determines if this element already has an AnchorJS link on it.
+Uses this technique: <a href="http://stackoverflow.com/a/5898748/1154642">http://stackoverflow.com/a/5898748/1154642</a></p>
+
+    <div class='pre p1 fill-light mt0'>hasAnchorJSLink(el: HTMLElemnt): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>el</span> <code class='quiet'>(HTMLElemnt)</code>
+	    a DOM node
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></code>:
+        true/false
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='_getelements'>
+      _getElements
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>Turns a selector, nodeList, or array of elements into an array of elements (so we can use array methods).
+It also throws errors on any other inputs. Used to handle inputs to .add and .remove.</p>
+
+    <div class='pre p1 fill-light mt0'>_getElements(input: (<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | <a href="https://developer.mozilla.org/docs/Web/API/NodeList">Nodelist</a>)): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>input</span> <code class='quiet'>((<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a> | <a href="https://developer.mozilla.org/docs/Web/API/NodeList">Nodelist</a>))</code>
+	    A CSS selector string targeting elements with anchor links,
+OR a nodeList / array containing the DOM elements.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        An array containing the elements we want.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+          
+          <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+  <div class='clearfix'>
+    
+    <h3 class='fl m0' id='_addbaselinestyles'>
+      _addBaselineStyles
+    </h3>
+    
+    
+  </div>
+  
+
+  <p>_addBaselineStyles
+Adds baseline styles to the page, used by all AnchorJS links irregardless of configuration.</p>
+
+    <div class='pre p1 fill-light mt0'>_addBaselineStyles()</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+          
+        
+      </div>
+    </div>
+  <script src='assets/anchor.js'></script>
+  <script src='assets/split.js'></script>
+  <script src='assets/site.js'></script>
+</body>
+</html>
