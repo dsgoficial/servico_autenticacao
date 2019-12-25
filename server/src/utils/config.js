@@ -4,7 +4,7 @@ const dotenv = require('dotenv')
 const Joi = require('joi')
 const fs = require('fs')
 
-const AppError = require('./App_error')
+const AppError = require('./app_error')
 const errorHandler = require('./error_handler')
 
 const configFile =
