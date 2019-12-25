@@ -1,0 +1,18 @@
+version: '3'
+services:
+  client:
+    image: auth-server-client
+    build: ./client
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+  api:
+    image: auth-server-api
+    build: ./server
+    ports:
+      - "3012:3012"
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
