@@ -14,7 +14,7 @@ const handleLogin = async (usuario, senha) => {
   ) {
     throw new Error('')
   }
-  const decodedToken = decodeJwt(token);
+  const decodedToken = decodeJwt(response.data.dados.token);
   if (!('uuid' in decodedToken)) {
     throw new Error('')
   }

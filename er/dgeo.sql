@@ -18,7 +18,7 @@ CREATE TABLE dgeo.usuario(
   cpf VARCHAR(255),
   identidade VARCHAR(255),
   validade_identidade VARCHAR(255),
-  orgao_expeditor VARCHAR(255),
+  orgao_expedidor VARCHAR(255),
   banco VARCHAR(255),
   agencia VARCHAR(255),
   conta_bancaria VARCHAR(255),

@@ -2,7 +2,7 @@ import api from './api'
 
 const apiWrapper = {}
 
-apiWrapper.getDados = async url => {
+apiWrapper.getData = async url => {
   const response = await api.get(url)
   if (
     !response ||

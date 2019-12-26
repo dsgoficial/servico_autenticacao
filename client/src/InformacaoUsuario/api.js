@@ -1,19 +1,32 @@
 import { api, apiWrapper, auth } from '../services'
 
-const getData = async () => {
+const getUserData = async () => {
   const uuid = auth.getUUID()
   return apiWrapper.getData(`/usuarios/${uuid}`)
+}
+
+const getSelectData = async () => {
+  return new Promise((resolve, reject) => {
+    Promise.all([apiWrapper.getData('/usuarios/tipo_posto_grad'), apiWrapper.getData('/usuarios/tipo_turno')]).then(dados => {
+      resolve({
+        listaPostoGrad: dados[0],
+        listaTurnos: dados[1]
+      })
+    }).catch(e => {
+      reject(e)
+    })
+  })
 }
 
 const handleUpdate = async (
   nome,
   nomeGuerra,
-  tipoTurnoId,
+  tipoPostoGradId,
   tipoTurnoId,
   cpf,
   identidade,
   validadeIdentidade,
-  orgaoExpeditor,
+  orgaoExpedidor,
   banco,
   agencia,
   contaBancaria,
@@ -30,7 +43,7 @@ const handleUpdate = async (
     cpf,
     identidade,
     validade_identidade: validadeIdentidade,
-    orgao_expeditor: orgaoExpeditor,
+    orgao_expedidor: orgaoExpedidor,
     banco,
     agencia,
     conta_bancaria: contaBancaria,
@@ -40,4 +53,4 @@ const handleUpdate = async (
   })
 }
 
-export { getData, handleUpdate }
+export { getUserData, getSelectData, handleUpdate }

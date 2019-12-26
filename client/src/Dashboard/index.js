@@ -15,14 +15,14 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 import styles from './styles'
 import { mainListItems, adminListItems } from './list_items'
+import {handleLogout} from './api.js'
 
-import handleLogout from './handle_logout.js'
+import InformacaoUsuario from '../InformacaoUsuario'
 
 export default withRouter(props => {
-  const { history } = props
   const classes = styles()
 
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = useState(true)
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -32,7 +32,7 @@ export default withRouter(props => {
   }
 
   const clickLogout = () => {
-    handleLogout(history)
+    handleLogout(props.history)
   }
 
   return (
@@ -78,7 +78,7 @@ export default withRouter(props => {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth='lg' className={classes.container} />
+        <Container maxWidth='lg' className={classes.container}><InformacaoUsuario/></Container>
       </main>
     </div>
   )

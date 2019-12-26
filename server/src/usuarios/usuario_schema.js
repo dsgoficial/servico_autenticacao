@@ -59,16 +59,16 @@ models.atualizacaoUsuario = Joi.object().keys({
     .integer()
     .strict()
     .required(),
-  cpf: Joi.string().required(),
-  identidade: Joi.string().required(),
-  validade_identidade: Joi.string().required(),
-  orgao_expeditor: Joi.string().required(),
-  banco: Joi.string().required(),
-  agencia: Joi.string().required(),
-  conta_bancaria: Joi.string().required(),
-  data_nascimento: Joi.string().required(),
-  celular: Joi.string().required(),
-  email_eb: Joi.string().required()
+  cpf: Joi.string().allow('').required(),
+  identidade: Joi.string().allow('').required(),
+  validade_identidade: Joi.string().allow('').required(),
+  orgao_expedidor: Joi.string().allow('').required(),
+  banco: Joi.string().allow('').required(),
+  agencia: Joi.string().allow('').required(),
+  conta_bancaria: Joi.string().allow('').required(),
+  data_nascimento: Joi.string().allow('').required(),
+  celular: Joi.string().allow('').required(),
+  email_eb: Joi.string().allow('').required()
 })
 
 models.atualizacaoSenha = Joi.object().keys({
@@ -97,7 +97,7 @@ models.atualizacaoAdmUsuario = Joi.object().keys({
   cpf: Joi.string().required(),
   identidade: Joi.string().required(),
   validade_identidade: Joi.string().required(),
-  orgao_expeditor: Joi.string().required(),
+  orgao_expedidor: Joi.string().required(),
   banco: Joi.string().required(),
   agencia: Joi.string().required(),
   conta_bancaria: Joi.string().required(),

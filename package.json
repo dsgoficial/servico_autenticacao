@@ -8,7 +8,7 @@
     "url": "git://github.com/1cgeo/auth_server"
   },
   "scripts": {
-    "install-all": "cd server && npm install && cd ../client && npm install",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
     "start-all": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\"",
     "config": "node create_config.js"
   },

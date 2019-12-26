@@ -4,22 +4,23 @@ import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import LinkMui from '@material-ui/core/Link'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 import Paper from '@material-ui/core/Paper'
-import Grid from '@material-ui/core/Grid'
 import ReactLoading from 'react-loading'
+import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns';
 
-import { MessageSnackBar } from '../helpers'
+import { MessageSnackBar, FormikKeyboardDatePicker } from '../helpers'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
-import { getData, handleUpdate } from './api'
+import { getUserData, getSelectData, handleUpdate } from './api'
 
 export default withRouter(props => {
   const classes = styles()
-  const values = {
+
+  const [initialValues, setInitialValues] = useState({
     nome: '',
     nomeGuerra: '',
     tipoPostoGradId: '',
@@ -27,7 +28,24 @@ export default withRouter(props => {
     cpf: '',
     identidade: '',
     validadeIdentidade: '',
-    orgaoExpeditor: '',
+    orgaoExpedidor: '',
+    banco: '',
+    agencia: '',
+    contaBancaria: '',
+    dataNascimento: '',
+    celular: '',
+    emailEb: ''
+  })
+
+  const initialValues2 = {
+    nome: '',
+    nomeGuerra: '',
+    tipoPostoGradId: '',
+    tipoTurnoId: '',
+    cpf: '',
+    identidade: '',
+    validadeIdentidade: '',
+    orgaoExpedidor: '',
     banco: '',
     agencia: '',
     contaBancaria: '',
@@ -46,21 +64,28 @@ export default withRouter(props => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const usuarioData = await getData()
-        values.nome = usuarioData.nome
-        values.nomeGuerra = usuarioData.nomeGuerra
-        values.tipoTurnoId = usuarioData.tipoTurnoId
-        values.tipoTurnoId = usuarioData.tipoTurnoId
-        values.cpf = usuarioData.cpf
-        values.identidade = usuarioData.identidade
-        values.validadeIdentidade = usuarioData.validadeIdentidade
-        values.orgaoExpeditor = usuarioData.orgaoExpeditor
-        values.banco = usuarioData.banco
-        values.agencia = usuarioData.agencia
-        values.contaBancaria = usuarioData.contaBancaria
-        values.dataNascimento = usuarioData.dataNascimento
-        values.celular = usuarioData.celular
-        values.emailEb = usuarioData.emailEb
+        const usuarioData = await getUserData()
+        setInitialValues({
+          nome: usuarioData.nome || '',
+          nomeGuerra: usuarioData.nome_guerra || '',
+          tipoPostoGradId: usuarioData.tipo_posto_grad_id || '',
+          tipoTurnoId: usuarioData.tipo_turno_id || '',
+          cpf: usuarioData.cpf || '',
+          identidade: usuarioData.identidade || '',
+          validadeIdentidade: usuarioData.validade_identidade || '',
+          orgaoExpedidor: usuarioData.orgao_expedidor || '',
+          banco: usuarioData.banco || '',
+          agencia: usuarioData.agencia || '',
+          contaBancaria: usuarioData.conta_bancaria || '',
+          dataNascimento: usuarioData.data_nascimento || '',
+          celular: usuarioData.celular || '',
+          emailEb: usuarioData.email_eb || ''
+        })
+        const { listaPostoGrad, listaTurnos } = await getSelectData()
+        setListaPostoGrad(listaPostoGrad)
+        setListaTurnos(listaTurnos)
+
+        setLoaded(true)
       } catch (err) {
         props.history.push('/erro')
       }
@@ -73,12 +98,12 @@ export default withRouter(props => {
       await handleUpdate(
         values.nome,
         values.nomeGuerra,
-        values.tipoTurnoId,
+        values.tipoPostoGradId,
         values.tipoTurnoId,
         values.cpf,
         values.identidade,
         values.validadeIdentidade,
-        values.orgaoExpeditor,
+        values.orgaoExpedidor,
         values.banco,
         values.agencia,
         values.contaBancaria,
@@ -89,6 +114,7 @@ export default withRouter(props => {
       setSuccess(
         'Informações atualizadas com sucesso'
       )
+      props.history.push('/')
     } catch (err) {
       if (
         'response' in err &&
@@ -108,39 +134,15 @@ export default withRouter(props => {
         {loaded ? (
           <Paper className={classes.paper}>
             <Typography component='h1' variant='h5'>
-              Cadastro de novo usuário
+              Atualizar dados do usuário
             </Typography>
             <Formik
-              initialValues={values}
+              initialValues={initialValues2}
               validationSchema={validationSchema}
               onSubmit={handleForm}
             >
               {({ isValid, isSubmitting, errors, touched }) => (
                 <Form className={classes.form}>
-                  <Field
-                    name='usuario'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Usuário'
-                  />
-                  <Field
-                    type='password' name='senha'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Senha'
-                  />
-                  <Field
-                    type='password' name='confirmarSenha'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Confirme a senha'
-                  />
                   <Field
                     name='nome'
                     component={TextField}
@@ -195,6 +197,48 @@ export default withRouter(props => {
                       ))}
                     </Field>
                   </div>
+                  <Field
+                      name='cpf'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='CPF'
+                  />
+                  <Field
+                      name='identidade'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Identidade'
+                  />
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <Field
+                      name='validadeIdentidade2'
+                      component={FormikKeyboardDatePicker}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Data de validade da identidade'
+                  />
+                  </MuiPickersUtilsProvider>
+                  <Field
+                      name='orgaoExpedidor'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Órgão Expedidor'
+                  />
+                  <Field
+                      name='celular'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Celular'
+                  />
                   <Button
                     type='submit' disabled={isSubmitting || !isValid}
                     fullWidth
@@ -207,14 +251,6 @@ export default withRouter(props => {
                 </Form>
               )}
             </Formik>
-            <Grid container justify='flex-end'>
-              <Grid item>
-                <LinkMui to='/login' variant='body2' component={Link} className={classes.link}>
-                  Fazer login
-                </LinkMui>
-              </Grid>
-            </Grid>
-
           </Paper>
         )
           : (

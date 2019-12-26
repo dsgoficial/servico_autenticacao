@@ -5,4 +5,4 @@ const handleLogout = async (history) => {
   history.push('/login')
 }
 
-export default handleLogout
+export { handleLogout }

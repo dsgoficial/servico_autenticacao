@@ -9,16 +9,18 @@ const validationSchema = Yup.object().shape({
     .required('Preencha seu posto/graduação'),
   tipoTurnoId: Yup.number()
     .required('Preencha seu turno de trabalho'),
-  cpf: Yup.string(),
+  cpf: Yup.string().matches(/^\d\d\d.\d\d\d.\d\d\d-\d\d$/, 'O CPF deve ser no formato 999.999.999-99'),
   identidade: Yup.string(),
-  validadeIdentidade: Yup.date(),
-  orgaoExpeditor: Yup.string(),
+  validadeIdentidade: Yup.string(),
+  orgaoExpedidor: Yup.string(),
   banco: Yup.string(),
   agencia: Yup.string(),
   contaBancaria: Yup.string(),
-  dataNascimento: Yup.date(),
-  celular: Yup.date(),
+  dataNascimento: Yup.string(),
+  celular: Yup.string().matches(/^\(\d\d\)\d\d\d\d\d-\d\d\d\d$/, 'O celular deve ser no formato (0 _ _ ) _ _ _ _-_ _ _ _ _'),
   emailEb: Yup.string().email('Formato inválido para um email'),
 })
+
+
 
 export default validationSchema
