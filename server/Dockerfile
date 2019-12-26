@@ -7,6 +7,8 @@ COPY package-lock.json ./
 
 RUN npm install
 
+RUN npm create-docs
+
 COPY . .
 
 EXPOSE 3012
