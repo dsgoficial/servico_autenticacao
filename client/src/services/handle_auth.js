@@ -4,7 +4,7 @@ const AUTH_KEY = '@authserver-Role'
 
 const handleAuth = {}
 
-handleAuth.isAuthenticated = () => window.localStorage.getItem(TOKEN_KEY) !== null
+handleAuth.isAuthenticated = () => window.localStorage.getItem(TOKEN_KEY) !== null && window.localStorage.getItem(AUTH_KEY) !== null
 
 handleAuth.getToken = () => window.localStorage.getItem(TOKEN_KEY)
 

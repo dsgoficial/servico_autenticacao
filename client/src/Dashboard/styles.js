@@ -1,13 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-const drawerWidth = 240
+const drawerWidth = 280
 
 const styles = makeStyles(theme => ({
   root: {
     display: 'flex'
   },
   toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
+    paddingRight: 21 // keep right padding when drawer closed
   },
   toolbarIcon: {
     display: 'flex',
@@ -32,7 +32,10 @@ const styles = makeStyles(theme => ({
     })
   },
   menuButton: {
-    marginRight: 36
+    marginRight: 15
+  },
+  logoutButton: {
+    marginLeft: 10
   },
   menuButtonHidden: {
     display: 'none'

@@ -12,9 +12,9 @@ const PrivateRoute = ({ component: Component, role, ...rest }) => (
       }
 
       // check if route is restricted by role
-      if (role && role === handleAuth.getAuthorization()) {
+      if (role && role !== handleAuth.getAuthorization()) {
         // role not authorised so redirect to home page
-        return <Redirect to={{ pathname: '/' }} />
+        return <Redirect to={{ pathname: '/', state: { from: props.location } }} />
       }
 
       // authorised so return component

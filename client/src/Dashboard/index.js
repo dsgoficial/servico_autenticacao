@@ -16,15 +16,23 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import styles from './styles'
 import { mainListItems, adminListItems } from './list_items'
 
+import handleLogout from './handle_logout.js'
+
 export default withRouter(props => {
+  const { history } = props
   const classes = styles()
 
   const [open, setOpen] = React.useState(true)
+
   const handleDrawerOpen = () => {
     setOpen(true)
   }
   const handleDrawerClose = () => {
     setOpen(false)
+  }
+
+  const clickLogout = () => {
+    handleLogout(history)
   }
 
   return (
@@ -41,10 +49,13 @@ export default withRouter(props => {
             <MenuIcon />
           </IconButton>
           <Typography component='h1' variant='h6' color='inherit' noWrap className={classes.title}>
-            Dashboard
+            Serviço de Autenticação
           </Typography>
-          <IconButton color='inherit'>
-            <ExitToAppIcon />
+          <IconButton color='inherit' onClick={clickLogout}>
+            <Typography variant='h6' color='inherit' noWrap className={classes.title}>
+              Sair
+            </Typography>
+            <ExitToAppIcon className={classes.logoutButton} />
           </IconButton>
         </Toolbar>
       </AppBar>

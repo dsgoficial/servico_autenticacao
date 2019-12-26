@@ -7,6 +7,7 @@ import DashboardIcon from '@material-ui/icons/Dashboard'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
 import PersonIcon from '@material-ui/icons/Person'
 import CreateIcon from '@material-ui/icons/Create'
+import GroupIcon from '@material-ui/icons/Group';
 
 export const mainListItems = (
   <div>
@@ -30,9 +31,9 @@ export const adminListItems = (
     <ListSubheader inset>Administração</ListSubheader>
     <ListItem button>
       <ListItemIcon>
-        <CreateIcon />
+        <GroupIcon />
       </ListItemIcon>
-      <ListItemText primary='Current month' />
+      <ListItemText primary='Gerenciar usuários' />
     </ListItem>
     <ListItem button>
       <ListItemIcon>

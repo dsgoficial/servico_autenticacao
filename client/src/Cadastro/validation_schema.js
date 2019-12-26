@@ -2,7 +2,7 @@ import * as Yup from 'yup'
 
 const validationSchema = Yup.object().shape({
   usuario: Yup.string()
-    .required('Preencha seu usuário'),
+    .required('Preencha seu usuário').matches(/^[a-z]+$/, 'O nome do usuário deve ser em minúsculo e não conter espaços ou caracteres especiais'),
   senha: Yup.string()
     .min(6, 'A senha deve conter pelo menos 6 caracteres')
     .required('Preencha sua senha'),

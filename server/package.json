@@ -8,7 +8,8 @@
     "dev-multicore": "nodemon src/index.js --multicore",
     "dev-https": "nodemon src/index.js --https",
     "dev-https-multicore": "nodemon src/index.js --https --multicore",
-    "production": "pm2 start src/index.js -multicore -https --name sap"
+    "production": "pm2 start src/index.js -multicore --name sap",
+    "production-https": "pm2 start src/index.js -multicore -https --name sap-https"
   },
   "nodemonConfig": {
     "ignore": [
