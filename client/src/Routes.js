@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import { PrivateRoute } from './helpers'
-import { ROLES } from './services'
+import { auth } from './services'
 
 import Cadastro from './Cadastro'
 import Login from './Login'
@@ -14,7 +14,7 @@ const Routes = () => (
   <BrowserRouter>
     <Switch>
       <PrivateRoute exact path='/' component={Dashboard} />
-      <PrivateRoute exact path='/adm' role={ROLES.Admin} component={() => <h1>Adm</h1>} />
+      <PrivateRoute exact path='/adm' role={auth.ROLES.Admin} component={() => <h1>Adm</h1>} />
       <Route exact path='/login' component={Login} />
       <Route exact path='/cadastro' component={Cadastro} />
       <Route exact path='/erro' component={Erro} />

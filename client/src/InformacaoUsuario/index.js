@@ -15,18 +15,25 @@ import { MessageSnackBar } from '../helpers'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
-import { getData, handleCadastro } from './api'
+import { getData, handleUpdate } from './api'
 
 export default withRouter(props => {
   const classes = styles()
   const values = {
-    usuario: '',
-    senha: '',
-    confirmarSenha: '',
     nome: '',
     nomeGuerra: '',
     tipoPostoGradId: '',
-    tipoTurnoId: ''
+    tipoTurnoId: '',
+    cpf: '',
+    identidade: '',
+    validadeIdentidade: '',
+    orgaoExpeditor: '',
+    banco: '',
+    agencia: '',
+    contaBancaria: '',
+    dataNascimento: '',
+    celular: '',
+    emailEb: ''
   }
 
   const [listaTurnos, setListaTurnos] = useState([])
@@ -39,10 +46,21 @@ export default withRouter(props => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { listaPostoGrad, listaTurnos } = await getData()
-        setListaPostoGrad(listaPostoGrad)
-        setListaTurnos(listaTurnos)
-        setLoaded(true)
+        const usuarioData = await getData()
+        values.nome = usuarioData.nome
+        values.nomeGuerra = usuarioData.nomeGuerra
+        values.tipoTurnoId = usuarioData.tipoTurnoId
+        values.tipoTurnoId = usuarioData.tipoTurnoId
+        values.cpf = usuarioData.cpf
+        values.identidade = usuarioData.identidade
+        values.validadeIdentidade = usuarioData.validadeIdentidade
+        values.orgaoExpeditor = usuarioData.orgaoExpeditor
+        values.banco = usuarioData.banco
+        values.agencia = usuarioData.agencia
+        values.contaBancaria = usuarioData.contaBancaria
+        values.dataNascimento = usuarioData.dataNascimento
+        values.celular = usuarioData.celular
+        values.emailEb = usuarioData.emailEb
       } catch (err) {
         props.history.push('/erro')
       }
@@ -52,18 +70,25 @@ export default withRouter(props => {
 
   const handleForm = async (values, { setSubmitting }) => {
     try {
-      await handleCadastro(
-        values.usuario,
-        values.senha,
+      await handleUpdate(
         values.nome,
         values.nomeGuerra,
         values.tipoTurnoId,
-        values.tipoPostoGradId
+        values.tipoTurnoId,
+        values.cpf,
+        values.identidade,
+        values.validadeIdentidade,
+        values.orgaoExpeditor,
+        values.banco,
+        values.agencia,
+        values.contaBancaria,
+        values.dataNascimento,
+        values.celular,
+        values.emailEb
       )
       setSuccess(
-        'Usuário criado com sucesso. Entre em contato com o gerente para autorizar o login.'
+        'Informações atualizadas com sucesso'
       )
-      props.history.push('/')
     } catch (err) {
       if (
         'response' in err &&
@@ -72,7 +97,7 @@ export default withRouter(props => {
       ) {
         setError(err.response.data.message)
       } else {
-        setError('Ocorreu um erro ao registrar sua conta. Contate o gerente.')
+        setError('Ocorreu um erro ao atualizar suas informações. Contate o gerente.')
       }
     }
   }

@@ -13,7 +13,7 @@ import Grid from '@material-ui/core/Grid'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
-import handleLogin from './handle_login'
+import { handleLogin } from './api'
 
 import { MessageSnackBar } from '../helpers'
 

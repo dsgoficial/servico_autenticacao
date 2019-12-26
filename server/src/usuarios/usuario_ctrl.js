@@ -29,7 +29,7 @@ controller.criaUsuario = async (
 
   return db.conn.none(
     `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id)
-     VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoTurnoId>, $<tipoPostoGradId>)`,
+    VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoTurnoId>, $<tipoPostoGradId>)`,
     { login, hash, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId }
   )
 }
@@ -76,7 +76,17 @@ controller.updateUsuario = async (
   nome,
   nomeGuerra,
   tipoTurnoId,
-  tipoPostoGradId
+  tipoPostoGradId,
+  cpf,
+  identidade,
+  validadeIdentidade,
+  orgaoExpeditor,
+  banco,
+  agencia,
+  contaBancaria,
+  dataNascimento,
+  celular,
+  emailEb
 ) => {
   const result = await db.conn.result(
     `UPDATE dgeo.usuario

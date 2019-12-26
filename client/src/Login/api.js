@@ -1,5 +1,6 @@
 
-import { api, handleAuth } from '../services'
+import { api, auth } from '../services'
+import decodeJwt from 'jwt-decode';
 
 const handleLogin = async (usuario, senha) => {
   const response = await api.post('/login', { usuario, senha })
@@ -13,8 +14,15 @@ const handleLogin = async (usuario, senha) => {
   ) {
     throw new Error('')
   }
-  handleAuth.setToken(response.data.dados.token)
-  handleAuth.setAuthorization(response.data.dados.administrador)
+  const decodedToken = decodeJwt(token);
+  if (!('uuid' in decodedToken)) {
+    throw new Error('')
+  }
+
+  auth.setToken(response.data.dados.token)
+  auth.setAuthorization(response.data.dados.administrador)
+  auth.setUUID(decodedToken.uuid)
+
 }
 
-export default handleLogin
+export { handleLogin }

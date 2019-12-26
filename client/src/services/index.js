@@ -1,5 +1,5 @@
 import api from './api'
-import handleAuth from './handle_auth'
-import ROLES from './roles'
+import auth from './auth'
+import apiWrapper from './api_wrapper'
 
-export { api, handleAuth, ROLES }
+export { api, auth, apiWrapper }

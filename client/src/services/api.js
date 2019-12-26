@@ -1,10 +1,10 @@
 import axios from 'axios'
-import handleAuth from './handle_auth'
+import auth from './auth'
 
 const api = axios.create()
 
 api.interceptors.request.use(async config => {
-  const token = handleAuth.getToken()
+  const token = auth.getToken()
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
@@ -12,3 +12,5 @@ api.interceptors.request.use(async config => {
 })
 
 export default api
+
+

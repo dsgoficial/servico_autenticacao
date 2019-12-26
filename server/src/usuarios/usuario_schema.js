@@ -77,6 +77,7 @@ models.atualizacaoSenha = Joi.object().keys({
 
 models.atualizacaoAdmUsuario = Joi.object().keys({
   usuario: Joi.string().required(),
+  login: Joi.string().required(),
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),
   administrador: Joi.boolean()

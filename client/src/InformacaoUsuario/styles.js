@@ -28,12 +28,6 @@ const styles = makeStyles(theme => ({
     width: '100%',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1)
-  },
-  link: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#999',
-    textDecoration: 'none'
   }
 }))
 

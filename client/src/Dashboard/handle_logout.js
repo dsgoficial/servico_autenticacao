@@ -1,7 +1,7 @@
-import { handleAuth } from '../services'
+import { auth } from '../services'
 
 const handleLogout = async (history) => {
-  handleAuth.logout();
+  auth.logout()
   history.push('/login')
 }
 
