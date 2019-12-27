@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { Link, withRouter, HashRouter, Route } from 'react-router-dom'
+import React, { useState } from 'react'
+import { withRouter, HashRouter, Route } from 'react-router-dom'
 import clsx from 'clsx'
 import AppBar from '@material-ui/core/AppBar'
 import Drawer from '@material-ui/core/Drawer'
 import Container from '@material-ui/core/Container'
 import Toolbar from '@material-ui/core/Toolbar'
-import Divider from '@material-ui/core/Divider'
-import List from '@material-ui/core/List'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
@@ -14,7 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 import styles from './styles'
-import { mainListItems, adminListItems } from './list_items'
+import { MainListItems, AdminListItems } from './list_items'
 import { handleLogout } from './api.js'
 
 import InformacaoUsuario from '../InformacaoUsuario'
@@ -24,7 +22,7 @@ import GerenciaUsuarios from '../GerenciaUsuarios'
 export default withRouter(props => {
   const classes = styles()
 
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -75,12 +73,10 @@ export default withRouter(props => {
               <ChevronLeftIcon />
             </IconButton>
           </div>
-          <Divider />
-          <List>{mainListItems}</List>
+          <MainListItems/>
           {props.role === 'ADMIN' &&
             <>
-              <Divider />
-              <List>{adminListItems}</List>
+              <AdminListItems/>
             </>
           }
         </Drawer>

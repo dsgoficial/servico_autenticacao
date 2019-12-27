@@ -9,7 +9,7 @@ import NaoEncontrado from './NaoEncontrado'
 import Erro from './Erro'
 import Dashboard from './Dashboard'
 
-const PrivateRoute = ({ component: Component, role, ...rest }) => (
+const PrivateRoute = ({ component: Component, exact, path, role, ...rest }) => (
   <Route
     {...rest} render={props => {
       if (!auth.isAuthenticated()) {
@@ -25,7 +25,7 @@ const PrivateRoute = ({ component: Component, role, ...rest }) => (
       }
 
       // authorised so return component
-      return <Component role={userRole}  {...props} />
+      return <Route exact={exact} path={path}><Component role={userRole}  {...props} /></Route>
     }}
   />
 )
@@ -34,7 +34,6 @@ const Routes = () => (
   <BrowserRouter>
     <Switch>
       <PrivateRoute exact path='/' component={Dashboard} />
-      <PrivateRoute exact path='/adm' role={auth.ROLES.Admin} component={() => <h1>Adm</h1>} />
       <Route exact path='/login' component={Login} />
       <Route exact path='/cadastro' component={Cadastro} />
       <Route exact path='/erro' component={Erro} />

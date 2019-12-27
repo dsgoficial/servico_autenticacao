@@ -90,6 +90,12 @@ controller.updateUsuario = async (
   celular,
   emailEb
 ) => {
+  if(!validadeIdentidade){
+    validadeIdentidade = null
+  }
+  if(!dataNascimento){
+    dataNascimento = null
+  }
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, tipo_posto_grad_id = $<tipoPostoGradId>,
@@ -253,6 +259,12 @@ controller.updateUsuarioCompleto = async (
   celular,
   emailEb
 ) => {
+  if(!validadeIdentidade){
+    validadeIdentidade = null
+  }
+  if(!dataNascimento){
+    dataNascimento = null
+  }
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET login = $<login>, nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, 

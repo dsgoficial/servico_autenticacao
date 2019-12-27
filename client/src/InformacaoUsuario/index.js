@@ -10,6 +10,7 @@ import ReactLoading from 'react-loading'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker } from 'material-ui-formik-components/DatePicker'
+import ptLocale from "date-fns/locale/pt-BR";
 
 import { MessageSnackBar } from '../helpers'
 
@@ -51,18 +52,18 @@ export default withRouter(props => {
         setInitialValues({
           nome: usuarioData.nome || '',
           nomeGuerra: usuarioData.nome_guerra || '',
-          tipoPostoGradId: usuarioData.tipo_posto_grad_id || '',
+          tipoPostoGradId: usuarioData.tipo_posto_grad_id  || '',
           tipoTurnoId: usuarioData.tipo_turno_id || '',
           cpf: usuarioData.cpf || '',
           identidade: usuarioData.identidade || '',
-          validadeIdentidade: usuarioData.validade_identidade || '',
+          validadeIdentidade: usuarioData.validade_identidade,
           orgaoExpedidor: usuarioData.orgao_expedidor || '',
           banco: usuarioData.banco || '',
           agencia: usuarioData.agencia || '',
           contaBancaria: usuarioData.conta_bancaria || '',
-          dataNascimento: usuarioData.data_nascimento || '',
+          dataNascimento: usuarioData.data_nascimento,
           celular: usuarioData.celular || '',
-          emailEb: usuarioData.email_eb || ''
+          emailEb: usuarioData.email_eb  || ''
         })
         const { listaPostoGrad, listaTurnos } = await getSelectData()
         setListaPostoGrad(listaPostoGrad)
@@ -179,6 +180,20 @@ export default withRouter(props => {
                       ))}
                     </Field>
                   </div>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
+                    <Field
+                      name='dataNascimento'
+                      component={DatePicker}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Data de nascimento'
+                      format="dd/MM/yyyy"
+                      autoOk
+                      allowKeyboardControl
+                      clearable
+                    />
+                  </MuiPickersUtilsProvider>
                   <Field
                     name='celular'
                     component={TextField}
@@ -211,7 +226,7 @@ export default withRouter(props => {
                     fullWidth
                     label='Identidade'
                   />
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
                     <Field
                       name='validadeIdentidade'
                       component={DatePicker}

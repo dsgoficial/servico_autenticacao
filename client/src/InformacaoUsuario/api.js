@@ -40,16 +40,16 @@ const handleUpdate = async (
     nome_guerra: nomeGuerra,
     tipo_turno_id: tipoTurnoId,
     tipo_posto_grad_id: tipoPostoGradId,
-    cpf,
-    identidade,
-    validade_identidade: validadeIdentidade,
-    orgao_expedidor: orgaoExpedidor,
-    banco,
-    agencia,
-    conta_bancaria: contaBancaria,
-    data_nascimento: dataNascimento,
-    celular,
-    email_eb: emailEb
+    cpf: cpf || '',
+    identidade: identidade || '',
+    validade_identidade: validadeIdentidade  || '',
+    orgao_expedidor: orgaoExpedidor  || '',
+    banco: banco || '',
+    agencia: agencia || '',
+    conta_bancaria: contaBancaria  || '',
+    data_nascimento: dataNascimento  || '',
+    celular: celular  || '',
+    email_eb: emailEb  || ''
   })
 }
 

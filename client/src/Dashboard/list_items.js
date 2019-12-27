@@ -9,30 +9,46 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import PersonIcon from '@material-ui/icons/Person'
 import CreateIcon from '@material-ui/icons/Create'
 import GroupIcon from '@material-ui/icons/Group';
+import Divider from '@material-ui/core/Divider'
+import List from '@material-ui/core/List'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-export const mainListItems = (
-  <div>
-    <ListItem button component={NavLink} to="/">
+const styles = makeStyles(theme => ({
+  active: {
+    backgroundColor: theme.palette.action.selected
+  }
+}))
+
+export const MainListItems = props => {
+  const classes = styles()
+
+  return (
+    <List>
+    <Divider />
+    <ListItem button component={NavLink} exact to="/" activeClassName={classes.active}>
       <ListItemIcon>
         <PersonIcon />
       </ListItemIcon>
       <ListItemText primary='Informações do usuário' />
     </ListItem>
-    <ListItem button button component={NavLink} to="/alterar_senha">
+    <ListItem button button component={NavLink} exact to="/alterar_senha" activeClassName={classes.active}>
       <ListItemIcon>
         <LockOpenIcon />
       </ListItemIcon>
       <ListItemText primary='Alterar senha' />
     </ListItem>
-  </div >
-)
+    </List>
+)}
 
-export const adminListItems = (
-  <div>
+export const AdminListItems = props => {
+  const classes = styles()
+
+  return (
+    <List>
+    <Divider />
     <ListSubheader inset>Administração</ListSubheader>
-    <ListItem button component={NavLink} to="/gerenciar_usuarios">
+    <ListItem button component={NavLink} exact to="/gerenciar_usuarios" activeClassName={classes.active}>
       <ListItemIcon>
         <GroupIcon />
       </ListItemIcon>
@@ -40,7 +56,7 @@ export const adminListItems = (
     </ListItem>
     <ListItem button>
       <ListItemIcon>
-        <CreateIcon />
+        <DashboardIcon />
       </ListItemIcon>
       <ListItemText primary='Last quarter' />
     </ListItem>
@@ -50,5 +66,5 @@ export const adminListItems = (
       </ListItemIcon>
       <ListItemText primary='Year-end sale' />
     </ListItem>
-  </div>
-)
+    </List>
+)}
