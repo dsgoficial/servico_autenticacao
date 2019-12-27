@@ -29,7 +29,7 @@ const signJWT = (data, secret) => {
       data,
       secret,
       {
-        expiresIn: '10h'
+        expiresIn: '10m'
       },
       (err, token) => {
         if (err) {
@@ -69,6 +69,24 @@ controller.login = async (usuario, senha) => {
   await gravaLogin(id)
 
   return { token, administrador }
+}
+
+controller.verifyPassword = async (uuid, senha) => {
+  const usuarioDb = await db.conn.oneOrNone(
+    'SELECT id, uuid, administrador, senha FROM dgeo.usuario WHERE uuid = $<uuid> and ativo IS TRUE',
+    { uuid }
+  )
+  if (!usuarioDb) {
+    throw new AppError(
+      'Usuário não autorizado para utilizar o Serviço de Autenticação',
+      httpCode.BadRequest
+    )
+  }
+
+  const correctPassword = await verifyPassword(senha, usuarioDb.senha)
+  if (!correctPassword) {
+    throw new AppError('Usuário ou senha inválida', httpCode.BadRequest)
+  }
 }
 
 module.exports = controller

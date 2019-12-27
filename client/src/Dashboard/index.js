@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, withRouter, HashRouter, Route } from 'react-router-dom'
 import clsx from 'clsx'
 import AppBar from '@material-ui/core/AppBar'
 import Drawer from '@material-ui/core/Drawer'
@@ -18,6 +18,8 @@ import { mainListItems, adminListItems } from './list_items'
 import { handleLogout } from './api.js'
 
 import InformacaoUsuario from '../InformacaoUsuario'
+import AlteraSenha from '../AlteraSenha'
+import GerenciaUsuarios from '../GerenciaUsuarios'
 
 export default withRouter(props => {
   const classes = styles()
@@ -38,53 +40,59 @@ export default withRouter(props => {
 
   return (
     <div className={classes.root}>
-      <AppBar position='absolute' className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge='start'
-            color='inherit'
-            aria-label='open drawer'
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component='h1' variant='h6' color='inherit' noWrap className={classes.title}>
-            Serviço de Autenticação
+      <HashRouter>
+        <AppBar position='absolute' className={clsx(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+              edge='start'
+              color='inherit'
+              aria-label='open drawer'
+              onClick={handleDrawerOpen}
+              className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography component='h1' variant='h6' color='inherit' noWrap className={classes.title}>
+              Serviço de Autenticação
           </Typography>
-          <IconButton color='inherit' onClick={clickLogout}>
-            <Typography variant='h6' color='inherit' noWrap className={classes.title}>
-              Sair
+            <IconButton color='inherit' onClick={clickLogout}>
+              <Typography variant='h6' color='inherit' noWrap className={classes.title}>
+                Sair
             </Typography>
-            <ExitToAppIcon className={classes.logoutButton} />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant='permanent'
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>{mainListItems}</List>
-        {props.role === 'ADMIN' &&
-          <>
-            <Divider />
-            <List>{adminListItems}</List>
-          </>
-        }
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth='lg' className={classes.container}><InformacaoUsuario /></Container>
-      </main>
+              <ExitToAppIcon className={classes.logoutButton} />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant='permanent'
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          <Divider />
+          <List>{mainListItems}</List>
+          {props.role === 'ADMIN' &&
+            <>
+              <Divider />
+              <List>{adminListItems}</List>
+            </>
+          }
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth='lg' className={classes.container}>
+            <Route exact path="/" component={InformacaoUsuario} />
+            <Route exact path="/alterar_senha" component={AlteraSenha} />
+            <Route exact path="/gerenciar_usuarios" component={GerenciaUsuarios} />
+          </Container>
+        </main>
+      </HashRouter>
     </div>
   )
 })

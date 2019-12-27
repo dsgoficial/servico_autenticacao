@@ -4,6 +4,8 @@ const { db } = require('../database')
 
 const { AppError, httpCode } = require('../utils')
 
+const { loginController } = require('../login')
+
 const bcrypt = require('bcryptjs')
 
 const controller = {}
@@ -118,8 +120,10 @@ controller.updateUsuario = async (
   }
 }
 
-controller.updateSenha = async (uuid, senha) => {
-  const hash = await bcrypt.hash(senha, 10)
+controller.updateSenha = async (uuid, senhaAtual, senhaNova) => {
+  await loginController.verifyPassword(uuid, senhaAtual)
+
+  const hash = await bcrypt.hash(senhaNova, 10)
 
   const result = await db.conn.result(
     `UPDATE dgeo.usuario

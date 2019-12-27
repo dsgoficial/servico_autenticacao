@@ -118,7 +118,7 @@ router.put(
   }),
   verifyLogin,
   asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.updateSenha(req.params.uuid, req.body.senha)
+    await usuarioCtrl.updateSenha(req.params.uuid, req.body.senha_atual, req.body.senha_nova)
 
     const msg = 'Senha do usuário atualizada com sucesso'
 
@@ -151,42 +151,6 @@ router.put(
       req.params.uuid,
       req.body.nome,
       req.body.nome_guerra,
-      req.body.tipo_turno_id,
-      req.body.tipo_posto_grad_id,
-      req.body.cpf,
-      req.body.identidade,
-      req.body.validade_identidade,
-      req.body.orgao_expedidor,
-      req.body.banco,
-      req.body.agencia,
-      req.body.conta_bancaria,
-      req.body.data_nascimento,
-      req.body.celular,
-      req.body.email_eb
-    )
-
-    const msg = 'Usuário atualizado com sucesso'
-
-    return res.sendJsonAndLog(true, msg, httpCode.OK)
-  })
-)
-
-router.put(
-  '/:uuid',
-  verifyAdmin,
-  schemaValidation({
-    body: usuarioSchema.atualizacaoAdmUsuario,
-    params: usuarioSchema.uuidParams
-  }),
-  asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.updateUsuarioCompleto(
-      req.params.uuid,
-      req.params.login,
-      req.body.usuario,
-      req.body.nome,
-      req.body.nome_guerra,
-      req.body.administrador,
-      req.body.ativo,
       req.body.tipo_turno_id,
       req.body.tipo_posto_grad_id,
       req.body.cpf,
