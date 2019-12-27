@@ -15,7 +15,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 import styles from './styles'
 import { mainListItems, adminListItems } from './list_items'
-import {handleLogout} from './api.js'
+import { handleLogout } from './api.js'
 
 import InformacaoUsuario from '../InformacaoUsuario'
 
@@ -32,7 +32,8 @@ export default withRouter(props => {
   }
 
   const clickLogout = () => {
-    handleLogout(props.history)
+    handleLogout()
+    props.history.push('/login')
   }
 
   return (
@@ -73,12 +74,16 @@ export default withRouter(props => {
         </div>
         <Divider />
         <List>{mainListItems}</List>
-        <Divider />
-        <List>{adminListItems}</List>
+        {props.role === 'ADMIN' &&
+          <>
+            <Divider />
+            <List>{adminListItems}</List>
+          </>
+        }
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
-        <Container maxWidth='lg' className={classes.container}><InformacaoUsuario/></Container>
+        <Container maxWidth='lg' className={classes.container}><InformacaoUsuario /></Container>
       </main>
     </div>
   )

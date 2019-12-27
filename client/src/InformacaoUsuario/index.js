@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
-import Paper from '@material-ui/core/Paper'
 import ReactLoading from 'react-loading'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns';
+import { DatePicker } from 'material-ui-formik-components/DatePicker'
 
-import { MessageSnackBar, FormikKeyboardDatePicker } from '../helpers'
+import { MessageSnackBar } from '../helpers'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
@@ -36,23 +36,6 @@ export default withRouter(props => {
     celular: '',
     emailEb: ''
   })
-
-  const initialValues2 = {
-    nome: '',
-    nomeGuerra: '',
-    tipoPostoGradId: '',
-    tipoTurnoId: '',
-    cpf: '',
-    identidade: '',
-    validadeIdentidade: '',
-    orgaoExpedidor: '',
-    banco: '',
-    agencia: '',
-    contaBancaria: '',
-    dataNascimento: '',
-    celular: '',
-    emailEb: ''
-  }
 
   const [listaTurnos, setListaTurnos] = useState([])
   const [listaPostoGrad, setListaPostoGrad] = useState([])
@@ -84,7 +67,6 @@ export default withRouter(props => {
         const { listaPostoGrad, listaTurnos } = await getSelectData()
         setListaPostoGrad(listaPostoGrad)
         setListaTurnos(listaTurnos)
-
         setLoaded(true)
       } catch (err) {
         props.history.push('/erro')
@@ -132,12 +114,12 @@ export default withRouter(props => {
     <>
       <Container component='main' maxWidth='xs'>
         {loaded ? (
-          <Paper className={classes.paper}>
+          <div className={classes.formArea}>
             <Typography component='h1' variant='h5'>
               Atualizar dados do usuário
             </Typography>
             <Formik
-              initialValues={initialValues2}
+              initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={handleForm}
             >
@@ -198,46 +180,82 @@ export default withRouter(props => {
                     </Field>
                   </div>
                   <Field
-                      name='cpf'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='CPF'
+                    name='celular'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Celular'
                   />
                   <Field
-                      name='identidade'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Identidade'
+                    name='emailEb'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Email (EB)'
+                  />
+                  <Field
+                    name='cpf'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='CPF'
+                  />
+                  <Field
+                    name='identidade'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Identidade'
                   />
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <Field
-                      name='validadeIdentidade2'
-                      component={FormikKeyboardDatePicker}
+                    <Field
+                      name='validadeIdentidade'
+                      component={DatePicker}
                       variant='outlined'
                       margin='normal'
                       fullWidth
                       label='Data de validade da identidade'
-                  />
+                      format="dd/MM/yyyy"
+                      autoOk
+                      allowKeyboardControl
+                      clearable
+                    />
                   </MuiPickersUtilsProvider>
                   <Field
-                      name='orgaoExpedidor'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Órgão Expedidor'
+                    name='orgaoExpedidor'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Órgão Expedidor'
                   />
                   <Field
-                      name='celular'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Celular'
+                    name='banco'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Banco'
+                  />
+                  <Field
+                    name='agencia'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Agência'
+                  />
+                  <Field
+                    name='contaBancaria'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Conta bancária'
                   />
                   <Button
                     type='submit' disabled={isSubmitting || !isValid}
@@ -246,12 +264,12 @@ export default withRouter(props => {
                     color='primary'
                     className={classes.submit}
                   >
-                    Cadastrar
+                    Atualizar dados
                   </Button>
                 </Form>
               )}
             </Formik>
-          </Paper>
+          </div>
         )
           : (
             <div className={classes.loading}>

@@ -1,13 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 const styles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
+  formArea: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    padding: theme.spacing(3, 2),
-    elevation: 3
+    alignItems: 'center'
   },
   form: {
     width: '100%', // Fix IE 11 issue.

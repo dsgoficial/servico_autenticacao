@@ -1,8 +1,7 @@
 import { auth } from '../services'
 
-const handleLogout = async (history) => {
+const handleLogout = async () => {
   auth.logout()
-  history.push('/login')
 }
 
 export { handleLogout }

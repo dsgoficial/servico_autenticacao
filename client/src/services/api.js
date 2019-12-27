@@ -1,9 +1,11 @@
 import axios from 'axios'
 import auth from './auth'
 
-const api = axios.create()
+const axiosInstance = axios.create()
 
-api.interceptors.request.use(async config => {
+axiosInstance.defaults.headers.common['Content-Type'] = "application/json";
+
+axiosInstance.interceptors.request.use(async config => {
   const token = auth.getToken()
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -11,22 +13,34 @@ api.interceptors.request.use(async config => {
   return config
 })
 
-const handleResponse = response => {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text)
-    if (!response.ok) {
-      if ([401, 403].indexOf(response.status) !== -1) {
-        // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
-        auth.logout()
-        window.location.reload(true)
-      }
+const errorHandler = error => {
+  if ([401, 403].indexOf(error.response.status) !== -1) {
+    auth.logout()
+    return
+  }
+  return Promise.reject(error)
+}
 
-      const error = (data && data.message) || response.statusText
-      return Promise.reject(error)
-    }
+axiosInstance.interceptors.response.use(
+  response => response,
+  error => errorHandler(error)
+)
 
-    return data
-  })
+const api = {}
+
+api.axios = axiosInstance
+
+api.getData = async url => {
+  const response = await api.axios.get(url)
+  if (
+    !response ||
+    response.status !== 200 ||
+    !('data' in response) ||
+    !('dados' in response.data)
+  ) {
+    throw new Error()
+  }
+  return response.data.dados
 }
 
 export default api

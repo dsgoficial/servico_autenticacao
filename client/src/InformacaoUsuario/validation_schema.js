@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
   agencia: Yup.string(),
   contaBancaria: Yup.string(),
   dataNascimento: Yup.string(),
-  celular: Yup.string().matches(/^\(\d\d\)\d\d\d\d\d-\d\d\d\d$/, 'O celular deve ser no formato (0 _ _ ) _ _ _ _-_ _ _ _ _'),
+  celular: Yup.string().matches(/^\(\d\d\)\d\d\d\d\d-\d\d\d\d$/, 'O celular deve ser no formato ( _ _ ) _ _ _ _-_ _ _ _ _'),
   emailEb: Yup.string().email('Formato inválido para um email'),
 })
 
