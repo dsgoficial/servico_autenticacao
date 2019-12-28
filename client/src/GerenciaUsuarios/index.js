@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, withRouter, HashRouter, Route } from 'react-router-dom'
+import MaterialTable from 'material-table'
 
 export default withRouter(props => {
 
@@ -8,6 +9,50 @@ export default withRouter(props => {
       title="Usuários"
       columns={this.state.columns}
       data={this.state.data}
+      localization={{
+        pagination: {
+          labelDisplayedRows: '{from}-{to} de {count}',
+          labelRowsSelect: 'Usuários',
+          labelRowsPerPage: 'Usuários por página',
+          firstTooltip: 'Primeira página',
+          previousTooltip: 'Página anterior',
+          nextTooltip: 'Próxima página',
+          lastTooltip: 'Última página'
+        },
+        grouping: {
+          placeholder: 'Arraste títulos para agrupar'
+        },
+        toolbar: {
+          nRowsSelected: '{0} usuario(s) selecionada(s)',
+          searchTooltip: 'Buscar',
+          searchPlaceholder: 'Buscar'
+        },
+        header: {
+          actions: 'Ações'
+        },
+        body: {
+          emptyDataSourceMessage: 'Sem usuários para exibir',
+          addTooltip: 'Adicionar usuário',
+          deleteTooltip: 'Deletar usuário',
+          editTooltip: 'Editar usuário',
+          filterRow: {
+            filterTooltip: 'Filtro'
+          },
+          editRow: {
+            deleteText: 'Você tem certeza que deseja deletar este usuário?',
+            cancelTooltip: 'Cancelar',
+            saveTooltip: 'Salvar'
+          }
+        }
+      }}
+      actions={[
+        {
+          icon: 'add',
+          tooltip: 'Adicionar usuário',
+          isFreeAction: true,
+          onClick: (event) => alert("TESTE")
+        }
+      ]}
       editable={{
         onRowAdd: newData =>
           new Promise((resolve, reject) => {
@@ -48,30 +93,3 @@ export default withRouter(props => {
     />
   )
 })
-
-
-class Editable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      columns: [
-        { title: 'Name', field: 'name' },
-        { title: 'Surname', field: 'surname', initialEditValue: 'initial edit value' },
-        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-        {
-          title: 'Birth Place',
-          field: 'birthCity',
-          lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-        },
-      ],
-      data: [
-        { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-        { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-      ]
-    }
-  }
-
-  render() {
-
-  }
-}

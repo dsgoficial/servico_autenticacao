@@ -1,7 +1,7 @@
 import React from 'react'
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { Router, Route, Switch, Redirect } from 'react-router-dom'
 
-import { auth } from './services'
+import { auth, history } from './services'
 
 import Cadastro from './Cadastro'
 import Login from './Login'
@@ -31,7 +31,7 @@ const PrivateRoute = ({ component: Component, exact, path, role, ...rest }) => (
 )
 
 const Routes = () => (
-  <BrowserRouter>
+  <Router history={history}>
     <Switch>
       <PrivateRoute exact path='/' component={Dashboard} />
       <Route exact path='/login' component={Login} />
@@ -39,7 +39,7 @@ const Routes = () => (
       <Route exact path='/erro' component={Erro} />
       <Route path='*' component={NaoEncontrado} />
     </Switch>
-  </BrowserRouter>
+  </Router>
 )
 
 export default Routes

@@ -25,17 +25,17 @@ export default withRouter(props => {
 
   const handleForm = async (values, { setSubmitting }) => {
     try {
-      await handleLogin(values.usuario, values.senha)
-      props.history.push('/')
+      const success = await handleLogin(values.usuario, values.senha)
+      if (success) props.history.push('/')
     } catch (err) {
       if (
         'response' in err &&
         'data' in err.response &&
         'message' in err.response.data
       ) {
-        setError(err.response.data.message)
+        setError({ msg: err.response.data.message, date: new Date() })
       } else {
-        setError('Houve um problema com o login, verifique suas credenciais.')
+        setError({ msg: 'Houve um problema com o login, verifique suas credenciais.', date: new Date() })
       }
     }
   }
@@ -94,7 +94,7 @@ export default withRouter(props => {
           </Grid>
         </Paper>
       </Container>
-      {error ? <MessageSnackBar status='error' msg={error} /> : null}
+      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
     </>
   )
 })

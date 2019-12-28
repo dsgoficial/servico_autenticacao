@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Formik, Form, Field } from 'formik'
-import { TextField, Select } from 'formik-material-ui'
+import { TextField } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
-import MenuItem from '@material-ui/core/MenuItem'
 
 import { MessageSnackBar } from '../helpers'
 
@@ -27,22 +26,20 @@ export default withRouter(props => {
 
   const handleForm = async (values, { setSubmitting, resetForm }) => {
     try {
-      await handleUpdate(
+      const success = await handleUpdate(
         values.senhaAtual,
         values.senhaNova
       )
-      setSuccess(
-        'Senha atualizada com sucesso'
-      )
+      if (success) setSuccess({ msg: 'Senha atualizada com sucesso', date: new Date() })
     } catch (err) {
       if (
         'response' in err &&
         'data' in err.response &&
         'message' in err.response.data
       ) {
-        setError(err.response.data.message)
+        setError({ msg: err.response.data.message, date: new Date() })
       } else {
-        setError('Ocorreu um erro ao atualizar suas informações. Contate o gerente.')
+        setError({ msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
       }
     }
     resetForm(initialValues)
@@ -103,8 +100,8 @@ export default withRouter(props => {
           </Formik>
         </div>
       </Container>
-      {error ? <MessageSnackBar status='error' msg={error} /> : null}
-      {success ? <MessageSnackBar status='success' msg={success} /> : null}
+      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
+      {success ? <MessageSnackBar status='success' key={success.date} msg={success.msg} /> : null}
     </>
   )
 })

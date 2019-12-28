@@ -3,7 +3,10 @@ import { api, auth } from '../services'
 import decodeJwt from 'jwt-decode';
 
 const handleLogin = async (usuario, senha) => {
-  const response = await api.axios.post('/login', { usuario, senha })
+  const response = await api.post('/login', { usuario, senha })
+  if (response && 'canceled' in response && response.canceled) {
+    return false
+  }
   if (
     !response ||
     response.status !== 201 ||
@@ -22,7 +25,7 @@ const handleLogin = async (usuario, senha) => {
   auth.setToken(response.data.dados.token)
   auth.setAuthorization(response.data.dados.administrador)
   auth.setUUID(decodedToken.uuid)
-
+  return true
 }
 
 export { handleLogin }

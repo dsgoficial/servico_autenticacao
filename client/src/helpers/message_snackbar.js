@@ -78,7 +78,7 @@ const MessageSnackBar = ({ status, msg }) => {
     () => {
       setOpen(true)
     },
-    [status]
+    [status, msg]
   )
 
   const handleClose = (event, reason) => {

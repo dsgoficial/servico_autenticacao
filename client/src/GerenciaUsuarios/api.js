@@ -33,7 +33,7 @@ const handleCadastro = async (usuario, senha, nome, nomeGuerra, tipoTurnoId, tip
   if (response && 'canceled' in response && response.canceled) {
     return false
   }
-  return response
+  return true
 }
 
 export { getData, handleCadastro }

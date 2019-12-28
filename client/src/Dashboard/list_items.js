@@ -25,46 +25,48 @@ export const MainListItems = props => {
 
   return (
     <List>
-    <Divider />
-    <ListItem button component={NavLink} exact to="/" activeClassName={classes.active}>
-      <ListItemIcon>
-        <PersonIcon />
-      </ListItemIcon>
-      <ListItemText primary='Informações do usuário' />
-    </ListItem>
-    <ListItem button button component={NavLink} exact to="/alterar_senha" activeClassName={classes.active}>
-      <ListItemIcon>
-        <LockOpenIcon />
-      </ListItemIcon>
-      <ListItemText primary='Alterar senha' />
-    </ListItem>
+      <Divider />
+      <ListItem button component={NavLink} exact to="/" activeClassName={classes.active}>
+        <ListItemIcon>
+          <PersonIcon />
+        </ListItemIcon>
+        <ListItemText primary='Informações do usuário' />
+      </ListItem>
+      <ListItem button component={NavLink} exact to="/alterar_senha" activeClassName={classes.active}>
+        <ListItemIcon>
+          <LockOpenIcon />
+        </ListItemIcon>
+        <ListItemText primary='Alterar senha' />
+      </ListItem>
     </List>
-)}
+  )
+}
 
 export const AdminListItems = props => {
   const classes = styles()
 
   return (
     <List>
-    <Divider />
-    <ListSubheader inset>Administração</ListSubheader>
-    <ListItem button component={NavLink} exact to="/gerenciar_usuarios" activeClassName={classes.active}>
-      <ListItemIcon>
-        <GroupIcon />
-      </ListItemIcon>
-      <ListItemText primary='Gerenciar usuários' />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary='Last quarter' />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <CreateIcon />
-      </ListItemIcon>
-      <ListItemText primary='Year-end sale' />
-    </ListItem>
+      <Divider />
+      <ListSubheader inset>Administração</ListSubheader>
+      <ListItem button component={NavLink} exact to="/gerenciar_usuarios" activeClassName={classes.active}>
+        <ListItemIcon>
+          <GroupIcon />
+        </ListItemIcon>
+        <ListItemText primary='Gerenciar usuários' />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary='Last quarter' />
+      </ListItem>
+      <ListItem button>
+        <ListItemIcon>
+          <CreateIcon />
+        </ListItemIcon>
+        <ListItemText primary='Year-end sale' />
+      </ListItem>
     </List>
-)}
+  )
+}

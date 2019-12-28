@@ -5,10 +5,14 @@ const handleUpdate = async (
   senhaNova
 ) => {
   const uuid = auth.getUUID()
-  await api.axios.put(`/usuarios/${uuid}/senha`, {
+  const response = await api.put(`/usuarios/${uuid}/senha`, {
     senha_atual: senhaAtual,
     senha_nova: senhaNova
   })
+  if (response && 'canceled' in response && response.canceled) {
+    return false
+  }
+  return true
 }
 
 export { handleUpdate }

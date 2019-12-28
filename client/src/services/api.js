@@ -1,5 +1,6 @@
 import axios from 'axios'
 import auth from './auth'
+import history from './history';
 
 const axiosInstance = axios.create()
 
@@ -16,7 +17,12 @@ axiosInstance.interceptors.request.use(async config => {
 const errorHandler = error => {
   if ([401, 403].indexOf(error.response.status) !== -1) {
     auth.logout()
-    return
+    history.push('/')
+    throw new axios.Cancel('Operation canceled by redirect due 401/403.')
+  }
+  if ([500].indexOf(error.response.status) !== -1) {
+    history.push('/erro')
+    throw new axios.Cancel('Operation canceled by redirect due 500.')
   }
   return Promise.reject(error)
 }
@@ -28,10 +34,71 @@ axiosInstance.interceptors.response.use(
 
 const api = {}
 
-api.axios = axiosInstance
+api.axiosSpread = axios.spread
+
+api.axiosAll = async params => {
+  try {
+    const response = await axios.all(params)
+    return response
+  } catch (err) {
+    if (!axios.isCancel(err)) {
+      throw err
+    }
+    return { canceled: true }
+  }
+}
+
+api.post = async (url, params) => {
+  try {
+    const response = await axiosInstance.post(url, params)
+    return response
+  } catch (err) {
+    if (!axios.isCancel(err)) {
+      throw err
+    }
+    return { canceled: true }
+  }
+}
+
+api.get = async (url, params) => {
+  try {
+    const response = await axiosInstance.get(url, params)
+    return response
+  } catch (err) {
+    if (!axios.isCancel(err)) {
+      throw err
+    }
+    return { canceled: true }
+  }
+}
+
+
+api.put = async (url, params) => {
+  try {
+    const response = await axiosInstance.put(url, params)
+    return response
+  } catch (err) {
+    if (!axios.isCancel(err)) {
+      throw err
+    }
+    return { canceled: true }
+  }
+}
+
+api.delete = async (url, params) => {
+  try {
+    const response = await axiosInstance.delete(url, params)
+    return response
+  } catch (err) {
+    if (!axios.isCancel(err)) {
+      throw err
+    }
+    return { canceled: true }
+  }
+}
 
 api.getData = async url => {
-  const response = await api.axios.get(url)
+  const response = await axiosInstance.get(url)
   if (
     !response ||
     response.status !== 200 ||

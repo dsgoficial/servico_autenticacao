@@ -49,10 +49,13 @@ export default withRouter(props => {
     const loadData = async () => {
       try {
         const usuarioData = await getUserData()
+        if (!usuarioData) {
+          return
+        }
         setInitialValues({
           nome: usuarioData.nome || '',
           nomeGuerra: usuarioData.nome_guerra || '',
-          tipoPostoGradId: usuarioData.tipo_posto_grad_id  || '',
+          tipoPostoGradId: usuarioData.tipo_posto_grad_id || '',
           tipoTurnoId: usuarioData.tipo_turno_id || '',
           cpf: usuarioData.cpf || '',
           identidade: usuarioData.identidade || '',
@@ -63,14 +66,18 @@ export default withRouter(props => {
           contaBancaria: usuarioData.conta_bancaria || '',
           dataNascimento: usuarioData.data_nascimento,
           celular: usuarioData.celular || '',
-          emailEb: usuarioData.email_eb  || ''
+          emailEb: usuarioData.email_eb || ''
         })
-        const { listaPostoGrad, listaTurnos } = await getSelectData()
+        const response = await getSelectData()
+        if (!response) {
+          return
+        }
+        const { listaPostoGrad, listaTurnos } = response
         setListaPostoGrad(listaPostoGrad)
         setListaTurnos(listaTurnos)
         setLoaded(true)
       } catch (err) {
-        props.history.push('/erro')
+        setError({ msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
       }
     }
     loadData()
@@ -78,7 +85,7 @@ export default withRouter(props => {
 
   const handleForm = async (values, { setSubmitting }) => {
     try {
-      await handleUpdate(
+      const success = await handleUpdate(
         values.nome,
         values.nomeGuerra,
         values.tipoPostoGradId,
@@ -94,19 +101,19 @@ export default withRouter(props => {
         values.celular,
         values.emailEb
       )
-      setSuccess(
-        'Informações atualizadas com sucesso'
-      )
-      props.history.push('/')
+      if (success) {
+        setSuccess({ msg: 'Informações atualizadas com sucesso', date: new Date() })
+        props.history.push('/')
+      }
     } catch (err) {
       if (
         'response' in err &&
         'data' in err.response &&
         'message' in err.response.data
       ) {
-        setError(err.response.data.message)
+        setError({ msg: err.response.data.message, date: new Date() })
       } else {
-        setError('Ocorreu um erro ao atualizar suas informações. Contate o gerente.')
+        setError({ msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
       }
     }
   }
@@ -292,8 +299,8 @@ export default withRouter(props => {
             </div>
           )}
       </Container>
-      {error ? <MessageSnackBar status='error' msg={error} /> : null}
-      {success ? <MessageSnackBar status='success' msg={success} /> : null}
+      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
+      {success ? <MessageSnackBar status='success' key={success.date} msg={success.msg} /> : null}
     </>
   )
 })
