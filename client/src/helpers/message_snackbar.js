@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const MySnackbarContentWrapper = (props) => {
+const MySnackbarContentWrapper = props => {
   const classes = useStyles()
   const { className, message, onClose, variant, ...other } = props
   const Icon = variantIcon[variant]

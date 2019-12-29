@@ -29,7 +29,7 @@ const signJWT = (data, secret) => {
       data,
       secret,
       {
-        expiresIn: '10m'
+        expiresIn: '1h'
       },
       (err, token) => {
         if (err) {
@@ -53,13 +53,13 @@ controller.login = async (usuario, senha) => {
   if (!usuarioDb) {
     throw new AppError(
       'Usuário não autorizado para utilizar o Serviço de Autenticação',
-      httpCode.Unauthorized
+      httpCode.BadRequest
     )
   }
 
   const correctPassword = await verifyPassword(senha, usuarioDb.senha)
   if (!correctPassword) {
-    throw new AppError('Usuário ou senha inválida', httpCode.Unauthorized)
+    throw new AppError('Usuário ou senha inválida', httpCode.BadRequest)
   }
 
   const { id, uuid, administrador } = usuarioDb

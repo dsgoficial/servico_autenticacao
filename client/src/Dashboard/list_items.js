@@ -4,13 +4,12 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import DashboardIcon from '@material-ui/icons/Dashboard'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
 import PersonIcon from '@material-ui/icons/Person'
-import CreateIcon from '@material-ui/icons/Create'
 import GroupIcon from '@material-ui/icons/Group';
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -55,17 +54,11 @@ export const AdminListItems = props => {
         </ListItemIcon>
         <ListItemText primary='Gerenciar usuários' />
       </ListItem>
-      <ListItem button>
+      <ListItem button component={NavLink} exact to="/autorizar_usuarios" activeClassName={classes.active}>
         <ListItemIcon>
-          <DashboardIcon />
+          <VerifiedUserIcon />
         </ListItemIcon>
-        <ListItemText primary='Last quarter' />
-      </ListItem>
-      <ListItem button>
-        <ListItemIcon>
-          <CreateIcon />
-        </ListItemIcon>
-        <ListItemText primary='Year-end sale' />
+        <ListItemText primary='Autorizar usuários' />
       </ListItem>
     </List>
   )

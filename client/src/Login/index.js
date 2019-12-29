@@ -15,7 +15,7 @@ import styles from './styles'
 import validationSchema from './validation_schema'
 import { handleLogin } from './api'
 
-import { MessageSnackBar } from '../helpers'
+import { MessageSnackBar, BackgroundImages } from '../helpers'
 
 export default withRouter(props => {
   const classes = styles()
@@ -41,7 +41,7 @@ export default withRouter(props => {
   }
 
   return (
-    <>
+    <BackgroundImages>
       <Container component='main' maxWidth='xs'>
         <Paper className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -95,6 +95,6 @@ export default withRouter(props => {
         </Paper>
       </Container>
       {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
-    </>
+    </BackgroundImages>
   )
 })

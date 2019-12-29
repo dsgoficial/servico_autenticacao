@@ -14,11 +14,11 @@ const router = express.Router()
 router.get(
   '/completo',
   verifyAdmin,
-  schemaValidation({ query: usuarioSchema.filtroUsuariosQuery }),
+  schemaValidation({ query: usuarioSchema.paginacaoUsuariosQuery }),
   asyncHandler(async (req, res, next) => {
     const dados = await usuarioCtrl.getUsuarios(
-      req.params.autorizados,
-      req.params.administradores
+      req.query.pagina,
+      req.query.total_pagina
     )
 
     const msg = 'Informação dos usuários retornada com sucesso'

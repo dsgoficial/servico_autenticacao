@@ -43,6 +43,10 @@ const styles = makeStyles(theme => ({
   title: {
     flexGrow: 1
   },
+  menu: {
+    flexGrow: 1,
+    textAlign: 'center'
+  },
   drawerPaper: {
     position: 'relative',
     whiteSpace: 'nowrap',

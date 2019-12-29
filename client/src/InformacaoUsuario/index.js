@@ -16,7 +16,7 @@ import { MessageSnackBar } from '../helpers'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
-import { getUserData, getSelectData, handleUpdate } from './api'
+import { getData, handleUpdate } from './api'
 
 export default withRouter(props => {
   const classes = styles()
@@ -28,12 +28,12 @@ export default withRouter(props => {
     tipoTurnoId: '',
     cpf: '',
     identidade: '',
-    validadeIdentidade: '',
+    validadeIdentidade: null,
     orgaoExpedidor: '',
     banco: '',
     agencia: '',
     contaBancaria: '',
-    dataNascimento: '',
+    dataNascimento: null,
     celular: '',
     emailEb: ''
   })
@@ -48,31 +48,27 @@ export default withRouter(props => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const usuarioData = await getUserData()
-        if (!usuarioData) {
-          return
-        }
-        setInitialValues({
-          nome: usuarioData.nome || '',
-          nomeGuerra: usuarioData.nome_guerra || '',
-          tipoPostoGradId: usuarioData.tipo_posto_grad_id || '',
-          tipoTurnoId: usuarioData.tipo_turno_id || '',
-          cpf: usuarioData.cpf || '',
-          identidade: usuarioData.identidade || '',
-          validadeIdentidade: usuarioData.validade_identidade,
-          orgaoExpedidor: usuarioData.orgao_expedidor || '',
-          banco: usuarioData.banco || '',
-          agencia: usuarioData.agencia || '',
-          contaBancaria: usuarioData.conta_bancaria || '',
-          dataNascimento: usuarioData.data_nascimento,
-          celular: usuarioData.celular || '',
-          emailEb: usuarioData.email_eb || ''
-        })
-        const response = await getSelectData()
+        const response = await getData()
         if (!response) {
           return
         }
-        const { listaPostoGrad, listaTurnos } = response
+        const { usuario, listaPostoGrad, listaTurnos } = response
+        setInitialValues({
+          nome: usuario.nome,
+          nomeGuerra: usuario.nome_guerra,
+          tipoPostoGradId: usuario.tipo_posto_grad_id,
+          tipoTurnoId: usuario.tipo_turno_id,
+          cpf: usuario.cpf,
+          identidade: usuario.identidade,
+          validadeIdentidade: usuario.validade_identidade,
+          orgaoExpedidor: usuario.orgao_expedidor,
+          banco: usuario.banco,
+          agencia: usuario.agencia,
+          contaBancaria: usuario.conta_bancaria,
+          dataNascimento: usuario.data_nascimento,
+          celular: usuario.celular,
+          emailEb: usuario.email_eb
+        })
         setListaPostoGrad(listaPostoGrad)
         setListaTurnos(listaTurnos)
         setLoaded(true)
@@ -120,7 +116,7 @@ export default withRouter(props => {
 
   return (
     <>
-      <Container component='main' maxWidth='xs'>
+      <Container maxWidth='sm'>
         {loaded ? (
           <div className={classes.formArea}>
             <Typography component='h1' variant='h5'>

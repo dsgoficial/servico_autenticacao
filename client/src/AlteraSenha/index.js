@@ -47,7 +47,7 @@ export default withRouter(props => {
 
   return (
     <>
-      <Container component='main' maxWidth='xs'>
+      <Container maxWidth='sm'>
         <div className={classes.formArea}>
           <Typography component='h1' variant='h5'>
             Atualizar senha

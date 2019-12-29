@@ -21,9 +21,9 @@ models.ativoParams = Joi.object().keys({
   ativo: Joi.string().valid('true', 'false')
 })
 
-models.filtroUsuariosQuery = Joi.object().keys({
-  autorizados: Joi.string().valid('true', 'false'),
-  administradores: Joi.string().valid('true', 'false')
+models.paginacaoUsuariosQuery = Joi.object().keys({
+  pagina: Joi.number().integer().min(1),
+  total_pagina: Joi.number().integer().min(5)
 })
 
 models.listaUsuarios = Joi.object().keys({
@@ -61,12 +61,12 @@ models.atualizacaoUsuario = Joi.object().keys({
     .required(),
   cpf: Joi.string().allow('').required(),
   identidade: Joi.string().allow('').required(),
-  validade_identidade: Joi.string().allow('').required(),
+  validade_identidade: Joi.date().allow(null).required(),
   orgao_expedidor: Joi.string().allow('').required(),
   banco: Joi.string().allow('').required(),
   agencia: Joi.string().allow('').required(),
   conta_bancaria: Joi.string().allow('').required(),
-  data_nascimento: Joi.string().allow('').required(),
+  data_nascimento: Joi.date().allow(null).required(),
   celular: Joi.string().allow('').required(),
   email_eb: Joi.string().allow('').required()
 })

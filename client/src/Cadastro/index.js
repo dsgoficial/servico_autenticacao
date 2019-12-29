@@ -11,7 +11,7 @@ import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import ReactLoading from 'react-loading'
 
-import { MessageSnackBar } from '../helpers'
+import { MessageSnackBar, BackgroundImages } from '../helpers'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
@@ -48,7 +48,6 @@ export default withRouter(props => {
         setListaTurnos(listaTurnos)
         setLoaded(true)
       } catch (err) {
-        console.log(err)
         setError({ msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
       }
     }
@@ -83,7 +82,7 @@ export default withRouter(props => {
   }
 
   return (
-    <>
+    <BackgroundImages>
       <Container component='main' maxWidth='xs'>
         {loaded ? (
           <Paper className={classes.paper}>
@@ -199,12 +198,12 @@ export default withRouter(props => {
         )
           : (
             <div className={classes.loading}>
-              <ReactLoading type='bars' color='#C44D33' height='20%' width='20%' />
+              <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
             </div>
           )}
       </Container>
       {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
       {success ? <MessageSnackBar status='success' key={success.date} msg={success.msg} /> : null}
-    </>
+    </BackgroundImages>
   )
 })

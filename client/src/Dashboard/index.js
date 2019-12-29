@@ -69,14 +69,17 @@ export default withRouter(props => {
           open={open}
         >
           <div className={classes.toolbarIcon}>
+            <Typography variant='h6' className={classes.menu}>
+              Menu
+            </Typography>
             <IconButton onClick={handleDrawerClose}>
               <ChevronLeftIcon />
             </IconButton>
           </div>
-          <MainListItems/>
+          <MainListItems />
           {props.role === 'ADMIN' &&
             <>
-              <AdminListItems/>
+              <AdminListItems />
             </>
           }
         </Drawer>

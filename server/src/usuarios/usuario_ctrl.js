@@ -90,12 +90,6 @@ controller.updateUsuario = async (
   celular,
   emailEb
 ) => {
-  if(!validadeIdentidade){
-    validadeIdentidade = null
-  }
-  if(!dataNascimento){
-    dataNascimento = null
-  }
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, tipo_posto_grad_id = $<tipoPostoGradId>,
@@ -211,32 +205,30 @@ controller.modificaNivelAcesso = async (usuarioUUID, administrador) => {
   )
 }
 
-controller.getUsuarios = async (autorizados, administradores) => {
-  const whereConditions = []
+controller.getUsuarios = async (pagina, totalPagina) => {
+  let paginacao = ''
 
-  if (!(autorizados == null)) {
-    whereConditions.push(`ativo IS ${autorizados}`)
-  }
-  if (!(administradores == null)) {
-    whereConditions.push(`administrador IS ${administradores}`)
-  }
-  let usuarios
-
-  let sql = `SELECT uuid, login, nome, nome_guerra, ativo, administrador, tipo_turno_id, tipo_posto_grad_id,
-  cpf, identidade, validade_identidade, orgao_expedidor, banco, agencia, conta_bancaria, data_nascimento, celular,
-  email_eb
-  FROM dgeo.usuario`
-
-  if (whereConditions.length > 0) {
-    const whereCondition = `WHERE ${whereConditions.join(' AND ')}`
-
-    sql = `${sql} $<whereCondition:raw>`
-    usuarios = await db.conn.any(sql, { whereCondition })
-  } else {
-    usuarios = await db.conn.any(sql)
+  if (pagina && totalPagina) {
+    paginacao = `LIMIT ${totalPagina} OFFSET (${pagina} - 1)*${totalPagina}`
   }
 
-  return usuarios
+  const sql = `SELECT u.uuid, u.login, u.nome, u.nome_guerra, u.ativo, u.administrador, u.tipo_turno_id, u.tipo_posto_grad_id,
+  u.cpf, u.identidade, u.validade_identidade, u.orgao_expedidor, u.banco, u.agencia, u.conta_bancaria, u.data_nascimento, u.celular,
+  u.email_eb, tpg.nome_abrev AS tipo_posto_grad 
+  FROM dgeo.usuario AS u 
+  INNER JOIN dominio.tipo_posto_grad AS tpg ON tpg.code = u.tipo_posto_grad_id
+  ${paginacao}`
+
+  const usuarios = await db.conn.any(sql)
+
+  const result = { usuarios }
+
+  if (paginacao) {
+    const selectCount = await db.conn.one('SELECT count(*) FROM dgeo.usuario')
+    result.total = +selectCount.count
+  }
+
+  return result
 }
 
 controller.updateUsuarioCompleto = async (
@@ -259,12 +251,6 @@ controller.updateUsuarioCompleto = async (
   celular,
   emailEb
 ) => {
-  if(!validadeIdentidade){
-    validadeIdentidade = null
-  }
-  if(!dataNascimento){
-    dataNascimento = null
-  }
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET login = $<login>, nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, 

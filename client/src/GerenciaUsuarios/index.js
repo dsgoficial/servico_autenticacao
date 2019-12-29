@@ -1,95 +1,74 @@
 import React, { useState, useEffect } from 'react'
-import { Link, withRouter, HashRouter, Route } from 'react-router-dom'
-import MaterialTable from 'material-table'
+import { withRouter } from 'react-router-dom'
+import Edit from '@material-ui/icons/Edit';
+import Add from '@material-ui/icons/Add';
+import Delete from '@material-ui/icons/Delete';
+
+import { getUsuarios } from './api'
+import { MessageSnackBar, MaterialTable } from '../helpers'
 
 export default withRouter(props => {
 
+  const [usuarios, setUsuarios] = useState([])
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const response = await getUsuarios()
+        if (!response) {
+          return
+        }
+        setUsuarios(response)
+      } catch (err) {
+        setError({ msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+      }
+    }
+    loadData()
+  }, [])
+
+  const editarUsuario = event => {
+    alert("EDITAR")
+  }
+  const deletarUsuario = event => {
+    alert("DELETAR")
+  }
+  const adicionarUsuario = event => {
+    alert("ADICIONAR")
+  }
+
   return (
-    <MaterialTable
-      title="Usuários"
-      columns={this.state.columns}
-      data={this.state.data}
-      localization={{
-        pagination: {
-          labelDisplayedRows: '{from}-{to} de {count}',
-          labelRowsSelect: 'Usuários',
-          labelRowsPerPage: 'Usuários por página',
-          firstTooltip: 'Primeira página',
-          previousTooltip: 'Página anterior',
-          nextTooltip: 'Próxima página',
-          lastTooltip: 'Última página'
-        },
-        grouping: {
-          placeholder: 'Arraste títulos para agrupar'
-        },
-        toolbar: {
-          nRowsSelected: '{0} usuario(s) selecionada(s)',
-          searchTooltip: 'Buscar',
-          searchPlaceholder: 'Buscar'
-        },
-        header: {
-          actions: 'Ações'
-        },
-        body: {
-          emptyDataSourceMessage: 'Sem usuários para exibir',
-          addTooltip: 'Adicionar usuário',
-          deleteTooltip: 'Deletar usuário',
-          editTooltip: 'Editar usuário',
-          filterRow: {
-            filterTooltip: 'Filtro'
+    <>
+      <MaterialTable
+        title="Usuários"
+        columns={[
+          { title: 'Login', field: 'login' },
+          { title: 'Posto/Graducao', field: 'tipo_posto_grad' },
+          { title: 'Nome Guerra', field: 'nome_guerra' },
+          { title: 'Ativo', field: 'ativo', type: 'boolean' },
+          { title: 'Administrador', field: 'administrador', type: 'boolean' },
+        ]}
+        data={usuarios}
+        actions={[
+          {
+            icon: Edit,
+            tooltip: 'Editar usuário',
+            onClick: editarUsuario
           },
-          editRow: {
-            deleteText: 'Você tem certeza que deseja deletar este usuário?',
-            cancelTooltip: 'Cancelar',
-            saveTooltip: 'Salvar'
+          {
+            icon: Delete,
+            tooltip: 'Deletar usuário',
+            onClick: deletarUsuario
+          },
+          {
+            icon: Add,
+            tooltip: 'Adicionar usuário',
+            isFreeAction: true,
+            onClick: adicionarUsuario
           }
-        }
-      }}
-      actions={[
-        {
-          icon: 'add',
-          tooltip: 'Adicionar usuário',
-          isFreeAction: true,
-          onClick: (event) => alert("TESTE")
-        }
-      ]}
-      editable={{
-        onRowAdd: newData =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              {
-                const data = this.state.data;
-                data.push(newData);
-                this.setState({ data }, () => resolve());
-              }
-              resolve()
-            }, 1000)
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              {
-                const data = this.state.data;
-                const index = data.indexOf(oldData);
-                data[index] = newData;
-                this.setState({ data }, () => resolve());
-              }
-              resolve()
-            }, 1000)
-          }),
-        onRowDelete: oldData =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              {
-                let data = this.state.data;
-                const index = data.indexOf(oldData);
-                data.splice(index, 1);
-                this.setState({ data }, () => resolve());
-              }
-              resolve()
-            }, 1000)
-          }),
-      }}
-    />
+        ]}
+      />
+      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
+    </>
   )
 })
