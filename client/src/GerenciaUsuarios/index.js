@@ -8,6 +8,7 @@ import { getUsuarios } from './api'
 import { MessageSnackBar, MaterialTable } from '../helpers'
 import DialogoDelete from './dialogo_delete'
 import DialogoAdiciona from './dialogo_adiciona'
+import DialogoAtualiza from './dialogo_atualiza'
 
 export default withRouter(props => {
 
@@ -15,6 +16,7 @@ export default withRouter(props => {
   const [snackbar, setSnackbar] = useState('')
   const [openDeleteDialog, setOpenDeleteDialog] = useState({})
   const [openAdicionaDialog, setOpenAdicionaDialog] = useState({})
+  const [openAtualizaDialog, setOpenAtualizaDialog] = useState({})
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
@@ -31,7 +33,10 @@ export default withRouter(props => {
   }, [refresh])
 
   const editarUsuario = (event, rowData) => {
-    alert("EDITAR")
+    setOpenAtualizaDialog({
+      open: true,
+      usuario: rowData
+    })
   }
 
   const deletarUsuario = (event, rowData) => {
@@ -58,6 +63,14 @@ export default withRouter(props => {
 
   const handleDeleteDialog = useMemo(() => ((status, msg) => {
     setOpenDeleteDialog({})
+    setRefresh(new Date())
+    if (status && msg) {
+      setSnackbar({ status, msg, date: new Date() })
+    }
+  }), [])
+
+  const handleAtualizaDialog = useMemo(() => ((status, msg) => {
+    setOpenAtualizaDialog({})
     setRefresh(new Date())
     if (status && msg) {
       setSnackbar({ status, msg, date: new Date() })
@@ -105,6 +118,11 @@ export default withRouter(props => {
       {openAdicionaDialog ? <DialogoAdiciona
         open={openAdicionaDialog.open}
         handleDialog={handleAdicionaDialog}
+      /> : null}
+      {openAtualizaDialog ? <DialogoAtualiza
+        open={openAtualizaDialog.open}
+        usuario={openAtualizaDialog.usuario}
+        handleDialog={handleAtualizaDialog}
       /> : null}
       {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </>

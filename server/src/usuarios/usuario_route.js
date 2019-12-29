@@ -27,12 +27,47 @@ router.get(
   })
 )
 
+router.put(
+  '/completo/:uuid',
+  schemaValidation({
+    body: usuarioSchema.atualizacaoUsuario,
+    params: usuarioSchema.uuidParams
+  }),
+  verifyAdmin,
+  asyncHandler(async (req, res, next) => {
+    await usuarioCtrl.updateUsuarioCompleto(
+      req.params.uuid,
+      req.body.usuario,
+      req.body.nome,
+      req.body.nome_guerra,
+      req.body.administrador,
+      req.body.ativo,
+      req.body.tipo_turno_id,
+      req.body.tipo_posto_grad_id,
+      req.body.cpf,
+      req.body.identidade,
+      req.body.validade_identidade,
+      req.body.orgao_expedidor,
+      req.body.banco,
+      req.body.agencia,
+      req.body.conta_bancaria,
+      req.body.data_nascimento,
+      req.body.celular,
+      req.body.email_eb
+    )
+
+    const msg = 'Usuário atualizado com sucesso'
+
+    return res.sendJsonAndLog(true, msg, httpCode.OK)
+  })
+)
+
 router.post(
   '/senha/resetar',
   verifyAdmin,
   schemaValidation({ body: usuarioSchema.listaUsuarios }),
   asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.resetaSenhaUsuarios(req.body.usuariosUuid)
+    await usuarioCtrl.resetaSenhaUsuarios(req.body.usuarios_uuids)
 
     const msg = 'Senha resetada com sucesso'
 
@@ -49,7 +84,7 @@ router.post(
   }),
   asyncHandler(async (req, res, next) => {
     await usuarioCtrl.modificaAutorizacao(
-      req.body.usuariosUuid,
+      req.body.usuarios_uuids,
       req.params.ativo
     )
 
@@ -78,22 +113,6 @@ router.get(
     const msg = 'Tipos de Turno retornados com sucesso'
 
     return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
-  })
-)
-
-router.post(
-  '/:uuid/administrador/:administrador',
-  verifyAdmin,
-  schemaValidation({ params: usuarioSchema.admParams }),
-  asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.modificaNivelAcesso(
-      req.params.uuid,
-      req.params.administrador
-    )
-
-    const msg = 'Nivel de acesso atualizado com sucesso'
-
-    return res.sendJsonAndLog(true, msg, httpCode.OK)
   })
 )
 

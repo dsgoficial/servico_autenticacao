@@ -8,16 +8,14 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import ReactLoading from 'react-loading'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
+import MenuItem from '@material-ui/core/MenuItem'
 
 import { criaUsuario, getSelectData } from './api'
-
 import { adicionaSchema } from './validation_schema'
-
 import { SubmitButton } from '../helpers'
-
 import styles from './styles'
 
-const DialogoUsuario = ({ open = false, handleDialog }) => {
+const DialogoAdiciona = ({ open = false, handleDialog }) => {
   const classes = styles();
 
   const initialValues = {
@@ -25,9 +23,7 @@ const DialogoUsuario = ({ open = false, handleDialog }) => {
     nome: '',
     nomeGuerra: '',
     tipoPostoGradId: '',
-    tipoTurnoId: '',
-    ativo: true,
-    administrador: false
+    tipoTurnoId: ''
   }
 
   const [listaTurnos, setListaTurnos] = useState([])
@@ -67,9 +63,7 @@ const DialogoUsuario = ({ open = false, handleDialog }) => {
         values.nome,
         values.nomeGuerra,
         values.tipoTurnoId,
-        values.tipoPostoGradId,
-        values.ativo,
-        values.administrador
+        values.tipoPostoGradId
       )
       if (!response) return
       setSubmitting(false)
@@ -90,25 +84,26 @@ const DialogoUsuario = ({ open = false, handleDialog }) => {
   }
 
   return (
-    <Dialog
-      open={open}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">Adicionar usuário</DialogTitle>
+    <Dialog open={open}>
+      <DialogTitle>Adicionar usuário</DialogTitle>
       <DialogContent>
         {loaded ? (
           <>
-            <DialogContentText id="alert-dialog-description">
-              Adicionar novo usuário
-            </DialogContentText>
             <Formik
               initialValues={initialValues}
               validationSchema={adicionaSchema}
               onSubmit={handleForm}
             >
-              {({ isValid, isSubmitting, errors, touched }) => (
+              {({ isValid, isSubmitting, isValidating }) => (
                 <Form className={classes.form}>
+                  <Field
+                    name='usuario'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Usuário'
+                  />
                   <Field
                     name='nome'
                     component={TextField}
@@ -125,9 +120,59 @@ const DialogoUsuario = ({ open = false, handleDialog }) => {
                     fullWidth
                     label='Nome de guerra'
                   />
+                  <div>
+                    <Field
+                      name='tipoPostoGradId'
+                      label='Posto/Graduação'
+                      variant='outlined'
+                      component={Select}
+                      displayEmpty
+                      className={classes.select}
+                    >
+                      <MenuItem value='' disabled>
+                        Selecione seu Posto/Graduação
+                      </MenuItem>
+                      {listaPostoGrad.map(option => (
+                        <MenuItem key={option.code} value={option.code}>
+                          {option.nome}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  </div>
+                  <div>
+                    <Field
+                      name='tipoTurnoId'
+                      label='Turno'
+                      variant='outlined'
+                      component={Select}
+                      displayEmpty
+                      className={classes.select}
+                    >
+                      <MenuItem value='' disabled>
+                        Selecione seu turno de trabalho
+                      </MenuItem>
+                      {listaTurnos.map(option => (
+                        <MenuItem key={option.code} value={option.code}>
+                          {option.nome}
+                        </MenuItem>
+                      ))}
+                    </Field>
+                  </div>
+                  <SubmitButton
+                    type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
+                    fullWidth
+                    variant='contained'
+                    color='primary'
+                    className={classes.submit}
+                  >
+                    Cadastrar
+                  </SubmitButton>
                 </Form>
               )}
             </Formik>
+            <DialogContentText>
+              A senha do usuário criado será igual ao login.
+            </DialogContentText>
           </>
         ) : (
             <div className={classes.loading}>
@@ -138,13 +183,10 @@ const DialogoUsuario = ({ open = false, handleDialog }) => {
       <DialogActions>
         <Button onClick={handleClose} color="primary" disabled={submitting} autoFocus>
           Cancelar
-          </Button>
-        <SubmitButton onClick={handleForm} color="secondary" submitting={submitting}>
-          Confirmar
-            </SubmitButton>
+        </Button>
       </DialogActions>
     </Dialog >
   );
 }
 
-export default DialogoUsuario
+export default DialogoAdiciona

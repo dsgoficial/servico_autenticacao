@@ -18,6 +18,7 @@ import { handleLogout } from './api.js'
 import InformacaoUsuario from '../InformacaoUsuario'
 import AlteraSenha from '../AlteraSenha'
 import GerenciaUsuarios from '../GerenciaUsuarios'
+import AutorizaUsuarios from '../AutorizaUsuarios'
 
 export default withRouter(props => {
   const classes = styles()
@@ -89,6 +90,7 @@ export default withRouter(props => {
             <Route exact path="/" component={InformacaoUsuario} />
             <Route exact path="/alterar_senha" component={AlteraSenha} />
             <Route exact path="/gerenciar_usuarios" component={GerenciaUsuarios} />
+            <Route exact path="/autorizar_usuarios" component={AutorizaUsuarios} />
           </Container>
         </main>
       </HashRouter>

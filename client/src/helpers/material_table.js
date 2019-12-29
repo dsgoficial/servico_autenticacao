@@ -58,7 +58,7 @@ export default props => {
           placeholder: 'Arraste títulos para agrupar'
         },
         toolbar: {
-          nRowsSelected: '{0} usuario(s) selecionada(s)',
+          nRowsSelected: '{0} usuario(s) selecionado(s)',
           searchTooltip: 'Buscar',
           searchPlaceholder: 'Buscar'
         },
@@ -81,6 +81,7 @@ export default props => {
         }
       }}
       actions={props.actions}
+      options={props.options}
     />
   )
 }

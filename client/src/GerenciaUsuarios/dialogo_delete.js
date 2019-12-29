@@ -42,14 +42,10 @@ const DialogoDelete = ({ open = false, uuid, nome, handleDialog }) => {
   }
 
   return (
-    <Dialog
-      open={open}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">Deletar usuário</DialogTitle>
+    <Dialog open={open}>
+      <DialogTitle>Deletar usuário</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText>
           Deseja realmente deletar o usuário {nome}?
         </DialogContentText>
       </DialogContent>

@@ -188,7 +188,7 @@ controller.resetaSenhaUsuarios = async usuariosUUID => {
         senha
       })
     }
-
+    console.log(values)
     const query =
       db.pgp.helpers.update(values, cs, null, {
         tableAlias: 'X',
@@ -205,15 +205,6 @@ controller.modificaAutorizacao = async (usuariosUUID, ativo) => {
     SET ativo = $<ativo>
     WHERE uuid IN ($<usuariosUUID:csv>)`,
     { usuariosUUID, ativo }
-  )
-}
-
-controller.modificaNivelAcesso = async (usuarioUUID, administrador) => {
-  return db.conn.none(
-    `UPDATE dgeo.usuario
-    SET administrador = $<administrador>
-    WHERE uuid = $<usuarioUUID>`,
-    { usuarioUUID, administrador }
   )
 }
 

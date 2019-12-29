@@ -4,7 +4,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import LockOpenIcon from '@material-ui/icons/LockOpen'
+import LockIcon from '@material-ui/icons/Lock'
 import PersonIcon from '@material-ui/icons/Person'
 import GroupIcon from '@material-ui/icons/Group';
 import Divider from '@material-ui/core/Divider'
@@ -27,7 +27,7 @@ export const MainListItems = props => {
       </ListItem>
       <ListItem button component={NavLink} exact to="/alterar_senha" activeClassName={classes.active}>
         <ListItemIcon>
-          <LockOpenIcon />
+          <LockIcon />
         </ListItemIcon>
         <ListItemText primary='Alterar senha' />
       </ListItem>

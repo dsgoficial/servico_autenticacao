@@ -10,13 +10,6 @@ models.uuidParams = Joi.object().keys({
     .required()
 })
 
-models.admParams = Joi.object().keys({
-  uuid: Joi.string()
-    .guid()
-    .required(),
-  administrador: Joi.string().valid('true', 'false')
-})
-
 models.ativoParams = Joi.object().keys({
   ativo: Joi.string().valid('true', 'false')
 })
@@ -27,7 +20,7 @@ models.paginacaoUsuariosQuery = Joi.object().keys({
 })
 
 models.listaUsuarios = Joi.object().keys({
-  usuariosUuid: Joi.array()
+  usuarios_uuids: Joi.array()
     .items(Joi.string().guid())
     .required()
     .min(1)
@@ -78,15 +71,8 @@ models.atualizacaoSenha = Joi.object().keys({
 
 models.atualizacaoAdmUsuario = Joi.object().keys({
   usuario: Joi.string().required(),
-  login: Joi.string().required(),
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),
-  administrador: Joi.boolean()
-    .strict()
-    .required(),
-  ativo: Joi.boolean()
-    .strict()
-    .required(),
   tipo_turno_id: Joi.number()
     .integer()
     .strict()
@@ -95,16 +81,22 @@ models.atualizacaoAdmUsuario = Joi.object().keys({
     .integer()
     .strict()
     .required(),
-  cpf: Joi.string().required(),
-  identidade: Joi.string().required(),
-  validade_identidade: Joi.string().required(),
-  orgao_expedidor: Joi.string().required(),
-  banco: Joi.string().required(),
-  agencia: Joi.string().required(),
-  conta_bancaria: Joi.string().required(),
-  data_nascimento: Joi.string().required(),
-  celular: Joi.string().required(),
-  email_eb: Joi.string().required()
+  cpf: Joi.string().allow('').required(),
+  identidade: Joi.string().allow('').required(),
+  validade_identidade: Joi.date().allow(null).required(),
+  orgao_expedidor: Joi.string().allow('').required(),
+  banco: Joi.string().allow('').required(),
+  agencia: Joi.string().allow('').required(),
+  conta_bancaria: Joi.string().allow('').required(),
+  data_nascimento: Joi.date().allow(null).required(),
+  celular: Joi.string().allow('').required(),
+  email_eb: Joi.string().allow('').required(),
+  administrador: Joi.boolean()
+    .strict()
+    .required(),
+  ativo: Joi.boolean()
+    .strict()
+    .required()
 })
 
 module.exports = models

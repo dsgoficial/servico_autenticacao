@@ -7,11 +7,7 @@ const styles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     padding: theme.spacing(3, 2),
-    elevation: 3,
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    elevation: 3
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -19,6 +15,19 @@ const styles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  loading: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    minHeight: '100vh'
+  },
+  select: {
+    width: '100%',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1)
   },
   link: {
     fontSize: 16,
