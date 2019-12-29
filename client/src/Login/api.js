@@ -4,11 +4,10 @@ import decodeJwt from 'jwt-decode';
 
 const handleLogin = async (usuario, senha) => {
   const response = await api.post('/login', { usuario, senha })
-  if (response && 'canceled' in response && response.canceled) {
-    return false
-  }
+  if (!response) return false
+
   if (
-    !response ||
+    !('status' in response) ||
     response.status !== 201 ||
     !('data' in response) ||
     !('dados' in response.data) ||
@@ -25,6 +24,7 @@ const handleLogin = async (usuario, senha) => {
   auth.setToken(response.data.dados.token)
   auth.setAuthorization(response.data.dados.administrador)
   auth.setUUID(decodedToken.uuid)
+
   return true
 }
 

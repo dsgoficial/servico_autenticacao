@@ -11,13 +11,7 @@ import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 
-import { makeStyles } from '@material-ui/core/styles'
-
-const styles = makeStyles(theme => ({
-  active: {
-    backgroundColor: theme.palette.action.selected
-  }
-}))
+import styles from './styles'
 
 export const MainListItems = props => {
   const classes = styles()

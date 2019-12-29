@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-const validationSchema = Yup.object().shape({
+const adicionaSchema = Yup.object().shape({
   usuario: Yup.string()
     .required('Preencha seu usuário').matches(/^[a-z]+$/, 'O nome do usuário deve ser em minúsculo e não conter espaços ou caracteres especiais'),
   senha: Yup.string()
@@ -19,4 +19,4 @@ const validationSchema = Yup.object().shape({
     .required('Preencha seu turno de trabalho')
 })
 
-export default validationSchema
+export { adicionaSchema }

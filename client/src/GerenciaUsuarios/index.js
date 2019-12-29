@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { withRouter } from 'react-router-dom'
 import Edit from '@material-ui/icons/Edit';
 import Add from '@material-ui/icons/Add';
@@ -6,36 +6,63 @@ import Delete from '@material-ui/icons/Delete';
 
 import { getUsuarios } from './api'
 import { MessageSnackBar, MaterialTable } from '../helpers'
+import DialogoDelete from './dialogo_delete'
+import DialogoAdiciona from './dialogo_adiciona'
 
 export default withRouter(props => {
 
   const [usuarios, setUsuarios] = useState([])
-  const [error, setError] = useState('')
+  const [snackbar, setSnackbar] = useState('')
+  const [openDeleteDialog, setOpenDeleteDialog] = useState({})
+  const [openAdicionaDialog, setOpenAdicionaDialog] = useState({})
+  const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const response = await getUsuarios()
-        if (!response) {
-          return
-        }
+        if (!response) return
         setUsuarios(response)
       } catch (err) {
-        setError({ msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
       }
     }
     loadData()
-  }, [])
+  }, [refresh])
 
-  const editarUsuario = event => {
+  const editarUsuario = (event, rowData) => {
     alert("EDITAR")
   }
-  const deletarUsuario = event => {
-    alert("DELETAR")
+
+  const deletarUsuario = (event, rowData) => {
+    setOpenDeleteDialog({
+      open: true,
+      uuid: rowData.uuid,
+      nome: `${rowData.tipo_posto_grad} ${rowData.nome_guerra}`
+    })
   }
-  const adicionarUsuario = event => {
-    alert("ADICIONAR")
+
+  const adicionarUsuario = (event, rowData) => {
+    setOpenAdicionaDialog({
+      open: true
+    })
   }
+
+  const handleAdicionaDialog = useMemo(() => ((status, msg) => {
+    setOpenAdicionaDialog({})
+    setRefresh(new Date())
+    if (status && msg) {
+      setSnackbar({ status, msg, date: new Date() })
+    }
+  }), [])
+
+  const handleDeleteDialog = useMemo(() => ((status, msg) => {
+    setOpenDeleteDialog({})
+    setRefresh(new Date())
+    if (status && msg) {
+      setSnackbar({ status, msg, date: new Date() })
+    }
+  }), [])
 
   return (
     <>
@@ -45,6 +72,7 @@ export default withRouter(props => {
           { title: 'Login', field: 'login' },
           { title: 'Posto/Graducao', field: 'tipo_posto_grad' },
           { title: 'Nome Guerra', field: 'nome_guerra' },
+          { title: 'Nome completo', field: 'nome' },
           { title: 'Ativo', field: 'ativo', type: 'boolean' },
           { title: 'Administrador', field: 'administrador', type: 'boolean' },
         ]}
@@ -68,7 +96,17 @@ export default withRouter(props => {
           }
         ]}
       />
-      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
+      {openDeleteDialog ? <DialogoDelete
+        open={openDeleteDialog.open}
+        uuid={openDeleteDialog.uuid}
+        nome={openDeleteDialog.nome}
+        handleDialog={handleDeleteDialog}
+      /> : null}
+      {openAdicionaDialog ? <DialogoAdiciona
+        open={openAdicionaDialog.open}
+        handleDialog={handleAdicionaDialog}
+      /> : null}
+      {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </>
   )
 })

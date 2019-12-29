@@ -3,6 +3,9 @@ import { makeStyles } from '@material-ui/core/styles'
 const drawerWidth = 280
 
 const styles = makeStyles(theme => ({
+  active: {
+    backgroundColor: theme.palette.action.selected
+  },
   root: {
     display: 'flex'
   },

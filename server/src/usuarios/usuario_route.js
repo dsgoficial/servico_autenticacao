@@ -28,19 +28,6 @@ router.get(
 )
 
 router.post(
-  '/deletar',
-  verifyAdmin,
-  schemaValidation({ body: usuarioSchema.listaUsuarios }),
-  asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.deletaUsuarios(req.body.usuariosUuid)
-
-    const msg = 'Usuários deletados com sucesso'
-
-    return res.sendJsonAndLog(true, msg, httpCode.OK)
-  })
-)
-
-router.post(
   '/senha/resetar',
   verifyAdmin,
   schemaValidation({ body: usuarioSchema.listaUsuarios }),
@@ -166,6 +153,21 @@ router.put(
     )
 
     const msg = 'Usuário atualizado com sucesso'
+
+    return res.sendJsonAndLog(true, msg, httpCode.OK)
+  })
+)
+
+router.delete(
+  '/:uuid',
+  schemaValidation({
+    params: usuarioSchema.uuidParams
+  }),
+  verifyAdmin,
+  asyncHandler(async (req, res, next) => {
+    await usuarioCtrl.deletaUsuario(req.params.uuid)
+
+    const msg = 'Usuário deletado com sucesso'
 
     return res.sendJsonAndLog(true, msg, httpCode.OK)
   })

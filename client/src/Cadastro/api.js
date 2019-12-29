@@ -1,28 +1,14 @@
 import { api } from '../services'
 
 const getData = async () => {
-  return new Promise((resolve, reject) => {
-    api.axiosAll([api.getData('/usuarios/tipo_posto_grad'), api.getData('/usuarios/tipo_turno')])
-      .then(response => {
-        if (response && 'canceled' in response && response.canceled) {
-          resolve(false)
-        } else {
-          api.axiosSpread((listaPostoGrad, listaTurnos) => {
-            resolve({
-              listaPostoGrad,
-              listaTurnos
-            })
-          })(response)
-        }
-      }
-      ).catch(e => {
-        reject(e)
-      })
+  return api.axiosAll({
+    listaPostoGrad: api.getData('/usuarios/tipo_posto_grad'),
+    listaTurnos: api.getData('/usuarios/tipo_turno')
   })
 }
 
 const handleCadastro = async (usuario, senha, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId) => {
-  const response = await api.post('/usuarios', {
+  return api.post('/usuarios', {
     usuario,
     senha,
     nome,
@@ -30,10 +16,6 @@ const handleCadastro = async (usuario, senha, nome, nomeGuerra, tipoTurnoId, tip
     tipo_turno_id: tipoTurnoId,
     tipo_posto_grad_id: tipoPostoGradId
   })
-  if (response && 'canceled' in response && response.canceled) {
-    return false
-  }
-  return response
 }
 
 export { getData, handleCadastro }

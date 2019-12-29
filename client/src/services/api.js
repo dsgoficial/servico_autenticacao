@@ -36,71 +36,67 @@ const api = {}
 
 api.axiosSpread = axios.spread
 
-api.axiosAll = async params => {
-  try {
-    const response = await axios.all(params)
-    return response
-  } catch (err) {
-    if (!axios.isCancel(err)) {
-      throw err
+api.axiosAll = async requestsObject => {
+  const requestsName = []
+  const requests = []
+  let index = 0;
+  for (let key in requestsObject) {
+    requestsName[index] = key
+    requests[index] = requestsObject[key]
+    index++
+  }
+
+  return new Promise((resolve, reject) => {
+    axios.all(requests)
+      .then(response => {
+        let cancelled = false
+        response.forEach(r => {
+          if (!response) {
+            cancelled = true
+          }
+        })
+        if (cancelled) {
+          return resolve(false)
+        }
+
+        const responseObject = {}
+        response.forEach((r, i) => {
+          responseObject[requestsName[i]] = r
+        })
+
+        return resolve(responseObject)
+      })
+      .catch(e => {
+        reject(e)
+      })
+  })
+}
+
+const handleCancel = func => {
+  return async function (url, params) {
+    try {
+      const response = await axiosInstance[func](url, params)
+      return response
+    } catch (err) {
+      if (!axios.isCancel(err)) {
+        throw err
+      }
+      return false
     }
-    return { canceled: true }
   }
 }
 
-api.post = async (url, params) => {
-  try {
-    const response = await axiosInstance.post(url, params)
-    return response
-  } catch (err) {
-    if (!axios.isCancel(err)) {
-      throw err
-    }
-    return { canceled: true }
-  }
-}
-
-api.get = async (url, params) => {
-  try {
-    const response = await axiosInstance.get(url, params)
-    return response
-  } catch (err) {
-    if (!axios.isCancel(err)) {
-      throw err
-    }
-    return { canceled: true }
-  }
-}
-
-
-api.put = async (url, params) => {
-  try {
-    const response = await axiosInstance.put(url, params)
-    return response
-  } catch (err) {
-    if (!axios.isCancel(err)) {
-      throw err
-    }
-    return { canceled: true }
-  }
-}
-
-api.delete = async (url, params) => {
-  try {
-    const response = await axiosInstance.delete(url, params)
-    return response
-  } catch (err) {
-    if (!axios.isCancel(err)) {
-      throw err
-    }
-    return { canceled: true }
-  }
-}
+api.post = handleCancel('post')
+api.get = handleCancel('get')
+api.put = handleCancel('put')
+api.delete = handleCancel('delete')
 
 api.getData = async url => {
-  const response = await axiosInstance.get(url)
+  const response = await api.get(url)
+  if (!response) return false
+
   if (
-    !response ||
+    !('status' in response) ||
     response.status !== 200 ||
     !('data' in response) ||
     !('dados' in response.data)

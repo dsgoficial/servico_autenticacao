@@ -1,19 +1,17 @@
 import React, { useState } from 'react'
 import { Link, withRouter } from 'react-router-dom'
-import { Formik, Form, Field } from 'formik'
-import { TextField } from 'formik-material-ui'
 import Avatar from '@material-ui/core/Avatar'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 import LinkMui from '@material-ui/core/Link'
-import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
 import { handleLogin } from './api'
+import LoginForm from './login_form'
 
 import { MessageSnackBar, BackgroundImages } from '../helpers'
 
@@ -21,9 +19,9 @@ export default withRouter(props => {
   const classes = styles()
   const values = { usuario: '', senha: '' }
 
-  const [error, setError] = useState('')
+  const [snackbar, setSnackbar] = useState('')
 
-  const handleForm = async (values, { setSubmitting }) => {
+  const handleForm = async (values) => {
     try {
       const success = await handleLogin(values.usuario, values.senha)
       if (success) props.history.push('/')
@@ -33,9 +31,9 @@ export default withRouter(props => {
         'data' in err.response &&
         'message' in err.response.data
       ) {
-        setError({ msg: err.response.data.message, date: new Date() })
+        setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
       } else {
-        setError({ msg: 'Houve um problema com o login, verifique suas credenciais.', date: new Date() })
+        setSnackbar({ status: 'error', msg: 'Houve um problema com o login, verifique suas credenciais.', date: new Date() })
       }
     }
   }
@@ -50,41 +48,11 @@ export default withRouter(props => {
           <Typography component='h1' variant='h5'>
             Serviço de Autenticação
           </Typography>
-          <Formik
+          <LoginForm
             initialValues={values}
             validationSchema={validationSchema}
             onSubmit={handleForm}
-          >
-            {({ isValid, isSubmitting, errors, touched }) => (
-              <Form className={classes.form}>
-                <Field
-                  name='usuario'
-                  component={TextField}
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  label='Usuário'
-                />
-                <Field
-                  type='password' name='senha'
-                  component={TextField}
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  label='Senha'
-                />
-                <Button
-                  type='submit' disabled={isSubmitting || !isValid}
-                  fullWidth
-                  variant='contained'
-                  color='primary'
-                  className={classes.submit}
-                >
-                  Entrar
-                </Button>
-              </Form>
-            )}
-          </Formik>
+          />
           <Grid container justify='flex-end'>
             <Grid item>
               <LinkMui to='/cadastro' variant='body2' component={Link} className={classes.link}>
@@ -94,7 +62,7 @@ export default withRouter(props => {
           </Grid>
         </Paper>
       </Container>
-      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
+      {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </BackgroundImages>
   )
 })

@@ -2,24 +2,11 @@ import { api, auth } from '../services'
 
 const getData = async () => {
   const uuid = auth.getUUID()
-  return new Promise((resolve, reject) => {
-    api.axiosAll([api.getData(`/usuarios/${uuid}`), api.getData('/usuarios/tipo_posto_grad'), api.getData('/usuarios/tipo_turno')])
-      .then(response => {
-        if (response && 'canceled' in response && response.canceled) {
-          resolve(false)
-        } else {
-          api.axiosSpread((usuario, listaPostoGrad, listaTurnos) => {
-            resolve({
-              usuario,
-              listaPostoGrad,
-              listaTurnos
-            })
-          })(response)
-        }
-      }
-      ).catch(e => {
-        reject(e)
-      })
+
+  return api.axiosAll({
+    usuario: api.getData(`/usuarios/${uuid}`),
+    listaPostoGrad: api.getData('/usuarios/tipo_posto_grad'),
+    listaTurnos: api.getData('/usuarios/tipo_turno')
   })
 }
 
@@ -40,7 +27,7 @@ const handleUpdate = async (
   emailEb
 ) => {
   const uuid = auth.getUUID()
-  const response = await api.put(`/usuarios/${uuid}`, {
+  return api.put(`/usuarios/${uuid}`, {
     nome,
     nome_guerra: nomeGuerra,
     tipo_turno_id: tipoTurnoId,
@@ -56,10 +43,6 @@ const handleUpdate = async (
     celular: celular,
     email_eb: emailEb
   })
-  if (response && 'canceled' in response && response.canceled) {
-    return false
-  }
-  return true
 }
 
 export { getData, handleUpdate }

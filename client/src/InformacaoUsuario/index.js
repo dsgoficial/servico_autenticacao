@@ -4,7 +4,7 @@ import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import Button from '@material-ui/core/Button'
+import { SubmitButton } from '../helpers'
 import MenuItem from '@material-ui/core/MenuItem'
 import ReactLoading from 'react-loading'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
@@ -41,17 +41,15 @@ export default withRouter(props => {
   const [listaTurnos, setListaTurnos] = useState([])
   const [listaPostoGrad, setListaPostoGrad] = useState([])
 
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [snackbar, setSnackbar] = useState('')
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const response = await getData()
-        if (!response) {
-          return
-        }
+        if (!response) return
+
         const { usuario, listaPostoGrad, listaTurnos } = response
         setInitialValues({
           nome: usuario.nome,
@@ -73,7 +71,7 @@ export default withRouter(props => {
         setListaTurnos(listaTurnos)
         setLoaded(true)
       } catch (err) {
-        setError({ msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
       }
     }
     loadData()
@@ -98,7 +96,7 @@ export default withRouter(props => {
         values.emailEb
       )
       if (success) {
-        setSuccess({ msg: 'Informações atualizadas com sucesso', date: new Date() })
+        setSnackbar({ status: 'success', msg: 'Informações atualizadas com sucesso', date: new Date() })
         props.history.push('/')
       }
     } catch (err) {
@@ -107,9 +105,9 @@ export default withRouter(props => {
         'data' in err.response &&
         'message' in err.response.data
       ) {
-        setError({ msg: err.response.data.message, date: new Date() })
+        setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
       } else {
-        setError({ msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
+        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
       }
     }
   }
@@ -127,7 +125,7 @@ export default withRouter(props => {
               validationSchema={validationSchema}
               onSubmit={handleForm}
             >
-              {({ isValid, isSubmitting, errors, touched }) => (
+              {({ isValid, isSubmitting, isValidating }) => (
                 <Form className={classes.form}>
                   <Field
                     name='nome'
@@ -275,15 +273,15 @@ export default withRouter(props => {
                     fullWidth
                     label='Conta bancária'
                   />
-                  <Button
-                    type='submit' disabled={isSubmitting || !isValid}
+                  <SubmitButton
+                    type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
                     fullWidth
                     variant='contained'
                     color='primary'
                     className={classes.submit}
                   >
                     Atualizar dados
-                  </Button>
+                  </SubmitButton>
                 </Form>
               )}
             </Formik>
@@ -295,8 +293,7 @@ export default withRouter(props => {
             </div>
           )}
       </Container>
-      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
-      {success ? <MessageSnackBar status='success' key={success.date} msg={success.msg} /> : null}
+      {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </>
   )
 })

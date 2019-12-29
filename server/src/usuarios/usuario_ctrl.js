@@ -136,17 +136,29 @@ controller.updateSenha = async (uuid, senhaAtual, senhaNova) => {
   }
 }
 
-controller.deletaUsuarios = async usuariosUUID => {
+controller.deletaUsuario = async uuid => {
   return db.conn.tx(async t => {
+    const adm = await t.oneOrNone(
+      `SELECT uuid FROM dgeo.usuario 
+      WHERE uuid IN ($<uuid>) AND administrador IS TRUE `,
+      { uuid }
+    )
+
+    if (adm) {
+      throw new AppError('Usuário com privilégio de administrador não pode ser deletado', httpCode.BadRequest)
+    }
     await t.none(
       `DELETE FROM dgeo.login WHERE usuario_id IN 
-      (SELECT id FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID:csv>))`,
-      { usuariosUUID }
+      (SELECT id FROM dgeo.usuario WHERE uuid IN ($<uuid>) AND administrador IS FALSE)`,
+      { uuid }
     )
-    await t.none(
-      'DELETE FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID:csv>)',
-      { usuariosUUID }
+    const result = await t.result(
+      'DELETE FROM dgeo.usuario WHERE uuid IN ($<uuid>) AND administrador IS FALSE',
+      { uuid }
     )
+    if (!result.rowCount || result.rowCount < 1) {
+      throw new AppError('Usuário não encontrado', httpCode.NotFound)
+    }
   })
 }
 

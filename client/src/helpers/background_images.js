@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 
 const styles = makeStyles(theme => ({
@@ -13,16 +13,20 @@ const styles = makeStyles(theme => ({
   }
 }))
 
-const BackgroundImages = props => {
+const BackgroundImages = ({ children }) => {
   const classes = styles()
 
-  const images = ['img-1.jpg', 'img-2.jpg', 'img-3.jpg', 'img-4.jpg', 'img-5.jpg']
-  const randomNumber = Math.floor(Math.random() * images.length);
-  const imageUrl = `${process.env.PUBLIC_URL}/${images[randomNumber]}`
+  const [image, setImage] = useState('')
+
+  useEffect(() => {
+    const images = ['img-1.jpg', 'img-2.jpg', 'img-3.jpg', 'img-4.jpg', 'img-5.jpg']
+    const randomNumber = Math.floor(Math.random() * images.length);
+    setImage(`${process.env.PUBLIC_URL}/${images[randomNumber]}`)
+  }, [])
 
   return (
-    <div className={classes.background} style={{ backgroundImage: `url(${imageUrl})` }}>
-      {props.children}
+    <div className={classes.background} style={image ? { backgroundImage: `url(${image})` } : null}>
+      {children}
     </div>
   )
 }

@@ -4,9 +4,8 @@ import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import Button from '@material-ui/core/Button'
 
-import { MessageSnackBar } from '../helpers'
+import { MessageSnackBar, SubmitButton } from '../helpers'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
@@ -21,28 +20,30 @@ export default withRouter(props => {
     confirmarSenhaNova: ''
   }
 
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [snackbar, setSnackbar] = useState('')
 
-  const handleForm = async (values, { setSubmitting, resetForm }) => {
+  const handleForm = async (values, { resetForm }) => {
     try {
       const success = await handleUpdate(
         values.senhaAtual,
         values.senhaNova
       )
-      if (success) setSuccess({ msg: 'Senha atualizada com sucesso', date: new Date() })
+      if (success) {
+        resetForm(initialValues)
+        setSnackbar({ status: 'success', msg: 'Senha atualizada com sucesso', date: new Date() })
+      }
     } catch (err) {
+      resetForm(initialValues)
       if (
         'response' in err &&
         'data' in err.response &&
         'message' in err.response.data
       ) {
-        setError({ msg: err.response.data.message, date: new Date() })
+        setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
       } else {
-        setError({ msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
+        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
       }
     }
-    resetForm(initialValues)
   }
 
   return (
@@ -57,7 +58,7 @@ export default withRouter(props => {
             validationSchema={validationSchema}
             onSubmit={handleForm}
           >
-            {({ isValid, isSubmitting, errors, touched }) => (
+            {({ isValid, isSubmitting, isValidating }) => (
               <Form className={classes.form}>
                 <Field
                   name='senhaAtual'
@@ -86,22 +87,21 @@ export default withRouter(props => {
                   label='Confirmar nova senha'
                   type='password'
                 />
-                <Button
-                  type='submit' disabled={isSubmitting || !isValid}
+                <SubmitButton
+                  type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
                   fullWidth
                   variant='contained'
                   color='primary'
                   className={classes.submit}
                 >
                   Atualizar senha
-                  </Button>
+                  </SubmitButton>
               </Form>
             )}
           </Formik>
         </div>
       </Container>
-      {error ? <MessageSnackBar status='error' key={error.date} msg={error.msg} /> : null}
-      {success ? <MessageSnackBar status='success' key={success.date} msg={success.msg} /> : null}
+      {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </>
   )
 })
