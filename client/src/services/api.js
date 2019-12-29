@@ -51,7 +51,7 @@ api.axiosAll = async requestsObject => {
       .then(response => {
         let cancelled = false
         response.forEach(r => {
-          if (!response) {
+          if (!r) {
             cancelled = true
           }
         })
