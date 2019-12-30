@@ -68,7 +68,7 @@ controller.login = async (usuario, senha) => {
 
   await gravaLogin(id)
 
-  return { token, administrador }
+  return { token, administrador, uuid }
 }
 
 controller.verifyPassword = async (uuid, senha) => {
