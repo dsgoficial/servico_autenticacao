@@ -4,15 +4,13 @@ import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import { SubmitButton } from '../helpers'
+import { SubmitButton, MessageSnackBar } from '../helpers'
 import MenuItem from '@material-ui/core/MenuItem'
 import ReactLoading from 'react-loading'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns';
+import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker } from 'material-ui-formik-components/DatePicker'
-import ptLocale from "date-fns/locale/pt-BR";
-
-import { MessageSnackBar } from '../helpers'
+import ptLocale from 'date-fns/locale/pt-BR'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
@@ -189,7 +187,7 @@ export default withRouter(props => {
                       margin='normal'
                       fullWidth
                       label='Data de nascimento'
-                      format="dd/MM/yyyy"
+                      format='dd/MM/yyyy'
                       autoOk
                       allowKeyboardControl
                       clearable
@@ -235,7 +233,7 @@ export default withRouter(props => {
                       margin='normal'
                       fullWidth
                       label='Data de validade da identidade'
-                      format="dd/MM/yyyy"
+                      format='dd/MM/yyyy'
                       autoOk
                       allowKeyboardControl
                       clearable

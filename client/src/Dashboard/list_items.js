@@ -1,15 +1,15 @@
 import React from 'react'
-import { NavLink } from "react-router-dom"
+import { NavLink } from 'react-router-dom'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import LockIcon from '@material-ui/icons/Lock'
 import PersonIcon from '@material-ui/icons/Person'
-import GroupIcon from '@material-ui/icons/Group';
+import GroupIcon from '@material-ui/icons/Group'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
+import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
 
 import styles from './styles'
 
@@ -19,13 +19,13 @@ export const MainListItems = props => {
   return (
     <List>
       <Divider />
-      <ListItem button component={NavLink} exact to="/" activeClassName={classes.active}>
+      <ListItem button component={NavLink} exact to='/' activeClassName={classes.active}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
         <ListItemText primary='Informações do usuário' />
       </ListItem>
-      <ListItem button component={NavLink} exact to="/alterar_senha" activeClassName={classes.active}>
+      <ListItem button component={NavLink} exact to='/alterar_senha' activeClassName={classes.active}>
         <ListItemIcon>
           <LockIcon />
         </ListItemIcon>
@@ -42,13 +42,13 @@ export const AdminListItems = props => {
     <List>
       <Divider />
       <ListSubheader inset>Administração</ListSubheader>
-      <ListItem button component={NavLink} exact to="/gerenciar_usuarios" activeClassName={classes.active}>
+      <ListItem button component={NavLink} exact to='/gerenciar_usuarios' activeClassName={classes.active}>
         <ListItemIcon>
           <GroupIcon />
         </ListItemIcon>
         <ListItemText primary='Gerenciar usuários' />
       </ListItem>
-      <ListItem button component={NavLink} exact to="/autorizar_usuarios" activeClassName={classes.active}>
+      <ListItem button component={NavLink} exact to='/autorizar_usuarios' activeClassName={classes.active}>
         <ListItemIcon>
           <VerifiedUserIcon />
         </ListItemIcon>

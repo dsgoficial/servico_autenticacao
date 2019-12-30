@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import ReactLoading from 'react-loading'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select, CheckboxWithLabel } from 'formik-material-ui'
 import MenuItem from '@material-ui/core/MenuItem'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns';
+import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker } from 'material-ui-formik-components/DatePicker'
-import ptLocale from "date-fns/locale/pt-BR";
+import ptLocale from 'date-fns/locale/pt-BR'
 
 import { atualizaUsuario, getSelectData } from './api'
 import { atualizaSchema } from './validation_schema'
@@ -19,7 +19,7 @@ import { SubmitButton } from '../helpers'
 import styles from './styles'
 
 const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
-  const classes = styles();
+  const classes = styles()
 
   const initialValues = useMemo(() => ({
     usuario: usuario.login || '',
@@ -194,7 +194,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                       margin='normal'
                       fullWidth
                       label='Data de nascimento'
-                      format="dd/MM/yyyy"
+                      format='dd/MM/yyyy'
                       autoOk
                       allowKeyboardControl
                       clearable
@@ -240,7 +240,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                       margin='normal'
                       fullWidth
                       label='Data de validade da identidade'
-                      format="dd/MM/yyyy"
+                      format='dd/MM/yyyy'
                       autoOk
                       allowKeyboardControl
                       clearable
@@ -285,7 +285,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                       variant='outlined'
                       margin='normal'
                       Label={{ label: 'Administrador' }}
-                      color="primary"
+                      color='primary'
                     />
                   </div>
                   <div>
@@ -295,7 +295,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                       variant='outlined'
                       margin='normal'
                       Label={{ label: 'Ativo' }}
-                      color="primary"
+                      color='primary'
                     />
                   </div>
                   <SubmitButton
@@ -312,18 +312,18 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
             </Formik>
           </>
         ) : (
-            <div className={classes.loading}>
-              <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
-            </div>
-          )}
+          <div className={classes.loading}>
+            <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
+          </div>
+        )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" disabled={submitting} autoFocus>
+        <Button onClick={handleClose} color='primary' disabled={submitting} autoFocus>
           Cancelar
         </Button>
       </DialogActions>
-    </Dialog >
-  );
+    </Dialog>
+  )
 }
 
 export default DialogoAtualiza

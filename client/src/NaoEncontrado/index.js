@@ -21,17 +21,17 @@ const NaoEncontrado = props => {
       <div>
         <Typography variant='h1'>
           404
-          </Typography>
+        </Typography>
       </div>
       <div>
         <Typography variant='h4' gutterBottom>
           Página não encontrada
-          </Typography>
+        </Typography>
       </div>
       <div>
         <LinkMui to='/' variant='h6' component={Link}>
           Retorne a página principal
-          </LinkMui>
+        </LinkMui>
       </div>
     </div>
   )

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import ReactLoading from 'react-loading'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
@@ -16,7 +16,7 @@ import { SubmitButton } from '../helpers'
 import styles from './styles'
 
 const DialogoAdiciona = ({ open = false, handleDialog }) => {
-  const classes = styles();
+  const classes = styles()
 
   const initialValues = {
     usuario: '',
@@ -175,18 +175,18 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
             </DialogContentText>
           </>
         ) : (
-            <div className={classes.loading}>
-              <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
-            </div>
-          )}
+          <div className={classes.loading}>
+            <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
+          </div>
+        )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" disabled={submitting} autoFocus>
+        <Button onClick={handleClose} color='primary' disabled={submitting} autoFocus>
           Cancelar
         </Button>
       </DialogActions>
-    </Dialog >
-  );
+    </Dialog>
+  )
 }
 
 export default DialogoAdiciona

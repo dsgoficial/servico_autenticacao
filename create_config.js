@@ -190,7 +190,7 @@ const createConfig = async () => {
         name: 'authUser',
         message:
           'Qual o nome que deseja para o usuário administrador do Serviço de Autenticação?',
-        when(answers) {
+        when (answers) {
           return answers.dbCreate
         }
       },
@@ -200,7 +200,7 @@ const createConfig = async () => {
         mask: '*',
         message:
           'Qual a senha que deseja para o usuário administrador do Serviço de Autenticação?',
-        when(answers) {
+        when (answers) {
           return answers.dbCreate
         }
       },
@@ -210,7 +210,7 @@ const createConfig = async () => {
         mask: '*',
         message:
           'Confirme a senha para o usuário administrador do Serviço de Autenticação?',
-        when(answers) {
+        when (answers) {
           return answers.dbCreate
         }
       }
@@ -299,7 +299,6 @@ const createConfig = async () => {
     console.log(
       'Arquivo de configuração (config.env) criado com sucesso!'.blue
     )
-
   } catch (e) {
     handleError(e)
   }

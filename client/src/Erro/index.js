@@ -21,22 +21,22 @@ const Erro = props => {
       <div>
         <Typography variant='h1'>
           500
-          </Typography>
+        </Typography>
       </div>
       <div>
         <Typography variant='h4' gutterBottom>
           Erro no servidor
-          </Typography>
+        </Typography>
       </div>
       <div>
         <Typography variant='h4' gutterBottom>
           Procure o administrador
-          </Typography>
+        </Typography>
       </div>
       <div>
         <LinkMui to='/' variant='h6' component={Link}>
           Retorne a página principal
-          </LinkMui>
+        </LinkMui>
       </div>
     </div>
   )

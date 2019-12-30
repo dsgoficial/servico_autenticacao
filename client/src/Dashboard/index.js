@@ -53,11 +53,11 @@ export default withRouter(props => {
             </IconButton>
             <Typography component='h1' variant='h6' color='inherit' noWrap className={classes.title}>
               Serviço de Autenticação
-          </Typography>
+            </Typography>
             <IconButton color='inherit' onClick={clickLogout}>
               <Typography variant='h6' color='inherit' noWrap className={classes.title}>
                 Sair
-            </Typography>
+              </Typography>
               <ExitToAppIcon className={classes.logoutButton} />
             </IconButton>
           </Toolbar>
@@ -81,16 +81,15 @@ export default withRouter(props => {
           {props.role === 'ADMIN' &&
             <>
               <AdminListItems />
-            </>
-          }
+            </>}
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth='lg' className={classes.container}>
-            <Route exact path="/" component={InformacaoUsuario} />
-            <Route exact path="/alterar_senha" component={AlteraSenha} />
-            <Route exact path="/gerenciar_usuarios" component={GerenciaUsuarios} />
-            <Route exact path="/autorizar_usuarios" component={AutorizaUsuarios} />
+            <Route exact path='/' component={InformacaoUsuario} />
+            <Route exact path='/alterar_senha' component={AlteraSenha} />
+            <Route exact path='/gerenciar_usuarios' component={GerenciaUsuarios} />
+            <Route exact path='/autorizar_usuarios' component={AutorizaUsuarios} />
           </Container>
         </main>
       </HashRouter>

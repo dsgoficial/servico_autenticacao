@@ -28,7 +28,7 @@ const PrivateRoute = ({ component: Component, exact, path, role, ...rest }) => (
       }
 
       // authorised so return component
-      return <Component role={userRole}  {...props} />
+      return <Component role={userRole} {...props} />
     }}
   />
 )

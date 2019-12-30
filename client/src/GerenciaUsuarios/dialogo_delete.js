@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React, { useState } from 'react'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
 
 import { deletarUsuario } from './api'
 import { SubmitButton } from '../helpers'
 
 const DialogoDelete = ({ open = false, uuid, nome, handleDialog }) => {
-
   const [submitting, setSubmitting] = useState(false)
 
   const handleClose = (event, reason) => {
@@ -50,15 +49,15 @@ const DialogoDelete = ({ open = false, uuid, nome, handleDialog }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary" disabled={submitting} autoFocus>
+        <Button onClick={handleClose} color='primary' disabled={submitting} autoFocus>
           Cancelar
-          </Button>
-        <SubmitButton onClick={handleConfirm} color="secondary" submitting={submitting}>
+        </Button>
+        <SubmitButton onClick={handleConfirm} color='secondary' submitting={submitting}>
           Confirmar
         </SubmitButton>
       </DialogActions>
     </Dialog>
-  );
+  )
 }
 
 export default DialogoDelete

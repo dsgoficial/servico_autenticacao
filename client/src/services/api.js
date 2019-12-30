@@ -1,10 +1,10 @@
 import axios from 'axios'
 import auth from './auth'
-import history from './history';
+import history from './history'
 
 const axiosInstance = axios.create()
 
-axiosInstance.defaults.headers.common['Content-Type'] = "application/json";
+axiosInstance.defaults.headers.common['Content-Type'] = 'application/json'
 
 axiosInstance.interceptors.request.use(async config => {
   const token = auth.getToken()
@@ -39,8 +39,8 @@ api.axiosSpread = axios.spread
 api.axiosAll = async requestsObject => {
   const requestsName = []
   const requests = []
-  let index = 0;
-  for (let key in requestsObject) {
+  let index = 0
+  for (const key in requestsObject) {
     requestsName[index] = key
     requests[index] = requestsObject[key]
     index++
@@ -107,5 +107,3 @@ api.getData = async url => {
 }
 
 export default api
-
-

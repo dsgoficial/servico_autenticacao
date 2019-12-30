@@ -52,7 +52,7 @@ export default withRouter(props => {
         <div className={classes.formArea}>
           <Typography component='h1' variant='h5'>
             Atualizar senha
-            </Typography>
+          </Typography>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -95,7 +95,7 @@ export default withRouter(props => {
                   className={classes.submit}
                 >
                   Atualizar senha
-                  </SubmitButton>
+                </SubmitButton>
               </Form>
             )}
           </Formik>

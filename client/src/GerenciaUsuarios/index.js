@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { withRouter } from 'react-router-dom'
-import Edit from '@material-ui/icons/Edit';
-import Add from '@material-ui/icons/Add';
-import Delete from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit'
+import Add from '@material-ui/icons/Add'
+import Delete from '@material-ui/icons/Delete'
 
 import { getUsuarios } from './api'
 import { MessageSnackBar, MaterialTable } from '../helpers'
@@ -11,7 +11,6 @@ import DialogoAdiciona from './dialogo_adiciona'
 import DialogoAtualiza from './dialogo_atualiza'
 
 export default withRouter(props => {
-
   const [usuarios, setUsuarios] = useState([])
   const [snackbar, setSnackbar] = useState('')
   const [openDeleteDialog, setOpenDeleteDialog] = useState({})
@@ -53,41 +52,41 @@ export default withRouter(props => {
     })
   }
 
-  const handleAdicionaDialog = useMemo(() => ((status, msg) => {
+  const handleAdicionaDialog = useMemo(() => (status, msg) => {
     setOpenAdicionaDialog({})
     setRefresh(new Date())
     if (status && msg) {
       setSnackbar({ status, msg, date: new Date() })
     }
-  }), [])
+  }, [])
 
-  const handleDeleteDialog = useMemo(() => ((status, msg) => {
+  const handleDeleteDialog = useMemo(() => (status, msg) => {
     setOpenDeleteDialog({})
     setRefresh(new Date())
     if (status && msg) {
       setSnackbar({ status, msg, date: new Date() })
     }
-  }), [])
+  }, [])
 
-  const handleAtualizaDialog = useMemo(() => ((status, msg) => {
+  const handleAtualizaDialog = useMemo(() => (status, msg) => {
     setOpenAtualizaDialog({})
     setRefresh(new Date())
     if (status && msg) {
       setSnackbar({ status, msg, date: new Date() })
     }
-  }), [])
+  }, [])
 
   return (
     <>
       <MaterialTable
-        title="Usuários"
+        title='Usuários'
         columns={[
           { title: 'Login', field: 'login' },
           { title: 'Posto/Graducao', field: 'tipo_posto_grad' },
           { title: 'Nome Guerra', field: 'nome_guerra' },
           { title: 'Nome completo', field: 'nome' },
           { title: 'Ativo', field: 'ativo', type: 'boolean' },
-          { title: 'Administrador', field: 'administrador', type: 'boolean' },
+          { title: 'Administrador', field: 'administrador', type: 'boolean' }
         ]}
         data={usuarios}
         actions={[
@@ -109,21 +108,33 @@ export default withRouter(props => {
           }
         ]}
       />
-      {openDeleteDialog ? <DialogoDelete
-        open={openDeleteDialog.open}
-        uuid={openDeleteDialog.uuid}
-        nome={openDeleteDialog.nome}
-        handleDialog={handleDeleteDialog}
-      /> : null}
-      {openAdicionaDialog ? <DialogoAdiciona
-        open={openAdicionaDialog.open}
-        handleDialog={handleAdicionaDialog}
-      /> : null}
-      {openAtualizaDialog ? <DialogoAtualiza
-        open={openAtualizaDialog.open}
-        usuario={openAtualizaDialog.usuario}
-        handleDialog={handleAtualizaDialog}
-      /> : null}
+      {openDeleteDialog
+        ? (
+          <DialogoDelete
+            open={openDeleteDialog.open}
+            uuid={openDeleteDialog.uuid}
+            nome={openDeleteDialog.nome}
+            handleDialog={handleDeleteDialog}
+          />
+        )
+        : null}
+      {openAdicionaDialog
+        ? (
+          <DialogoAdiciona
+            open={openAdicionaDialog.open}
+            handleDialog={handleAdicionaDialog}
+          />
+        )
+        : null}
+      {openAtualizaDialog
+        ? (
+          <DialogoAtualiza
+            open={openAtualizaDialog.open}
+            usuario={openAtualizaDialog.usuario}
+            handleDialog={handleAtualizaDialog}
+          />
+        )
+        : null}
       {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </>
   )

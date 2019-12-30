@@ -6,9 +6,9 @@ const USER_AUTHORIZATION_KEY = '@authserver-User-Authorization'
 
 const auth = {}
 
-auth.isAuthenticated = () => window.localStorage.getItem(TOKEN_KEY) !== null
-  && window.localStorage.getItem(USER_UUID_KEY) !== null
-  && window.localStorage.getItem(USER_AUTHORIZATION_KEY) !== null
+auth.isAuthenticated = () => window.localStorage.getItem(TOKEN_KEY) !== null &&
+  window.localStorage.getItem(USER_UUID_KEY) !== null &&
+  window.localStorage.getItem(USER_AUTHORIZATION_KEY) !== null
 
 auth.getToken = () => window.localStorage.getItem(TOKEN_KEY)
 

@@ -69,7 +69,7 @@ export default ({ initialValues, validationSchema, onSubmit, listaTurnos = [], l
             >
               <MenuItem value='' disabled>
                 Selecione seu Posto/Graduação
-                      </MenuItem>
+              </MenuItem>
               {listaPostoGrad.map(option => (
                 <MenuItem key={option.code} value={option.code}>
                   {option.nome}
@@ -88,7 +88,7 @@ export default ({ initialValues, validationSchema, onSubmit, listaTurnos = [], l
             >
               <MenuItem value='' disabled>
                 Selecione seu turno de trabalho
-                      </MenuItem>
+              </MenuItem>
               {listaTurnos.map(option => (
                 <MenuItem key={option.code} value={option.code}>
                   {option.nome}
@@ -104,7 +104,7 @@ export default ({ initialValues, validationSchema, onSubmit, listaTurnos = [], l
             className={classes.submit}
           >
             Cadastrar
-                  </SubmitButton>
+          </SubmitButton>
         </Form>
       )}
     </Formik>

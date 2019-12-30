@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import DoneAllIcon from '@material-ui/icons/DoneAll'
+import LockOpenIcon from '@material-ui/icons/LockOpen'
 
 import { getUsuarios, autorizarUsuarios, resetarSenhas } from './api'
 import { MessageSnackBar, MaterialTable } from '../helpers'
 
 export default withRouter(props => {
-
   const [usuarios, setUsuarios] = useState([])
   const [snackbar, setSnackbar] = useState('')
   const [refresh, setRefresh] = useState(false)
@@ -70,21 +69,21 @@ export default withRouter(props => {
   return (
     <>
       <MaterialTable
-        title="Usuários"
+        title='Usuários'
         columns={[
           { title: 'Login', field: 'login' },
           { title: 'Posto/Graducao', field: 'tipo_posto_grad' },
           { title: 'Nome Guerra', field: 'nome_guerra' },
           { title: 'Nome completo', field: 'nome' },
           { title: 'Ativo', field: 'ativo', type: 'boolean' },
-          { title: 'Administrador', field: 'administrador', type: 'boolean' },
+          { title: 'Administrador', field: 'administrador', type: 'boolean' }
         ]}
         data={usuarios}
         actions={[
           {
             icon: DoneAllIcon,
             tooltip: 'Autorizar usuário',
-            onClick: handleAutorizarUsuario,
+            onClick: handleAutorizarUsuario
           },
           {
             icon: LockOpenIcon,

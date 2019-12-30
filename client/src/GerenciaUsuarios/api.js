@@ -28,7 +28,7 @@ const criaUsuario = async (usuario, nome, nomeGuerra, tipoTurnoId, tipoPostoGrad
     senha: nome,
     nome_guerra: nomeGuerra,
     tipo_turno_id: tipoTurnoId,
-    tipo_posto_grad_id: tipoPostoGradId,
+    tipo_posto_grad_id: tipoPostoGradId
   })
 }
 

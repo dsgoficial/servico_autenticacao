@@ -7,7 +7,7 @@ const styles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     padding: theme.spacing(3, 2),
-    elevation: 3,
+    elevation: 3
   },
   avatar: {
     margin: theme.spacing(1),

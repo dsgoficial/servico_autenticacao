@@ -8,9 +8,7 @@ const validationSchema = Yup.object().shape({
     .required('Preencha sua nova senha'),
   confirmarSenhaNova: Yup.string()
     .required('Confirme sua nova senha')
-    .oneOf([Yup.ref('senhaNova')], 'As senhas devem ser iguais'),
+    .oneOf([Yup.ref('senhaNova')], 'As senhas devem ser iguais')
 })
-
-
 
 export default validationSchema
