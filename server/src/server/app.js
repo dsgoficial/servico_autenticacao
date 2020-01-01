@@ -44,7 +44,7 @@ app.use(helmet.noCache())
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minuto
-  max: 200 // limit each IP to 30 requests per windowMs
+  max: 200 // limite por minuto por IP
 })
 
 // apply limit all requests

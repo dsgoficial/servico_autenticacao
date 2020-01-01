@@ -2,6 +2,8 @@ import axios from 'axios'
 import auth from './auth'
 import history from './history'
 
+const APLICACAO = 'auth_web'
+
 const axiosInstance = axios.create()
 
 axiosInstance.defaults.headers.common['Content-Type'] = 'application/json'
@@ -33,6 +35,8 @@ axiosInstance.interceptors.response.use(
 )
 
 const api = {}
+
+api.APLICACAO = APLICACAO
 
 api.axios = axios
 

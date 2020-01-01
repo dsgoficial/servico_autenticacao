@@ -14,12 +14,12 @@ const {
 
 const controller = {}
 
-const gravaLogin = async usuarioId => {
-  await db.conn.any(
+const gravaLogin = async (usuarioId, aplicacaoId, connection) => {
+  await connection.any(
     `
-      INSERT INTO dgeo.login(usuario_id, data_login) VALUES($<usuarioId>, now())
+      INSERT INTO dgeo.login(usuario_id, data_login, aplicacao_id) VALUES($<usuarioId>, now(), $<aplicacaoId>)
       `,
-    { usuarioId }
+    { usuarioId, aplicacaoId }
   )
 }
 
@@ -41,34 +41,47 @@ const signJWT = (data, secret) => {
   })
 }
 
-const verifyPassword = async (senhaFornecida, senhaDb) => {
+const comparePassword = async (senhaFornecida, senhaDb) => {
   return bcrypt.compare(senhaFornecida, senhaDb)
 }
 
-controller.login = async (usuario, senha) => {
-  const usuarioDb = await db.conn.oneOrNone(
-    'SELECT id, uuid, administrador, senha FROM dgeo.usuario WHERE login = $<usuario> and ativo IS TRUE',
-    { usuario }
-  )
-  if (!usuarioDb) {
-    throw new AppError(
-      'Usuário não autorizado para utilizar o Serviço de Autenticação',
-      httpCode.BadRequest
+controller.login = async (usuario, senha, aplicacao) => {
+  return db.conn.task(async t => {
+    const aplicacaoId = await t.oneOrNone(
+      'SELECT id FROM dgeo.aplicacao WHERE nome_abrev = $<aplicacao> and ativa IS TRUE',
+      { aplicacao }
     )
-  }
+    if (!aplicacaoId) {
+      throw new AppError(
+        'Aplicação fornecida não pode utilizar o serviço de autenticação',
+        httpCode.BadRequest
+      )
+    }
 
-  const correctPassword = await verifyPassword(senha, usuarioDb.senha)
-  if (!correctPassword) {
-    throw new AppError('Usuário ou senha inválida', httpCode.BadRequest)
-  }
+    const usuarioDb = await t.oneOrNone(
+      'SELECT id, uuid, administrador, senha FROM dgeo.usuario WHERE login = $<usuario> and ativo IS TRUE',
+      { usuario }
+    )
+    if (!usuarioDb) {
+      throw new AppError(
+        'Usuário não autorizado para utilizar o Serviço de Autenticação',
+        httpCode.BadRequest
+      )
+    }
 
-  const { id, uuid, administrador } = usuarioDb
+    const correctPassword = await comparePassword(senha, usuarioDb.senha)
+    if (!correctPassword) {
+      throw new AppError('Usuário ou senha inválida', httpCode.BadRequest)
+    }
 
-  const token = await signJWT({ uuid, administrador }, JWT_SECRET)
+    const { id, uuid, administrador } = usuarioDb
 
-  await gravaLogin(id)
+    const token = await signJWT({ uuid, administrador }, JWT_SECRET)
 
-  return { token, administrador, uuid }
+    await gravaLogin(id, aplicacaoId.id, t)
+
+    return { token, administrador, uuid }
+  })
 }
 
 controller.verifyPassword = async (uuid, senha) => {
@@ -83,7 +96,7 @@ controller.verifyPassword = async (uuid, senha) => {
     )
   }
 
-  const correctPassword = await verifyPassword(senha, usuarioDb.senha)
+  const correctPassword = await comparePassword(senha, usuarioDb.senha)
   if (!correctPassword) {
     throw new AppError('Usuário ou senha inválida', httpCode.BadRequest)
   }
