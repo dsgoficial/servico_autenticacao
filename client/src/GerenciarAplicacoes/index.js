@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
-import { useAsync } from 'react-async-hook'
 import TextField from '@material-ui/core/TextField'
 
 import { getAplicacoes, atualizaAplicacao, deletaAplicacao, criaAplicacao } from './api'
@@ -14,22 +13,30 @@ export default withRouter(props => {
   const [snackbar, setSnackbar] = useState('')
   const [refresh, setRefresh] = useState(false)
 
-  useAsync(async () => {
-    try {
-      const response = await getAplicacoes()
-      if (!response) return
+  useEffect(() => {
+    let isCurrent = true
+    const load = async () => {
+      try {
+        const response = await getAplicacoes()
+        if (!response || !isCurrent) return
 
-      setAplicacoes(response)
-    } catch (err) {
-      if (
-        'response' in err &&
-        'data' in err.response &&
-        'message' in err.response.data
-      ) {
-        setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
-      } else {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+        setAplicacoes(response)
+      } catch (err) {
+        if (
+          'response' in err &&
+          'data' in err.response &&
+          'message' in err.response.data
+        ) {
+          setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
+        } else {
+          setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+        }
       }
+    }
+    load()
+
+    return () => {
+      isCurrent = false
     }
   }, [refresh])
 

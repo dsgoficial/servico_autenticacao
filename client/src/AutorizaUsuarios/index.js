@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import DoneAllIcon from '@material-ui/icons/DoneAll'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
-import { useAsync } from 'react-async-hook'
 
 import { getUsuarios, autorizarUsuarios, resetarSenhas } from './api'
 import { MessageSnackBar, MaterialTable, DialogoConfirmacao } from '../helpers'
@@ -13,13 +12,21 @@ export default withRouter(props => {
   const [refresh, setRefresh] = useState(false)
   const [openConfirmDialog, setOpenConfirmDialog] = useState({})
 
-  useAsync(async () => {
-    try {
-      const response = await getUsuarios()
-      if (!response) return
-      setUsuarios(response)
-    } catch (err) {
-      setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+  useEffect(() => {
+    let isCurrent = true
+    const load = async () => {
+      try {
+        const response = await getUsuarios()
+        if (!response || !isCurrent) return
+        setUsuarios(response)
+      } catch (err) {
+        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+      }
+    }
+    load()
+
+    return () => {
+      isCurrent = false
     }
   }, [refresh])
 

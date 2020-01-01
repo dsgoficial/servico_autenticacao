@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -12,7 +12,6 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker } from 'material-ui-formik-components/DatePicker'
 import ptLocale from 'date-fns/locale/pt-BR'
-import { useAsync } from 'react-async-hook'
 
 import { atualizaUsuario, getSelectData } from './api'
 import { atualizaSchema } from './validation_schema'
@@ -48,19 +47,27 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
   const [submitting, setSubmitting] = useState(false)
   const [loaded, setLoaded] = useState(false)
 
-  useAsync(async () => {
-    try {
-      const response = await getSelectData()
-      if (!response) return
+  useEffect(() => {
+    let isCurrent = true
+    const load = async () => {
+      try {
+        const response = await getSelectData()
+        if (!response || !isCurrent) return
 
-      const { listaPostoGrad, listaTurnos } = response
-      setListaPostoGrad(listaPostoGrad)
-      setListaTurnos(listaTurnos)
-      setLoaded(true)
-    } catch (err) {
-      handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
+        const { listaPostoGrad, listaTurnos } = response
+        setListaPostoGrad(listaPostoGrad)
+        setListaTurnos(listaTurnos)
+        setLoaded(true)
+      } catch (err) {
+        handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
+      }
     }
-  }, [])
+    load()
+
+    return () => {
+      isCurrent = false
+    }
+  }, [handleDialog])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -311,10 +318,10 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
             </Formik>
           </>
         ) : (
-          <div className={classes.loading}>
-            <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
-          </div>
-        )}
+            <div className={classes.loading}>
+              <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
+            </div>
+          )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color='primary' disabled={submitting} autoFocus>

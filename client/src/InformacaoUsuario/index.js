@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
@@ -11,7 +11,6 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker } from 'material-ui-formik-components/DatePicker'
 import ptLocale from 'date-fns/locale/pt-BR'
-import { useAsync } from 'react-async-hook'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
@@ -44,33 +43,43 @@ export default withRouter(props => {
   const [loaded, setLoaded] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
-  useAsync(async () => {
-    try {
-      const response = await getData()
-      if (!response) return
+  useEffect(() => {
+    let isCurrent = true
 
-      const { usuario, listaPostoGrad, listaTurnos } = response
-      setInitialValues({
-        nome: usuario.nome,
-        nomeGuerra: usuario.nome_guerra,
-        tipoPostoGradId: usuario.tipo_posto_grad_id,
-        tipoTurnoId: usuario.tipo_turno_id,
-        cpf: usuario.cpf,
-        identidade: usuario.identidade,
-        validadeIdentidade: usuario.validade_identidade,
-        orgaoExpedidor: usuario.orgao_expedidor,
-        banco: usuario.banco,
-        agencia: usuario.agencia,
-        contaBancaria: usuario.conta_bancaria,
-        dataNascimento: usuario.data_nascimento,
-        celular: usuario.celular,
-        emailEb: usuario.email_eb
-      })
-      setListaPostoGrad(listaPostoGrad)
-      setListaTurnos(listaTurnos)
-      setLoaded(true)
-    } catch (err) {
-      setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+    const load = async () => {
+
+      try {
+        const response = await getData()
+        if (!response || !isCurrent) return
+
+        const { usuario, listaPostoGrad, listaTurnos } = response
+        setInitialValues({
+          nome: usuario.nome,
+          nomeGuerra: usuario.nome_guerra,
+          tipoPostoGradId: usuario.tipo_posto_grad_id,
+          tipoTurnoId: usuario.tipo_turno_id,
+          cpf: usuario.cpf,
+          identidade: usuario.identidade,
+          validadeIdentidade: usuario.validade_identidade,
+          orgaoExpedidor: usuario.orgao_expedidor,
+          banco: usuario.banco,
+          agencia: usuario.agencia,
+          contaBancaria: usuario.conta_bancaria,
+          dataNascimento: usuario.data_nascimento,
+          celular: usuario.celular,
+          emailEb: usuario.email_eb
+        })
+        setListaPostoGrad(listaPostoGrad)
+        setListaTurnos(listaTurnos)
+        setLoaded(true)
+      } catch (err) {
+        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+      }
+    }
+    load()
+
+    return () => {
+      isCurrent = false
     }
   }, [refresh])
 

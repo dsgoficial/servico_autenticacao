@@ -1,9 +1,8 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import Edit from '@material-ui/icons/Edit'
 import Add from '@material-ui/icons/Add'
 import Delete from '@material-ui/icons/Delete'
-import { useAsync } from 'react-async-hook'
 
 import { getUsuarios, deletarUsuario as deletarUsuarioApi } from './api'
 import { MessageSnackBar, MaterialTable, DialogoConfirmacao } from '../helpers'
@@ -18,14 +17,23 @@ export default withRouter(props => {
   const [openAtualizaDialog, setOpenAtualizaDialog] = useState({})
   const [refresh, setRefresh] = useState(false)
 
-  useAsync(async () => {
-    try {
-      const response = await getUsuarios()
-      if (!response) return
+  useEffect(() => {
+    let isCurrent = true
 
-      setUsuarios(response)
-    } catch (err) {
-      setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+    const load = async () => {
+      try {
+        const response = await getUsuarios()
+        if (!response || !isCurrent) return
+
+        setUsuarios(response)
+      } catch (err) {
+        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+      }
+    }
+    load()
+
+    return () => {
+      isCurrent = false
     }
   }, [refresh])
 
