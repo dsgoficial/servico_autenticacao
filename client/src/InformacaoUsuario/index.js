@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
@@ -11,6 +11,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker } from 'material-ui-formik-components/DatePicker'
 import ptLocale from 'date-fns/locale/pt-BR'
+import { useAsync } from 'react-async-hook'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
@@ -41,41 +42,39 @@ export default withRouter(props => {
 
   const [snackbar, setSnackbar] = useState('')
   const [loaded, setLoaded] = useState(false)
+  const [refresh, setRefresh] = useState(false)
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const response = await getData()
-        if (!response) return
+  useAsync(async () => {
+    try {
+      const response = await getData()
+      if (!response) return
 
-        const { usuario, listaPostoGrad, listaTurnos } = response
-        setInitialValues({
-          nome: usuario.nome,
-          nomeGuerra: usuario.nome_guerra,
-          tipoPostoGradId: usuario.tipo_posto_grad_id,
-          tipoTurnoId: usuario.tipo_turno_id,
-          cpf: usuario.cpf,
-          identidade: usuario.identidade,
-          validadeIdentidade: usuario.validade_identidade,
-          orgaoExpedidor: usuario.orgao_expedidor,
-          banco: usuario.banco,
-          agencia: usuario.agencia,
-          contaBancaria: usuario.conta_bancaria,
-          dataNascimento: usuario.data_nascimento,
-          celular: usuario.celular,
-          emailEb: usuario.email_eb
-        })
-        setListaPostoGrad(listaPostoGrad)
-        setListaTurnos(listaTurnos)
-        setLoaded(true)
-      } catch (err) {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
-      }
+      const { usuario, listaPostoGrad, listaTurnos } = response
+      setInitialValues({
+        nome: usuario.nome,
+        nomeGuerra: usuario.nome_guerra,
+        tipoPostoGradId: usuario.tipo_posto_grad_id,
+        tipoTurnoId: usuario.tipo_turno_id,
+        cpf: usuario.cpf,
+        identidade: usuario.identidade,
+        validadeIdentidade: usuario.validade_identidade,
+        orgaoExpedidor: usuario.orgao_expedidor,
+        banco: usuario.banco,
+        agencia: usuario.agencia,
+        contaBancaria: usuario.conta_bancaria,
+        dataNascimento: usuario.data_nascimento,
+        celular: usuario.celular,
+        emailEb: usuario.email_eb
+      })
+      setListaPostoGrad(listaPostoGrad)
+      setListaTurnos(listaTurnos)
+      setLoaded(true)
+    } catch (err) {
+      setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
     }
-    loadData()
-  }, [])
+  }, [refresh])
 
-  const handleForm = async (values, { setSubmitting }) => {
+  const handleForm = async (values, { resetForm }) => {
     try {
       const success = await handleUpdate(
         values.nome,
@@ -95,9 +94,10 @@ export default withRouter(props => {
       )
       if (success) {
         setSnackbar({ status: 'success', msg: 'Informações atualizadas com sucesso', date: new Date() })
-        props.history.push('/')
+        setRefresh(new Date())
       }
     } catch (err) {
+      setRefresh(new Date())
       if (
         'response' in err &&
         'data' in err.response &&

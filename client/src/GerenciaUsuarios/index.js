@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { withRouter } from 'react-router-dom'
 import Edit from '@material-ui/icons/Edit'
 import Add from '@material-ui/icons/Add'
 import Delete from '@material-ui/icons/Delete'
+import { useAsync } from 'react-async-hook'
 
-import { getUsuarios } from './api'
-import { MessageSnackBar, MaterialTable } from '../helpers'
-import DialogoDelete from './dialogo_delete'
+import { getUsuarios, deletarUsuario as deletarUsuarioApi } from './api'
+import { MessageSnackBar, MaterialTable, DialogoConfirmacao } from '../helpers'
 import DialogoAdiciona from './dialogo_adiciona'
 import DialogoAtualiza from './dialogo_atualiza'
 
@@ -18,17 +18,15 @@ export default withRouter(props => {
   const [openAtualizaDialog, setOpenAtualizaDialog] = useState({})
   const [refresh, setRefresh] = useState(false)
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const response = await getUsuarios()
-        if (!response) return
-        setUsuarios(response)
-      } catch (err) {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
-      }
+  useAsync(async () => {
+    try {
+      const response = await getUsuarios()
+      if (!response) return
+
+      setUsuarios(response)
+    } catch (err) {
+      setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
     }
-    loadData()
   }, [refresh])
 
   const editarUsuario = (event, rowData) => {
@@ -41,8 +39,9 @@ export default withRouter(props => {
   const deletarUsuario = (event, rowData) => {
     setOpenDeleteDialog({
       open: true,
-      uuid: rowData.uuid,
-      nome: `${rowData.tipo_posto_grad} ${rowData.nome_guerra}`
+      title: 'Resetar senha',
+      msg: `Deseja realmente deletar o usuário ${rowData.tipo_posto_grad} ${rowData.nome_guerra}`,
+      handleDialog: executeDelete(rowData.uuid)
     })
   }
 
@@ -60,13 +59,31 @@ export default withRouter(props => {
     }
   }, [])
 
-  const handleDeleteDialog = useMemo(() => (status, msg) => {
-    setOpenDeleteDialog({})
-    setRefresh(new Date())
-    if (status && msg) {
-      setSnackbar({ status, msg, date: new Date() })
+  const executeDelete = uuid => {
+    return async function (confirm) {
+      if (confirm) {
+        try {
+          const success = await deletarUsuarioApi(uuid)
+          if (success) {
+            setSnackbar({ status: 'success', msg: 'Usuário deletado com sucesso.', date: new Date() })
+            setRefresh(new Date())
+          }
+        } catch (err) {
+          setRefresh(new Date())
+          if (
+            'response' in err &&
+            'data' in err.response &&
+            'message' in err.response.data
+          ) {
+            setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
+          } else {
+            setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+          }
+        }
+      }
+      setOpenDeleteDialog({})
     }
-  }, [])
+  }
 
   const handleAtualizaDialog = useMemo(() => (status, msg) => {
     setOpenAtualizaDialog({})
@@ -108,16 +125,14 @@ export default withRouter(props => {
           }
         ]}
       />
-      {openDeleteDialog
-        ? (
-          <DialogoDelete
-            open={openDeleteDialog.open}
-            uuid={openDeleteDialog.uuid}
-            nome={openDeleteDialog.nome}
-            handleDialog={handleDeleteDialog}
-          />
-        )
-        : null}
+      {openDeleteDialog ? (
+        <DialogoConfirmacao
+          open={openDeleteDialog.open}
+          title={openDeleteDialog.title}
+          msg={openDeleteDialog.msg}
+          onClose={openDeleteDialog.handleDialog}
+        />
+      ) : null}
       {openAdicionaDialog
         ? (
           <DialogoAdiciona

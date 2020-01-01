@@ -18,7 +18,10 @@ router.get(
   asyncHandler(async (req, res, next) => {
     const dados = await usuarioCtrl.getUsuarios(
       req.query.pagina,
-      req.query.total_pagina
+      req.query.total_pagina,
+      req.query.coluna_ordem,
+      req.query.direcao_ordem,
+      req.query.filtro
     )
 
     const msg = 'Informação dos usuários retornada com sucesso'

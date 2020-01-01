@@ -15,12 +15,12 @@ axiosInstance.interceptors.request.use(async config => {
 })
 
 const errorHandler = error => {
-  if ([401, 403].indexOf(error.response.status) !== -1) {
+  if (error.response && [401, 403].indexOf(error.response.status) !== -1) {
     auth.logout()
     history.push('/')
     throw new axios.Cancel('Operation canceled by redirect due 401/403.')
   }
-  if ([500].indexOf(error.response.status) !== -1) {
+  if (error.response && [500].indexOf(error.response.status) !== -1) {
     history.push('/erro')
     throw new axios.Cancel('Operation canceled by redirect due 500.')
   }
@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
 
 const api = {}
 
-api.axiosSpread = axios.spread
+api.axios = axios
 
 api.axiosAll = async requestsObject => {
   const requestsName = []
@@ -91,8 +91,8 @@ api.get = handleCancel('get')
 api.put = handleCancel('put')
 api.delete = handleCancel('delete')
 
-api.getData = async url => {
-  const response = await api.get(url)
+api.getData = async (url, params) => {
+  const response = await api.get(url, params)
   if (!response) return false
 
   if (

@@ -6,46 +6,30 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-import { deletarUsuario } from './api'
 import { SubmitButton } from '../helpers'
 
-const DialogoDelete = ({ open = false, uuid, nome, handleDialog }) => {
+const DialogoConfirmacao = ({ open = false, title = '', msg = '', onClose }) => {
   const [submitting, setSubmitting] = useState(false)
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return
     }
-    handleDialog()
+    onClose(false)
   }
 
   const handleConfirm = async () => {
-    try {
-      setSubmitting(true)
-      const response = await deletarUsuario(uuid)
-      if (!response) return
-      setSubmitting(false)
-      handleDialog('success', 'Usuário deletado com sucesso.')
-    } catch (err) {
-      setSubmitting(false)
-      if (
-        'response' in err &&
-        'data' in err.response &&
-        'message' in err.response.data
-      ) {
-        handleDialog('error', err.response.data.message)
-      } else {
-        handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
-      }
-    }
+    setSubmitting(true)
+    await onClose(true)
+    setSubmitting(false)
   }
 
   return (
     <Dialog open={open}>
-      <DialogTitle>Deletar usuário</DialogTitle>
+      <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Deseja realmente deletar o usuário {nome}?
+          {msg}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -60,4 +44,4 @@ const DialogoDelete = ({ open = false, uuid, nome, handleDialog }) => {
   )
 }
 
-export default DialogoDelete
+export default DialogoConfirmacao

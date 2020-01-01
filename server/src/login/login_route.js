@@ -13,7 +13,7 @@ router.post(
   '/',
   schemaValidation({ body: loginSchema.login }),
   asyncHandler(async (req, res, next) => {
-    const { token, administrador } = await loginCtrl.login(
+    const dados = await loginCtrl.login(
       req.body.usuario,
       req.body.senha
     )
@@ -22,7 +22,7 @@ router.post(
       true,
       'Usuário autenticado com sucesso',
       httpCode.Created,
-      { token, administrador }
+      dados
     )
   })
 )

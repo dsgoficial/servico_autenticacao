@@ -19,13 +19,13 @@ export const MainListItems = props => {
   return (
     <List>
       <Divider />
-      <ListItem button component={NavLink} exact to='/' activeClassName={classes.active}>
+      <ListItem button component={NavLink} replace exact to='/' activeClassName={classes.active}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
         <ListItemText primary='Informações do usuário' />
       </ListItem>
-      <ListItem button component={NavLink} exact to='/alterar_senha' activeClassName={classes.active}>
+      <ListItem button component={NavLink} replace exact to='/alterar_senha' activeClassName={classes.active}>
         <ListItemIcon>
           <LockIcon />
         </ListItemIcon>
@@ -42,13 +42,13 @@ export const AdminListItems = props => {
     <List>
       <Divider />
       <ListSubheader inset>Administração</ListSubheader>
-      <ListItem button component={NavLink} exact to='/gerenciar_usuarios' activeClassName={classes.active}>
+      <ListItem button component={NavLink} replace exact to='/gerenciar_usuarios' activeClassName={classes.active}>
         <ListItemIcon>
           <GroupIcon />
         </ListItemIcon>
         <ListItemText primary='Gerenciar usuários' />
       </ListItem>
-      <ListItem button component={NavLink} exact to='/autorizar_usuarios' activeClassName={classes.active}>
+      <ListItem button component={NavLink} replace exact to='/autorizar_usuarios' activeClassName={classes.active}>
         <ListItemIcon>
           <VerifiedUserIcon />
         </ListItemIcon>

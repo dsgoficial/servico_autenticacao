@@ -4,7 +4,6 @@ import { api, auth } from '../services'
 const handleLogin = async (usuario, senha) => {
   const response = await api.post('/login', { usuario, senha })
   if (!response) return false
-
   if (
     !('status' in response) ||
     response.status !== 201 ||

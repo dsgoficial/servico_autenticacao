@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -9,6 +9,7 @@ import ReactLoading from 'react-loading'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select } from 'formik-material-ui'
 import MenuItem from '@material-ui/core/MenuItem'
+import { useAsync } from 'react-async-hook'
 
 import { criaUsuario, getSelectData } from './api'
 import { adicionaSchema } from './validation_schema'
@@ -32,21 +33,19 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
   const [submitting, setSubmitting] = useState(false)
   const [loaded, setLoaded] = useState(false)
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const response = await getSelectData()
-        if (!response) return
-        const { listaPostoGrad, listaTurnos } = response
-        setListaPostoGrad(listaPostoGrad)
-        setListaTurnos(listaTurnos)
-        setLoaded(true)
-      } catch (err) {
-        handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
-      }
+  useAsync(async () => {
+    try {
+      const response = await getSelectData()
+      if (!response) return
+
+      const { listaPostoGrad, listaTurnos } = response
+      setListaPostoGrad(listaPostoGrad)
+      setListaTurnos(listaTurnos)
+      setLoaded(true)
+    } catch (err) {
+      handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
     }
-    loadData()
-  }, [handleDialog])
+  }, [])
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
