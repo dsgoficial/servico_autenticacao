@@ -45,7 +45,9 @@ controller.criaAplicacao = async (
   nomeAbrev,
   ativa
 ) => {
-  return db.conn.task(async t => {
+  return db.conn.tx(async t => {
+    ativa = !!ativa
+
     const existe = await t.oneOrNone(
       'SELECT id FROM dgeo.aplicacao WHERE nome = $<nome> OR nome_abrev = $<nomeAbrev>',
       { nome, nomeAbrev }
@@ -69,13 +71,15 @@ controller.updateAplicacao = async (
   nomeAbrev,
   ativa
 ) => {
-  return db.conn.task(async t => {
+  return db.conn.tx(async t => {
+    ativa = !!ativa
+
     const existe = await t.oneOrNone(
       'SELECT id FROM dgeo.aplicacao WHERE id = $<id>',
       { id }
     )
 
-    if (existe) {
+    if (!existe) {
       throw new AppError('Id não corresponde a nenhuma aplicação', httpCode.NotFound)
     }
 
@@ -97,6 +101,16 @@ controller.updateAplicacao = async (
 
     if (aplicacaoDefault) {
       throw new AppError('O nome e nome_abrev de aplicações padrão não devem ser modificados', httpCode.BadRequest)
+    }
+
+    const aplicacaoAuth = await t.oneOrNone(
+      `SELECT id FROM dgeo.aplicacao 
+      WHERE id IN ($<id>) AND nome_abrev IN ('auth_web')`,
+      { id }
+    )
+
+    if (aplicacaoAuth) {
+      throw new AppError('O cliente web do serviço de autenticação não pode ser desativado', httpCode.BadRequest)
     }
 
     t.none(

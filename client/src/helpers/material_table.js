@@ -46,8 +46,8 @@ export default props => {
       localization={{
         pagination: {
           labelDisplayedRows: '{from}-{to} de {count}',
-          labelRowsSelect: 'Usuários',
-          labelRowsPerPage: 'Usuários por página',
+          labelRowsSelect: 'Registros',
+          labelRowsPerPage: 'Registros por página',
           firstTooltip: 'Primeira página',
           previousTooltip: 'Página anterior',
           nextTooltip: 'Próxima página',
@@ -57,7 +57,7 @@ export default props => {
           placeholder: 'Arraste títulos para agrupar'
         },
         toolbar: {
-          nRowsSelected: '{0} usuario(s) selecionado(s)',
+          nRowsSelected: '{0} registro(s) selecionado(s)',
           searchTooltip: 'Buscar',
           searchPlaceholder: 'Buscar'
         },
@@ -65,22 +65,27 @@ export default props => {
           actions: 'Ações'
         },
         body: {
-          emptyDataSourceMessage: 'Sem usuários para exibir',
-          addTooltip: 'Adicionar usuário',
-          deleteTooltip: 'Deletar usuário',
-          editTooltip: 'Editar usuário',
+          emptyDataSourceMessage: 'Sem dados para exibir',
+          addTooltip: 'Adicionar',
+          deleteTooltip: 'Deletar',
+          editTooltip: 'Editar',
           filterRow: {
             filterTooltip: 'Filtro'
           },
           editRow: {
-            deleteText: 'Você tem certeza que deseja deletar este usuário?',
+            deleteText: 'Você tem certeza que deseja deletar este registro?',
             cancelTooltip: 'Cancelar',
             saveTooltip: 'Salvar'
           }
         }
       }}
       actions={props.actions}
-      options={props.options}
+      options={{
+        pageSize: 10,
+        pageSizeOptions: [5, 10, 20, 50],
+        ...props.options
+      }}
+      editable={props.editable}
     />
   )
 }

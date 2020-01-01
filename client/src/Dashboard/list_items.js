@@ -10,6 +10,8 @@ import GroupIcon from '@material-ui/icons/Group'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
+import InsertChartIcon from '@material-ui/icons/InsertChart'
+import DesktopMacIcon from '@material-ui/icons/DesktopMac'
 
 import styles from './styles'
 
@@ -42,6 +44,12 @@ export const AdminListItems = props => {
     <List>
       <Divider />
       <ListSubheader inset>Administração</ListSubheader>
+      <ListItem button component={NavLink} replace exact to='/graficos' activeClassName={classes.active}>
+        <ListItemIcon>
+          <InsertChartIcon />
+        </ListItemIcon>
+        <ListItemText primary='Gráficos' />
+      </ListItem>
       <ListItem button component={NavLink} replace exact to='/gerenciar_usuarios' activeClassName={classes.active}>
         <ListItemIcon>
           <GroupIcon />
@@ -53,6 +61,12 @@ export const AdminListItems = props => {
           <VerifiedUserIcon />
         </ListItemIcon>
         <ListItemText primary='Autorizar usuários' />
+      </ListItem>
+      <ListItem button component={NavLink} replace exact to='/gerenciar_aplicacoes' activeClassName={classes.active}>
+        <ListItemIcon>
+          <DesktopMacIcon />
+        </ListItemIcon>
+        <ListItemText primary='Gerenciar aplicações' />
       </ListItem>
     </List>
   )

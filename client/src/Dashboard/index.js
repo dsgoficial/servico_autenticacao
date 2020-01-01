@@ -19,6 +19,8 @@ import InformacaoUsuario from '../InformacaoUsuario'
 import AlteraSenha from '../AlteraSenha'
 import GerenciaUsuarios from '../GerenciaUsuarios'
 import AutorizaUsuarios from '../AutorizaUsuarios'
+import GerenciarAplicacoes from '../GerenciarAplicacoes'
+import Graficos from '../Graficos'
 
 export default withRouter(props => {
   const classes = styles()
@@ -90,6 +92,8 @@ export default withRouter(props => {
             <Route exact path='/alterar_senha' component={AlteraSenha} />
             <Route exact path='/gerenciar_usuarios' component={GerenciaUsuarios} />
             <Route exact path='/autorizar_usuarios' component={AutorizaUsuarios} />
+            <Route exact path='/graficos' component={GerenciarAplicacoes} />
+            <Route exact path='/gerenciar_aplicacoes' component={GerenciarAplicacoes} />
           </Container>
         </main>
       </HashRouter>
