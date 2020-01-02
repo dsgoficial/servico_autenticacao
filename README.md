@@ -7,9 +7,8 @@ Serviço em Node.js e Cliente Web para autenticação de usuários. Sua utiliza�
 - [Sistema de Controle do Acervo](https://github.com/1cgeo/controle_acervo)
 - [Sistema de Pedidos da Mapoteca](https://github.com/1cgeo/mapoteca)
 - [DSGDocs](https://github.com/1cgeo/DSGDocs)
-
+- [SAP Dashboard](https://github.com/1cgeo/sap_dashboard)
 
 ## Releases
 
 Sem relases concluídas até o momento.
-
