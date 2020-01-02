@@ -1,4 +1,4 @@
-﻿# Serviço de Autenticação v1.0
+﻿# Serviço de Autenticação
 
 Serviço em Node.js e Cliente Web para autenticação de usuários. Sua utilização é necessária para executar os seguintes serviços da DSG:
 
