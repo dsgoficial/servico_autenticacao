@@ -11,6 +11,7 @@ export default withRouter(props => {
   const [snackbar, setSnackbar] = useState('')
   const [refresh, setRefresh] = useState(false)
   const [openConfirmDialog, setOpenConfirmDialog] = useState({})
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     let isCurrent = true
@@ -19,6 +20,7 @@ export default withRouter(props => {
         const response = await getUsuarios()
         if (!response || !isCurrent) return
         setUsuarios(response)
+        setLoaded(true)
       } catch (err) {
         setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
       }
@@ -105,6 +107,7 @@ export default withRouter(props => {
     <>
       <MaterialTable
         title='Usuários'
+        loaded={loaded}
         columns={[
           { title: 'Login', field: 'login' },
           { title: 'Posto/Graducao', field: 'tipo_posto_grad' },

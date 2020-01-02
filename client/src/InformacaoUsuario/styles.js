@@ -25,6 +25,13 @@ const styles = makeStyles(theme => ({
     width: '100%',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1)
+  },
+  paper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: theme.spacing(4, 3),
+    elevation: 3
   }
 }))
 

@@ -90,7 +90,7 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Adicionar usuário</DialogTitle>
       <DialogContent>
         {loaded ? (
@@ -180,7 +180,8 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
               A senha do usuário criado será igual ao login.
             </DialogContentText>
           </>
-        ) : (
+        )
+          : (
             <div className={classes.loading}>
               <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
             </div>

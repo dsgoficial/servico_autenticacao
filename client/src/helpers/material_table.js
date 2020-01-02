@@ -15,6 +15,8 @@ import Remove from '@material-ui/icons/Remove'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
+import ReactLoading from 'react-loading'
+import { makeStyles } from '@material-ui/core/styles'
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -36,56 +38,78 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 }
 
+const styles = makeStyles(theme => ({
+  loading: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    minHeight: '100vh'
+  }
+}))
+
 export default props => {
+  const classes = styles()
+
   return (
-    <MaterialTable
-      title={props.title}
-      icons={tableIcons}
-      columns={props.columns}
-      data={props.data}
-      localization={{
-        pagination: {
-          labelDisplayedRows: '{from}-{to} de {count}',
-          labelRowsSelect: 'Registros',
-          labelRowsPerPage: 'Registros por página',
-          firstTooltip: 'Primeira página',
-          previousTooltip: 'Página anterior',
-          nextTooltip: 'Próxima página',
-          lastTooltip: 'Última página'
-        },
-        grouping: {
-          placeholder: 'Arraste títulos para agrupar'
-        },
-        toolbar: {
-          nRowsSelected: '{0} registro(s) selecionado(s)',
-          searchTooltip: 'Buscar',
-          searchPlaceholder: 'Buscar'
-        },
-        header: {
-          actions: 'Ações'
-        },
-        body: {
-          emptyDataSourceMessage: 'Sem dados para exibir',
-          addTooltip: 'Adicionar',
-          deleteTooltip: 'Deletar',
-          editTooltip: 'Editar',
-          filterRow: {
-            filterTooltip: 'Filtro'
+    props.loaded ? (
+      <MaterialTable
+        title={props.title}
+        icons={tableIcons}
+        columns={props.columns}
+        data={props.data}
+        localization={{
+          pagination: {
+            labelDisplayedRows: '{from}-{to} de {count}',
+            labelRowsSelect: 'Registros',
+            labelRowsPerPage: 'Registros por página',
+            firstTooltip: 'Primeira página',
+            previousTooltip: 'Página anterior',
+            nextTooltip: 'Próxima página',
+            lastTooltip: 'Última página'
           },
-          editRow: {
-            deleteText: 'Você tem certeza que deseja deletar este registro?',
-            cancelTooltip: 'Cancelar',
-            saveTooltip: 'Salvar'
+          grouping: {
+            placeholder: 'Arraste títulos para agrupar'
+          },
+          toolbar: {
+            nRowsSelected: '{0} registro(s) selecionado(s)',
+            searchTooltip: 'Buscar',
+            searchPlaceholder: 'Buscar',
+            exportTitle: 'Exportar',
+            exportName: 'Exportar como CSV'
+          },
+          header: {
+            actions: 'Ações'
+          },
+          body: {
+            emptyDataSourceMessage: 'Sem dados para exibir',
+            addTooltip: 'Adicionar',
+            deleteTooltip: 'Deletar',
+            editTooltip: 'Editar',
+            filterRow: {
+              filterTooltip: 'Filtro'
+            },
+            editRow: {
+              deleteText: 'Você tem certeza que deseja deletar este registro?',
+              cancelTooltip: 'Cancelar',
+              saveTooltip: 'Salvar'
+            }
           }
-        }
-      }}
-      actions={props.actions}
-      options={{
-        pageSize: 10,
-        pageSizeOptions: [5, 10, 20, 50],
-        ...props.options
-      }}
-      editable={props.editable}
-    />
+        }}
+        actions={props.actions}
+        options={{
+          pageSize: 10,
+          pageSizeOptions: [5, 10, 20, 50],
+          ...props.options
+        }}
+        editable={props.editable}
+      />
+    )
+      : (
+        <div className={classes.loading}>
+          <ReactLoading type='bars' color='#F83737' height='5%' width='5%' />
+        </div>
+      )
   )
 }

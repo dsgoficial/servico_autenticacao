@@ -118,7 +118,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Atualizar usuário</DialogTitle>
       <DialogContent>
         {loaded ? (
@@ -317,7 +317,8 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
               )}
             </Formik>
           </>
-        ) : (
+        )
+          : (
             <div className={classes.loading}>
               <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
             </div>

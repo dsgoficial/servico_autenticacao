@@ -12,6 +12,7 @@ export default withRouter(props => {
   const [aplicacoes, setAplicacoes] = useState([])
   const [snackbar, setSnackbar] = useState('')
   const [refresh, setRefresh] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     let isCurrent = true
@@ -21,6 +22,7 @@ export default withRouter(props => {
         if (!response || !isCurrent) return
 
         setAplicacoes(response)
+        setLoaded(true)
       } catch (err) {
         if (
           'response' in err &&
@@ -96,6 +98,7 @@ export default withRouter(props => {
     <>
       <MaterialTable
         title='Aplicações'
+        loaded={loaded}
         columns={[
           {
             title: 'Aplicação',
@@ -104,7 +107,6 @@ export default withRouter(props => {
               <TextField
                 type='text'
                 value={props.value}
-                label='Nome da aplicação'
                 className={classes.textField}
                 onChange={e => props.onChange(e.target.value)}
               />

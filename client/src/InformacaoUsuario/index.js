@@ -11,6 +11,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker } from 'material-ui-formik-components/DatePicker'
 import ptLocale from 'date-fns/locale/pt-BR'
+import Paper from '@material-ui/core/Paper'
 
 import styles from './styles'
 import validationSchema from './validation_schema'
@@ -47,7 +48,6 @@ export default withRouter(props => {
     let isCurrent = true
 
     const load = async () => {
-
       try {
         const response = await getData()
         if (!response || !isCurrent) return
@@ -121,185 +121,187 @@ export default withRouter(props => {
 
   return (
     <>
-      <Container maxWidth='sm'>
-        {loaded ? (
-          <div className={classes.formArea}>
-            <Typography component='h1' variant='h5'>
-              Atualizar dados do usuário
-            </Typography>
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleForm}
-            >
-              {({ isValid, isSubmitting, isValidating }) => (
-                <Form className={classes.form}>
-                  <Field
-                    name='nome'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Nome completo'
-                  />
-                  <Field
-                    name='nomeGuerra'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Nome de guerra'
-                  />
-                  <div>
+      {loaded ? (
+        <Container maxWidth='sm'>
+          <Paper className={classes.paper}>
+            <div className={classes.formArea}>
+              <Typography component='h1' variant='h5'>
+                Atualizar dados do usuário
+              </Typography>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleForm}
+              >
+                {({ isValid, isSubmitting, isValidating }) => (
+                  <Form className={classes.form}>
                     <Field
-                      name='tipoPostoGradId'
-                      label='Posto/Graduação'
-                      variant='outlined'
-                      component={Select}
-                      displayEmpty
-                      className={classes.select}
-                    >
-                      <MenuItem value='' disabled>
-                        Selecione seu Posto/Graduação
-                      </MenuItem>
-                      {listaPostoGrad.map(option => (
-                        <MenuItem key={option.code} value={option.code}>
-                          {option.nome}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                  </div>
-                  <div>
-                    <Field
-                      name='tipoTurnoId'
-                      label='Turno'
-                      variant='outlined'
-                      component={Select}
-                      displayEmpty
-                      className={classes.select}
-                    >
-                      <MenuItem value='' disabled>
-                        Selecione seu turno de trabalho
-                      </MenuItem>
-                      {listaTurnos.map(option => (
-                        <MenuItem key={option.code} value={option.code}>
-                          {option.nome}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                  </div>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-                    <Field
-                      name='dataNascimento'
-                      component={DatePicker}
+                      name='nome'
+                      component={TextField}
                       variant='outlined'
                       margin='normal'
                       fullWidth
-                      label='Data de nascimento'
-                      format='dd/MM/yyyy'
-                      autoOk
-                      allowKeyboardControl
-                      clearable
+                      label='Nome completo'
                     />
-                  </MuiPickersUtilsProvider>
-                  <Field
-                    name='celular'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Celular'
-                  />
-                  <Field
-                    name='emailEb'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Email (EB)'
-                  />
-                  <Field
-                    name='cpf'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='CPF'
-                  />
-                  <Field
-                    name='identidade'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Identidade'
-                  />
-                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
                     <Field
-                      name='validadeIdentidade'
-                      component={DatePicker}
+                      name='nomeGuerra'
+                      component={TextField}
                       variant='outlined'
                       margin='normal'
                       fullWidth
-                      label='Data de validade da identidade'
-                      format='dd/MM/yyyy'
-                      autoOk
-                      allowKeyboardControl
-                      clearable
+                      label='Nome de guerra'
                     />
-                  </MuiPickersUtilsProvider>
-                  <Field
-                    name='orgaoExpedidor'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Órgão Expedidor'
-                  />
-                  <Field
-                    name='banco'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Banco'
-                  />
-                  <Field
-                    name='agencia'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Agência'
-                  />
-                  <Field
-                    name='contaBancaria'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Conta bancária'
-                  />
-                  <SubmitButton
-                    type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
-                    fullWidth
-                    variant='contained'
-                    color='primary'
-                    className={classes.submit}
-                  >
-                    Atualizar dados
-                  </SubmitButton>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        )
-          : (
-            <div className={classes.loading}>
-              <ReactLoading type='bars' color='#C44D33' height='20%' width='20%' />
+                    <div>
+                      <Field
+                        name='tipoPostoGradId'
+                        label='Posto/Graduação'
+                        variant='outlined'
+                        component={Select}
+                        displayEmpty
+                        className={classes.select}
+                      >
+                        <MenuItem value='' disabled>
+                          Selecione seu Posto/Graduação
+                        </MenuItem>
+                        {listaPostoGrad.map(option => (
+                          <MenuItem key={option.code} value={option.code}>
+                            {option.nome}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </div>
+                    <div>
+                      <Field
+                        name='tipoTurnoId'
+                        label='Turno'
+                        variant='outlined'
+                        component={Select}
+                        displayEmpty
+                        className={classes.select}
+                      >
+                        <MenuItem value='' disabled>
+                          Selecione seu turno de trabalho
+                        </MenuItem>
+                        {listaTurnos.map(option => (
+                          <MenuItem key={option.code} value={option.code}>
+                            {option.nome}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </div>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
+                      <Field
+                        name='dataNascimento'
+                        component={DatePicker}
+                        variant='outlined'
+                        margin='normal'
+                        fullWidth
+                        label='Data de nascimento'
+                        format='dd/MM/yyyy'
+                        autoOk
+                        allowKeyboardControl
+                        clearable
+                      />
+                    </MuiPickersUtilsProvider>
+                    <Field
+                      name='celular'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Celular'
+                    />
+                    <Field
+                      name='emailEb'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Email (EB)'
+                    />
+                    <Field
+                      name='cpf'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='CPF'
+                    />
+                    <Field
+                      name='identidade'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Identidade'
+                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
+                      <Field
+                        name='validadeIdentidade'
+                        component={DatePicker}
+                        variant='outlined'
+                        margin='normal'
+                        fullWidth
+                        label='Data de validade da identidade'
+                        format='dd/MM/yyyy'
+                        autoOk
+                        allowKeyboardControl
+                        clearable
+                      />
+                    </MuiPickersUtilsProvider>
+                    <Field
+                      name='orgaoExpedidor'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Órgão Expedidor'
+                    />
+                    <Field
+                      name='banco'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Banco'
+                    />
+                    <Field
+                      name='agencia'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Agência'
+                    />
+                    <Field
+                      name='contaBancaria'
+                      component={TextField}
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      label='Conta bancária'
+                    />
+                    <SubmitButton
+                      type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
+                      fullWidth
+                      variant='contained'
+                      color='primary'
+                      className={classes.submit}
+                    >
+                      Atualizar dados
+                    </SubmitButton>
+                  </Form>
+                )}
+              </Formik>
             </div>
-          )}
-      </Container>
+          </Paper>
+        </Container>
+      )
+        : (
+          <div className={classes.loading}>
+            <ReactLoading type='bars' color='#F83737' height='5%' width='5%' />
+          </div>
+        )}
       {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </>
   )

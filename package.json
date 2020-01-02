@@ -28,7 +28,7 @@
     "colors": "^1.4.0",
     "concurrently": "^5.0.2",
     "inquirer": "^7.0.1",
-    "pg-promise": "^10.3.1",
+    "pg-promise": "^10.3.2",
     "pgtools": "^0.3.0"
   }
 }

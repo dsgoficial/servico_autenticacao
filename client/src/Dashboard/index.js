@@ -57,7 +57,7 @@ export default withRouter(props => {
               Serviço de Autenticação
             </Typography>
             <IconButton color='inherit' onClick={clickLogout}>
-              <Typography variant='h6' color='inherit' noWrap className={classes.title}>
+              <Typography variant='body1' color='inherit' noWrap className={classes.title}>
                 Sair
               </Typography>
               <ExitToAppIcon className={classes.logoutButton} />
@@ -87,12 +87,12 @@ export default withRouter(props => {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container maxWidth='lg' className={classes.container}>
+          <Container maxWidth='xl' className={classes.container}>
             <Route exact path='/' component={InformacaoUsuario} />
             <Route exact path='/alterar_senha' component={AlteraSenha} />
             <Route exact path='/gerenciar_usuarios' component={GerenciaUsuarios} />
             <Route exact path='/autorizar_usuarios' component={AutorizaUsuarios} />
-            <Route exact path='/graficos' component={GerenciarAplicacoes} />
+            <Route exact path='/graficos' component={Graficos} />
             <Route exact path='/gerenciar_aplicacoes' component={GerenciarAplicacoes} />
           </Container>
         </main>

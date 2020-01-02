@@ -85,35 +85,37 @@ export default withRouter(props => {
 
   return (
     <BackgroundImages>
-      <Container component='main' maxWidth='xs'>
-        {loaded ? (
-          <Paper className={classes.paper}>
-            <Typography component='h1' variant='h5'>
-              Cadastro de novo usuário
-            </Typography>
-            <CadastroForm
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={handleForm}
-              listaTurnos={listaTurnos}
-              listaPostoGrad={listaPostoGrad}
-            />
-            <Grid container justify='flex-end'>
-              <Grid item>
-                <LinkMui to='/login' variant='body2' component={Link} className={classes.link}>
-                  Fazer login
-                </LinkMui>
+      <div className={classes.overflow}>
+        <Container component='main' maxWidth='xs'>
+          {loaded ? (
+            <Paper className={classes.paper}>
+              <Typography component='h1' variant='h5'>
+                Cadastro de novo usuário
+              </Typography>
+              <CadastroForm
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={handleForm}
+                listaTurnos={listaTurnos}
+                listaPostoGrad={listaPostoGrad}
+              />
+              <Grid container justify='flex-end'>
+                <Grid item>
+                  <LinkMui to='/login' variant='body2' component={Link} className={classes.link}>
+                    Fazer login
+                  </LinkMui>
+                </Grid>
               </Grid>
-            </Grid>
-          </Paper>
-        )
-          : (
-            <div className={classes.loading}>
-              <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
-            </div>
-          )}
-      </Container>
-      {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
+            </Paper>
+          )
+            : (
+              <div className={classes.loading}>
+                <ReactLoading type='bars' color='#F83737' height='40%' width='40%' />
+              </div>
+            )}
+        </Container>
+        {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
+      </div>
     </BackgroundImages>
   )
 })

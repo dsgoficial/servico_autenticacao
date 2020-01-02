@@ -4,6 +4,7 @@ import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
+import Paper from '@material-ui/core/Paper'
 
 import { MessageSnackBar, SubmitButton } from '../helpers'
 
@@ -49,57 +50,59 @@ export default withRouter(props => {
   return (
     <>
       <Container maxWidth='sm'>
-        <div className={classes.formArea}>
-          <Typography component='h1' variant='h5'>
-            Atualizar senha
-          </Typography>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleForm}
-          >
-            {({ isValid, isSubmitting, isValidating }) => (
-              <Form className={classes.form}>
-                <Field
-                  name='senhaAtual'
-                  component={TextField}
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  label='Senha atual'
-                  type='password'
-                />
-                <Field
-                  name='senhaNova'
-                  component={TextField}
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  label='Nova senha'
-                  type='password'
-                />
-                <Field
-                  name='confirmarSenhaNova'
-                  component={TextField}
-                  variant='outlined'
-                  margin='normal'
-                  fullWidth
-                  label='Confirmar nova senha'
-                  type='password'
-                />
-                <SubmitButton
-                  type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
-                  fullWidth
-                  variant='contained'
-                  color='primary'
-                  className={classes.submit}
-                >
-                  Atualizar senha
-                </SubmitButton>
-              </Form>
-            )}
-          </Formik>
-        </div>
+        <Paper className={classes.paper}>
+          <div className={classes.formArea}>
+            <Typography component='h1' variant='h5'>
+              Atualizar senha
+            </Typography>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleForm}
+            >
+              {({ isValid, isSubmitting, isValidating }) => (
+                <Form className={classes.form}>
+                  <Field
+                    name='senhaAtual'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Senha atual'
+                    type='password'
+                  />
+                  <Field
+                    name='senhaNova'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Nova senha'
+                    type='password'
+                  />
+                  <Field
+                    name='confirmarSenhaNova'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='Confirmar nova senha'
+                    type='password'
+                  />
+                  <SubmitButton
+                    type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
+                    fullWidth
+                    variant='contained'
+                    color='primary'
+                    className={classes.submit}
+                  >
+                    Atualizar senha
+                  </SubmitButton>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </Paper>
       </Container>
       {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
     </>

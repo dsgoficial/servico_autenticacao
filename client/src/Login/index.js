@@ -40,29 +40,31 @@ export default withRouter(props => {
 
   return (
     <BackgroundImages>
-      <Container component='main' maxWidth='xs'>
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component='h1' variant='h5'>
-            Serviço de Autenticação
-          </Typography>
-          <LoginForm
-            initialValues={values}
-            validationSchema={validationSchema}
-            onSubmit={handleForm}
-          />
-          <Grid container justify='flex-end'>
-            <Grid item>
-              <LinkMui to='/cadastro' variant='body2' component={Link} className={classes.link}>
-                Criar novo usuário
-              </LinkMui>
+      <div className={classes.overflow}>
+        <Container component='main' maxWidth='xs'>
+          <Paper className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component='h1' variant='h5'>
+              Serviço de Autenticação
+            </Typography>
+            <LoginForm
+              initialValues={values}
+              validationSchema={validationSchema}
+              onSubmit={handleForm}
+            />
+            <Grid container justify='flex-end'>
+              <Grid item>
+                <LinkMui to='/cadastro' variant='body2' component={Link} className={classes.link}>
+                  Criar novo usuário
+                </LinkMui>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </Container>
-      {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
+          </Paper>
+        </Container>
+        {snackbar ? <MessageSnackBar status={snackbar.status} key={snackbar.date} msg={snackbar.msg} /> : null}
+      </div>
     </BackgroundImages>
   )
 })

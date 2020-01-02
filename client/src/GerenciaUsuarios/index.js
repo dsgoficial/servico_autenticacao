@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 import Edit from '@material-ui/icons/Edit'
 import Add from '@material-ui/icons/Add'
 import Delete from '@material-ui/icons/Delete'
+import { CsvBuilder } from 'filefy'
 
 import { getUsuarios, deletarUsuario as deletarUsuarioApi } from './api'
 import { MessageSnackBar, MaterialTable, DialogoConfirmacao } from '../helpers'
@@ -16,6 +17,7 @@ export default withRouter(props => {
   const [openAdicionaDialog, setOpenAdicionaDialog] = useState({})
   const [openAtualizaDialog, setOpenAtualizaDialog] = useState({})
   const [refresh, setRefresh] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
     let isCurrent = true
@@ -26,6 +28,7 @@ export default withRouter(props => {
         if (!response || !isCurrent) return
 
         setUsuarios(response)
+        setLoaded(true)
       } catch (err) {
         setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
       }
@@ -105,6 +108,7 @@ export default withRouter(props => {
     <>
       <MaterialTable
         title='Usuários'
+        loaded={loaded}
         columns={[
           { title: 'Login', field: 'login' },
           { title: 'Posto/Graducao', field: 'tipo_posto_grad' },
@@ -132,6 +136,26 @@ export default withRouter(props => {
             onClick: adicionarUsuario
           }
         ]}
+        options={{
+          exportButton: true,
+          exportCsv: (columns, data) => {
+            data.forEach(d => {
+              delete d.tableData
+            })
+            const keys = Object.keys(data[0])
+            const dataToExport = data.map(r =>
+              keys.map(k => {
+                return r[k]
+              })
+            )
+            console.log(dataToExport)
+            const builder = new CsvBuilder('export_usuarios.csv')
+            builder.setDelimeter(',')
+              .setColumns(keys)
+              .addRows(dataToExport)
+              .exportFile()
+          }
+        }}
       />
       {openDeleteDialog ? (
         <DialogoConfirmacao

@@ -25,7 +25,7 @@ const DialogoConfirmacao = ({ open = false, title = '', msg = '', onClose }) => 
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>

@@ -20,6 +20,13 @@ const styles = makeStyles(theme => ({
     alignItems: 'center',
     textAlign: 'center',
     minHeight: '100vh'
+  },
+  paper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: theme.spacing(4, 3),
+    elevation: 3
   }
 }))
 

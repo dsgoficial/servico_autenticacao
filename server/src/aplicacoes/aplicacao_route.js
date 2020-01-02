@@ -49,6 +49,7 @@ router.delete(
 
 router.get(
   '/',
+  verifyAdmin,
   asyncHandler(async (req, res, next) => {
     const dados = await aplicacaoCtrl.getAplicacao()
 
