@@ -9,7 +9,7 @@ Serviço em Node.js e Cliente Web para autenticação de usuários. Sua utiliza�
 - [DSGDocs](https://github.com/1cgeo/DSGDocs)
 
 
-# Releases
+## Releases
 
 Sem relases concluídas até o momento.
 
