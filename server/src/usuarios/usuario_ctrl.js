@@ -140,7 +140,7 @@ controller.deletaUsuario = async uuid => {
   return db.conn.tx(async t => {
     const adm = await t.oneOrNone(
       `SELECT uuid FROM dgeo.usuario 
-      WHERE uuid IN ($<uuid>) AND administrador IS TRUE `,
+      WHERE uuid = $<uuid> AND administrador IS TRUE `,
       { uuid }
     )
 
@@ -148,12 +148,14 @@ controller.deletaUsuario = async uuid => {
       throw new AppError('Usuário com privilégio de administrador não pode ser deletado', httpCode.BadRequest)
     }
     await t.none(
-      `DELETE FROM dgeo.login WHERE usuario_id IN 
-      (SELECT id FROM dgeo.usuario WHERE uuid IN ($<uuid>) AND administrador IS FALSE)`,
+      `UPDATE dgeo.login
+      SET usuario_id = NULL
+      WHERE usuario_id IN 
+      (SELECT id FROM dgeo.usuario WHERE uuid = $<uuid> AND administrador IS FALSE)`,
       { uuid }
     )
     const result = await t.result(
-      'DELETE FROM dgeo.usuario WHERE uuid IN ($<uuid>) AND administrador IS FALSE',
+      'DELETE FROM dgeo.usuario WHERE uuid = $<uuid> AND administrador IS FALSE',
       { uuid }
     )
     if (!result.rowCount || result.rowCount < 1) {

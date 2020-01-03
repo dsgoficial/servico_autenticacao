@@ -72,7 +72,7 @@ controller.getLoginsMes = async (total = 12) => {
 
 controller.getLoginsAplicacoes = async (total = 14, max = 10) => {
   const aplicacoes = await db.conn.any(
-    `SELECT a.nome_abrev AS aplicacao, count(l.id) AS logins FROM 
+    `SELECT COALESCE(a.nome_abrev, 'Aplicação deletada') AS aplicacao, count(l.id) AS logins FROM 
     generate_series((now() - interval '$<total:raw> day')::date, now()::date, interval  '1 day') AS day
     INNER JOIN dgeo.login AS l ON l.data_login::date = day.day::date
     LEFT JOIN dgeo.aplicacao AS a ON a.id = l.aplicacao_id
@@ -82,7 +82,7 @@ controller.getLoginsAplicacoes = async (total = 14, max = 10) => {
     { total: total - 1, max: max - 1 }
   )
   const dados = await db.conn.any(
-    `SELECT day::date AS data_login,  a.nome_abrev AS aplicacao, count(l.id) AS logins FROM 
+    `SELECT day::date AS data_login,  COALESCE(a.nome_abrev, 'Aplicação deletada') AS aplicacao, count(l.id) AS logins FROM 
     generate_series((now() - interval '$<total:raw> day')::date, now()::date, interval  '1 day') AS day
     LEFT JOIN dgeo.login AS l ON l.data_login::date = day.day::date
     LEFT JOIN dgeo.aplicacao AS a ON a.id = l.aplicacao_id
@@ -121,7 +121,7 @@ controller.getLoginsAplicacoes = async (total = 14, max = 10) => {
 
 controller.getLoginsUsuarios = async (total = 14, max = 10) => {
   const usuarios = await db.conn.any(
-    `SELECT pg.nome_abrev || ' ' || u.nome_guerra AS usuario, count(l.id) AS logins FROM 
+    `SELECT COALESCE(pg.nome_abrev || ' ' || u.nome_guerra, 'Usuário deletado') AS usuario, count(l.id) AS logins FROM 
     generate_series((now() - interval '$<total:raw> day')::date, now()::date, interval  '1 day') AS day
     INNER JOIN dgeo.login AS l ON l.data_login::date = day.day::date
     LEFT JOIN dgeo.usuario AS u ON u.id = l.usuario_id
@@ -132,7 +132,7 @@ controller.getLoginsUsuarios = async (total = 14, max = 10) => {
     { total: total - 1, max: max - 1 }
   )
   const dados = await db.conn.any(
-    `SELECT day::date AS data_login,  pg.nome_abrev || ' ' || u.nome_guerra AS usuario, count(l.id) AS logins FROM 
+    `SELECT day::date AS data_login,  COALESCE(pg.nome_abrev || ' ' || u.nome_guerra, 'Usuário deletado') AS usuario, count(l.id) AS logins FROM 
     generate_series((now() - interval '$<total:raw> day')::date, now()::date, interval  '1 day') AS day
     LEFT JOIN dgeo.login AS l ON l.data_login::date = day.day::date
     LEFT JOIN dgeo.usuario AS u ON u.id = l.usuario_id

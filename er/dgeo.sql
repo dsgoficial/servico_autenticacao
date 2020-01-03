@@ -48,8 +48,8 @@ INSERT INTO dgeo.aplicacao (nome, nome_abrev, ativa) VALUES
 
 CREATE TABLE dgeo.login(
   id SERIAL NOT NULL PRIMARY KEY,
-  usuario_id SMALLINT NOT NULL REFERENCES dgeo.usuario (id),
-  aplicacao_id SMALLINT NOT NULL REFERENCES dgeo.aplicacao (id),
+  usuario_id SMALLINT REFERENCES dgeo.usuario (id),
+  aplicacao_id SMALLINT REFERENCES dgeo.aplicacao (id),
   data_login  timestamp with time zone NOT NULL
 );
 
