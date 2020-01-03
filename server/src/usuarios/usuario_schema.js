@@ -6,7 +6,7 @@ const models = {}
 
 models.uuidParams = Joi.object().keys({
   uuid: Joi.string()
-    .guid()
+    .guid({ version: 'uuidv4' })
     .required()
 })
 
@@ -24,7 +24,7 @@ models.paginacaoUsuariosQuery = Joi.object().keys({
 
 models.listaUsuarios = Joi.object().keys({
   usuarios_uuids: Joi.array()
-    .items(Joi.string().guid())
+    .items(Joi.string().guid({ version: 'uuidv4' }))
     .required()
     .min(1)
 })

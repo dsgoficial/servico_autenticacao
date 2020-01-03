@@ -47,8 +47,8 @@ export default withRouter(props => {
       const response = await criaAplicacao(newData)
       if (!response) return
 
-      setSnackbar({ status: 'success', msg: 'Aplicação adicionada com sucesso', date: new Date() })
       setRefresh(new Date())
+      setSnackbar({ status: 'success', msg: 'Aplicação adicionada com sucesso', date: new Date() })
     } catch (err) {
       if (
         'response' in err &&
@@ -67,8 +67,8 @@ export default withRouter(props => {
       const response = await atualizaAplicacao(newData)
       if (!response) return
 
-      setSnackbar({ status: 'success', msg: 'Aplicação atualizada com sucesso', date: new Date() })
       setRefresh(new Date())
+      setSnackbar({ status: 'success', msg: 'Aplicação atualizada com sucesso', date: new Date() })
     } catch (err) {
       if (
         'response' in err &&
@@ -87,8 +87,8 @@ export default withRouter(props => {
       const response = await deletaAplicacao(oldData.id)
       if (!response) return
 
-      setSnackbar({ status: 'success', msg: 'Aplicação deletada com sucesso', date: new Date() })
       setRefresh(new Date())
+      setSnackbar({ status: 'success', msg: 'Aplicação deletada com sucesso', date: new Date() })
     } catch (err) {
       setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
     }
@@ -106,7 +106,7 @@ export default withRouter(props => {
             editComponent: props => (
               <TextField
                 type='text'
-                value={props.value}
+                value={props.value || ''}
                 className={classes.textField}
                 onChange={e => props.onChange(e.target.value)}
               />

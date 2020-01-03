@@ -17,12 +17,12 @@ CREATE TABLE dgeo.usuario(
   uuid UUID NOT NULL DEFAULT uuid_generate_v4(),
   cpf VARCHAR(255),
   identidade VARCHAR(255),
-  validade_identidade VARCHAR(255),
+  validade_identidade TIMESTAMP WITH TIME ZONE,
   orgao_expedidor VARCHAR(255),
   banco VARCHAR(255),
   agencia VARCHAR(255),
   conta_bancaria VARCHAR(255),
-  data_nascimento VARCHAR(255),
+  data_nascimento TIMESTAMP WITH TIME ZONE,
   celular VARCHAR(255),
   email_eb VARCHAR(255) 
 );

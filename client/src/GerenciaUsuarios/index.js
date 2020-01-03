@@ -76,8 +76,8 @@ export default withRouter(props => {
         try {
           const success = await deletarUsuarioApi(uuid)
           if (success) {
-            setSnackbar({ status: 'success', msg: 'Usuário deletado com sucesso.', date: new Date() })
             setRefresh(new Date())
+            setSnackbar({ status: 'success', msg: 'Usuário deletado com sucesso.', date: new Date() })
           }
         } catch (err) {
           setRefresh(new Date())
@@ -148,7 +148,6 @@ export default withRouter(props => {
                 return r[k]
               })
             )
-            console.log(dataToExport)
             const builder = new CsvBuilder('export_usuarios.csv')
             builder.setDelimeter(',')
               .setColumns(keys)

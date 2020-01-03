@@ -202,8 +202,8 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                       label='Data de nascimento'
                       format='dd/MM/yyyy'
                       autoOk
-                      allowKeyboardControl
                       clearable
+                      disableFuture
                     />
                   </MuiPickersUtilsProvider>
                   <Field
@@ -248,8 +248,8 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                       label='Data de validade da identidade'
                       format='dd/MM/yyyy'
                       autoOk
-                      allowKeyboardControl
                       clearable
+                      disableFuture
                     />
                   </MuiPickersUtilsProvider>
                   <Field

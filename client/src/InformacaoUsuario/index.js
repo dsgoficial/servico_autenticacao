@@ -58,17 +58,18 @@ export default withRouter(props => {
           nomeGuerra: usuario.nome_guerra,
           tipoPostoGradId: usuario.tipo_posto_grad_id,
           tipoTurnoId: usuario.tipo_turno_id,
-          cpf: usuario.cpf,
-          identidade: usuario.identidade,
+          cpf: usuario.cpf || '',
+          identidade: usuario.identidade || '',
           validadeIdentidade: usuario.validade_identidade,
-          orgaoExpedidor: usuario.orgao_expedidor,
-          banco: usuario.banco,
-          agencia: usuario.agencia,
-          contaBancaria: usuario.conta_bancaria,
+          orgaoExpedidor: usuario.orgao_expedidor || '',
+          banco: usuario.banco || '',
+          agencia: usuario.agencia || '',
+          contaBancaria: usuario.conta_bancaria || '',
           dataNascimento: usuario.data_nascimento,
-          celular: usuario.celular,
-          emailEb: usuario.email_eb
+          celular: usuario.celular || '',
+          emailEb: usuario.email_eb || ''
         })
+
         setListaPostoGrad(listaPostoGrad)
         setListaTurnos(listaTurnos)
         setLoaded(true)
@@ -102,8 +103,8 @@ export default withRouter(props => {
         values.emailEb
       )
       if (success) {
-        setSnackbar({ status: 'success', msg: 'Informações atualizadas com sucesso', date: new Date() })
         setRefresh(new Date())
+        setSnackbar({ status: 'success', msg: 'Informações atualizadas com sucesso', date: new Date() })
       }
     } catch (err) {
       setRefresh(new Date())
@@ -193,14 +194,14 @@ export default withRouter(props => {
                       <Field
                         name='dataNascimento'
                         component={DatePicker}
-                        variant='outlined'
+                        inputVariant='outlined'
                         margin='normal'
                         fullWidth
                         label='Data de nascimento'
                         format='dd/MM/yyyy'
                         autoOk
-                        allowKeyboardControl
                         clearable
+                        disableFuture
                       />
                     </MuiPickersUtilsProvider>
                     <Field
@@ -239,14 +240,14 @@ export default withRouter(props => {
                       <Field
                         name='validadeIdentidade'
                         component={DatePicker}
-                        variant='outlined'
+                        inputVariant='outlined'
                         margin='normal'
                         fullWidth
                         label='Data de validade da identidade'
                         format='dd/MM/yyyy'
                         autoOk
-                        allowKeyboardControl
                         clearable
+                        disableFuture
                       />
                     </MuiPickersUtilsProvider>
                     <Field

@@ -48,8 +48,8 @@ export default withRouter(props => {
           const uuids = data.map(d => (d.uuid))
           const success = await autorizarUsuarios(uuids)
           if (success) {
-            setSnackbar({ status: 'success', msg: 'Usuários autorizados com sucesso', date: new Date() })
             setRefresh(new Date())
+            setSnackbar({ status: 'success', msg: 'Usuários autorizados com sucesso', date: new Date() })
           }
         } catch (err) {
           setRefresh(new Date())
@@ -84,8 +84,8 @@ export default withRouter(props => {
           const uuids = data.map(d => (d.uuid))
           const success = await resetarSenhas(uuids)
           if (success) {
-            setSnackbar({ status: 'success', msg: 'Senhas resetadas com sucesso', date: new Date() })
             setRefresh(new Date())
+            setSnackbar({ status: 'success', msg: 'Senhas resetadas com sucesso', date: new Date() })
           }
         } catch (err) {
           if (
