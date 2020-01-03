@@ -196,7 +196,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                     <Field
                       name='dataNascimento'
                       component={DatePicker}
-                      variant='outlined'
+                      inputVariant='outlined'
                       margin='normal'
                       fullWidth
                       label='Data de nascimento'
@@ -242,7 +242,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                     <Field
                       name='validadeIdentidade'
                       component={DatePicker}
-                      variant='outlined'
+                      inputVariant='outlined'
                       margin='normal'
                       fullWidth
                       label='Data de validade da identidade'
