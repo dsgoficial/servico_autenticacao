@@ -46,7 +46,7 @@ const comparePassword = async (senhaFornecida, senhaDb) => {
 }
 
 controller.login = async (usuario, senha, aplicacao) => {
-  return db.conn.task(async t => {
+  return db.conn.tx(async t => {
     const aplicacaoId = await t.oneOrNone(
       'SELECT id FROM dgeo.aplicacao WHERE nome_abrev = $<aplicacao> and ativa IS TRUE',
       { aplicacao }
