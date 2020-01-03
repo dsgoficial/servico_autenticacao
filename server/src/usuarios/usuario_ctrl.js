@@ -219,9 +219,9 @@ controller.getUsuarios = async (pagina, totalPagina, colunaOrdem, direcaoOrdem, 
   let sort = ''
   if (colunaOrdem) {
     if (direcaoOrdem) {
-      sort = ` ORDER BY ${colunaOrdem} ${direcaoOrdem}`
+      sort = ` ORDER BY u.${colunaOrdem} ${direcaoOrdem}`
     } else {
-      sort = ` ORDER BY ${colunaOrdem} ASC`
+      sort = ` ORDER BY u.${colunaOrdem} ASC`
     }
   }
 
