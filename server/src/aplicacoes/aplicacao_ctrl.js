@@ -110,7 +110,7 @@ controller.updateAplicacao = async (
       { id }
     )
 
-    if (aplicacaoAuth) {
+    if (aplicacaoAuth && !ativa) {
       throw new AppError('O cliente web do serviço de autenticação não pode ser desativado', httpCode.BadRequest)
     }
 
