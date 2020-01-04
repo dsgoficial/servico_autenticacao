@@ -72,10 +72,10 @@ controller.getLoginsMes = async (total = 12) => {
 
 controller.getLoginsAplicacoes = async (total = 14, max = 10) => {
   const aplicacoes = await db.conn.any(
-    `SELECT COALESCE(a.nome_abrev, 'Aplicação deletada') AS aplicacao, count(l.id) AS logins FROM 
-    generate_series((now() - interval '$<total:raw> day')::date, now()::date, interval  '1 day') AS day
-    INNER JOIN dgeo.login AS l ON l.data_login::date = day.day::date
+    `SELECT COALESCE(a.nome_abrev, 'Aplicação deletada') AS aplicacao, count(l.id) AS logins 
+    FROM dgeo.login AS l
     LEFT JOIN dgeo.aplicacao AS a ON a.id = l.aplicacao_id
+    WHERE l.data_login::date >= (now() - interval '$<total:raw> day')::date
     GROUP BY a.nome_abrev
     ORDER BY count(l.id) DESC
     LIMIT $<max:raw>`,
@@ -121,11 +121,11 @@ controller.getLoginsAplicacoes = async (total = 14, max = 10) => {
 
 controller.getLoginsUsuarios = async (total = 14, max = 10) => {
   const usuarios = await db.conn.any(
-    `SELECT COALESCE(pg.nome_abrev || ' ' || u.nome_guerra, 'Usuário deletado') AS usuario, count(l.id) AS logins FROM 
-    generate_series((now() - interval '$<total:raw> day')::date, now()::date, interval  '1 day') AS day
-    INNER JOIN dgeo.login AS l ON l.data_login::date = day.day::date
+    `SELECT COALESCE(pg.nome_abrev || ' ' || u.nome_guerra, 'Usuário deletado') AS usuario, count(l.id) AS logins 
+    FROM dgeo.login AS l
     LEFT JOIN dgeo.usuario AS u ON u.id = l.usuario_id
     LEFT JOIN dominio.tipo_posto_grad AS pg ON pg.code = u.tipo_posto_grad_id
+    WHERE l.data_login::date >= (now() - interval '$<total:raw> day')::date
     GROUP BY pg.nome_abrev || ' ' || u.nome_guerra
     ORDER BY count(l.id) DESC
     LIMIT $<max:raw>`,
