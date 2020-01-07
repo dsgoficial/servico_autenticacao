@@ -38,8 +38,10 @@ controller.criaUsuario = async (
 
 controller.getInfoPublicaUsuarios = async () => {
   return db.conn.any(
-    `SELECT uuid, nome, nome_guerra, tipo_turno_id, tipo_posto_grad_id
-    FROM dgeo.usuario WHERE ativo IS TRUE`
+    `SELECT u.uuid, u.nome, u.nome_guerra, u.tipo_turno_id, u.tipo_posto_grad_id, tpg.nome AS tipo_posto_grad
+    FROM dgeo.usuario AS u
+    INNER JOIN dominio.tipo_posto_grad AS tpg ON tpg.code = u.tipo_posto_grad_id
+    WHERE u.ativo IS TRUE`
   )
 }
 
