@@ -19,7 +19,7 @@ const verifyLogin = asyncHandler(async (req, res, next) => {
     )
   }
 
-  req.body.usuarioUuid = decoded.uuid
+  req.usuarioUuid = decoded.uuid
   next()
 })
 
