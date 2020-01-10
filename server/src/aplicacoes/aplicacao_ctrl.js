@@ -36,7 +36,7 @@ controller.deletaAplicacao = async id => {
       { id }
     )
     if (!result.rowCount || result.rowCount < 1) {
-      throw new AppError('Usuário não encontrado', httpCode.NotFound)
+      throw new AppError('Aplicação não encontrada', httpCode.NotFound)
     }
   })
 }
