@@ -7,7 +7,7 @@ import Container from '@material-ui/core/Container'
 import Paper from '@material-ui/core/Paper'
 
 import { MessageSnackBar, SubmitButton } from '../helpers'
-
+import { handleApiError } from '../services'
 import styles from './styles'
 import validationSchema from './validation_schema'
 import { handleUpdate } from './api'
@@ -35,15 +35,7 @@ export default withRouter(props => {
       }
     } catch (err) {
       resetForm(initialValues)
-      if (
-        'response' in err &&
-        'data' in err.response &&
-        'message' in err.response.data
-      ) {
-        setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
-      } else {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
-      }
+      handleApiError(err, setSnackbar)
     }
   }
 

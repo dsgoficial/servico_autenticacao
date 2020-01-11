@@ -16,6 +16,7 @@ import Paper from '@material-ui/core/Paper'
 import styles from './styles'
 import validationSchema from './validation_schema'
 import { getData, handleUpdate } from './api'
+import { handleApiError } from '../services'
 
 export default withRouter(props => {
   const classes = styles()
@@ -74,7 +75,8 @@ export default withRouter(props => {
         setListaTurnos(listaTurnos)
         setLoaded(true)
       } catch (err) {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+        if (!isCurrent) return
+        handleApiError(err, setSnackbar)
       }
     }
     load()
@@ -108,15 +110,7 @@ export default withRouter(props => {
       }
     } catch (err) {
       setRefresh(new Date())
-      if (
-        'response' in err &&
-        'data' in err.response &&
-        'message' in err.response.data
-      ) {
-        setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
-      } else {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao atualizar suas informações. Contate o gerente.', date: new Date() })
-      }
+      handleApiError(err, setSnackbar)
     }
   }
 

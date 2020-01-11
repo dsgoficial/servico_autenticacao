@@ -5,6 +5,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 
 import { getUsuarios, autorizarUsuarios, resetarSenhas } from './api'
 import { MessageSnackBar, MaterialTable, DialogoConfirmacao } from '../helpers'
+import { handleApiError } from '../services'
 
 export default withRouter(props => {
   const [usuarios, setUsuarios] = useState([])
@@ -22,7 +23,8 @@ export default withRouter(props => {
         setUsuarios(response)
         setLoaded(true)
       } catch (err) {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+        if (!isCurrent) return
+        handleApiError(err, setSnackbar)
       }
     }
     load()
@@ -53,15 +55,7 @@ export default withRouter(props => {
           }
         } catch (err) {
           setRefresh(new Date())
-          if (
-            'response' in err &&
-            'data' in err.response &&
-            'message' in err.response.data
-          ) {
-            setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
-          } else {
-            setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
-          }
+          handleApiError(err, setSnackbar)
         }
       }
       setOpenConfirmDialog({})
@@ -88,15 +82,7 @@ export default withRouter(props => {
             setSnackbar({ status: 'success', msg: 'Senhas resetadas com sucesso', date: new Date() })
           }
         } catch (err) {
-          if (
-            'response' in err &&
-            'data' in err.response &&
-            'message' in err.response.data
-          ) {
-            setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
-          } else {
-            setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
-          }
+          handleApiError(err, setSnackbar)
         }
       }
       setOpenConfirmDialog({})

@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import ReactLoading from 'react-loading'
 
 import { MessageSnackBar, BackgroundImages } from '../helpers'
+import { handleApiError } from '../services'
 
 import CadastroForm from './cadastro_form'
 
@@ -45,7 +46,8 @@ export default withRouter(props => {
         setListaTurnos(listaTurnos)
         setLoaded(true)
       } catch (err) {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() })
+        if (!isCurrent) return
+        handleApiError(err, setSnackbar)
       }
     }
     load()
@@ -66,20 +68,12 @@ export default withRouter(props => {
         values.tipoPostoGradId
       )
       if (success) {
-        setSnackbar({ status: 'success', msg: 'Usuário criado com sucesso. Entre em contato com o gerente para autorizar o login.', date: new Date() })
         resetForm(initialValues)
+        setSnackbar({ status: 'success', msg: 'Usuário criado com sucesso. Entre em contato com o gerente para autorizar o login.', date: new Date() })
       }
     } catch (err) {
       resetForm(initialValues)
-      if (
-        'response' in err &&
-        'data' in err.response &&
-        'message' in err.response.data
-      ) {
-        setSnackbar({ status: 'error', msg: err.response.data.message, date: new Date() })
-      } else {
-        setSnackbar({ status: 'error', msg: 'Ocorreu um erro ao registrar sua conta. Contate o gerente.', date: new Date() })
-      }
+      handleApiError(err, setSnackbar)
     }
   }
 

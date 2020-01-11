@@ -52,12 +52,12 @@ export const AdminListItems = props => {
       <Divider />
       <ListSubheader inset>Administração</ListSubheader>
 
-      <Tooltip title='Gráficos' placement='right-start'>
-        <ListItem button component={NavLink} replace exact to='/graficos' activeClassName={classes.active}>
+      <Tooltip title='Dashboard' placement='right-start'>
+        <ListItem button component={NavLink} replace exact to='/dashboard' activeClassName={classes.active}>
           <ListItemIcon>
             <InsertChartIcon />
           </ListItemIcon>
-          <ListItemText primary='Gráficos' />
+          <ListItemText primary='Dashboard' />
         </ListItem>
       </Tooltip>
 
