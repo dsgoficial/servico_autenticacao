@@ -3,14 +3,11 @@ import { withRouter } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import ReactLoading from 'react-loading'
 
-import CardGraph from './card_graph'
-import Card from './card'
 import UsuariosLogadosDataTable from './usuarios_logados'
-import StackeArea from './stacked_area'
 import styles from './styles'
 
 import { getDashboardData } from './api'
-import { MessageSnackBar } from '../helpers'
+import { MessageSnackBar, CardGraph, Card, StackedArea } from '../helpers'
 import { handleApiError } from '../services'
 
 export default withRouter(props => {
@@ -70,10 +67,10 @@ export default withRouter(props => {
             <Card label='Aplicações ativas' currentValue={aplicacoesAtivas} />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <StackeArea title='Logins por dia por aplicação' series={loginsPorAplicacao} dataKey='data' />
+            <StackedArea title='Logins por dia por aplicação' series={loginsPorAplicacao} dataKey='data' />
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
-            <StackeArea title='Logins por dia por usuário' series={loginsPorUsuario} dataKey='data' />
+            <StackedArea title='Logins por dia por usuário' series={loginsPorUsuario} dataKey='data' />
           </Grid>
           <Grid item xs={12}>
             <UsuariosLogadosDataTable usuarios={usuariosLogados} />
