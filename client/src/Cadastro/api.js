@@ -2,13 +2,13 @@ import { api } from '../services'
 
 const getData = async () => {
   return api.axiosAll({
-    listaPostoGrad: api.getData('/usuarios/tipo_posto_grad'),
-    listaTurnos: api.getData('/usuarios/tipo_turno')
+    listaPostoGrad: api.getData('/api/usuarios/tipo_posto_grad'),
+    listaTurnos: api.getData('/api/usuarios/tipo_turno')
   })
 }
 
 const handleCadastro = async (usuario, senha, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId) => {
-  return api.post('/usuarios', {
+  return api.post('/api/usuarios', {
     usuario,
     senha,
     nome,

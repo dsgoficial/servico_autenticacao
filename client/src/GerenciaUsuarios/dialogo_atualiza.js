@@ -59,7 +59,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
         setListaTurnos(listaTurnos)
         setLoaded(true)
       } catch (err) {
-        handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
+        handleDialog && handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
       }
     }
     load()
@@ -73,7 +73,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
     if (reason === 'clickaway') {
       return
     }
-    handleDialog()
+    handleDialog && handleDialog()
   }
 
   const handleForm = async (values, { resetForm }) => {
@@ -101,7 +101,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
       )
       if (!response) return
       setSubmitting(false)
-      handleDialog('success', 'Usuário atualizado com sucesso.')
+      handleDialog && handleDialog('success', 'Usuário atualizado com sucesso.')
     } catch (err) {
       setSubmitting(false)
       resetForm(initialValues)
@@ -110,9 +110,9 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
         'data' in err.response &&
         'message' in err.response.data
       ) {
-        handleDialog('error', err.response.data.message)
+        handleDialog && handleDialog('error', err.response.data.message)
       } else {
-        handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
+        handleDialog && handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
       }
     }
   }

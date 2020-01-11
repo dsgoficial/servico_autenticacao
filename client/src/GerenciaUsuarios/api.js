@@ -1,7 +1,7 @@
 import { api } from '../services'
 
 const getUsuarios = async () => {
-  const response = await api.getData('/usuarios/completo')
+  const response = await api.getData('/api/usuarios/completo')
   if (!response) return false
 
   if (!('usuarios' in response)) {
@@ -11,18 +11,18 @@ const getUsuarios = async () => {
 }
 
 const deletarUsuario = async uuid => {
-  return api.delete(`/usuarios/${uuid}`)
+  return api.delete(`/api/usuarios/${uuid}`)
 }
 
 const getSelectData = async () => {
   return api.axiosAll({
-    listaPostoGrad: api.getData('/usuarios/tipo_posto_grad'),
-    listaTurnos: api.getData('/usuarios/tipo_turno')
+    listaPostoGrad: api.getData('/api/usuarios/tipo_posto_grad'),
+    listaTurnos: api.getData('/api/usuarios/tipo_turno')
   })
 }
 
 const criaUsuario = async (usuario, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId) => {
-  return api.post('/usuarios', {
+  return api.post('/api/usuarios', {
     usuario,
     nome,
     senha: nome,
@@ -52,7 +52,7 @@ const atualizaUsuario = async (
   administrador,
   ativo
 ) => {
-  return api.put(`/usuarios/completo/${uuid}`, {
+  return api.put(`/api/usuarios/completo/${uuid}`, {
     usuario,
     nome,
     nome_guerra: nomeGuerra,

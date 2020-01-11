@@ -5,7 +5,7 @@ const handleUpdate = async (
   senhaNova
 ) => {
   const uuid = auth.getUUID()
-  return api.put(`/usuarios/${uuid}/senha`, {
+  return api.put(`/api/usuarios/${uuid}/senha`, {
     senha_atual: senhaAtual,
     senha_nova: senhaNova
   })

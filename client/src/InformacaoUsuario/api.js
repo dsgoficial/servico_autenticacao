@@ -4,9 +4,9 @@ const getData = async () => {
   const uuid = auth.getUUID()
 
   return api.axiosAll({
-    usuario: api.getData(`/usuarios/${uuid}`),
-    listaPostoGrad: api.getData('/usuarios/tipo_posto_grad'),
-    listaTurnos: api.getData('/usuarios/tipo_turno')
+    usuario: api.getData(`/api/usuarios/${uuid}`),
+    listaPostoGrad: api.getData('/api/usuarios/tipo_posto_grad'),
+    listaTurnos: api.getData('/api/usuarios/tipo_turno')
   })
 }
 
@@ -27,7 +27,7 @@ const handleUpdate = async (
   emailEb
 ) => {
   const uuid = auth.getUUID()
-  return api.put(`/usuarios/${uuid}`, {
+  return api.put(`/api/usuarios/${uuid}`, {
     nome,
     nome_guerra: nomeGuerra,
     tipo_turno_id: tipoTurnoId,

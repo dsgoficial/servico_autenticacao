@@ -9,8 +9,10 @@
   },
   "scripts": {
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
-    "start-all": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\"",
-    "config": "node create_config.js"
+    "config": "node create_config.js",
+    "build": "node create_build.js",
+    "start": "pm2 start server/src/index.js --name auth-server",
+    "start-all-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\""
   },
   "keywords": [
     "Autenticação",
@@ -27,7 +29,9 @@
     "bluebird": "^3.7.2",
     "colors": "^1.4.0",
     "concurrently": "^5.0.2",
+    "fs-extra": "^8.1.0",
     "inquirer": "^7.0.1",
+    "npm-run": "^5.0.1",
     "pg-promise": "^10.3.2",
     "pgtools": "^0.3.0"
   }
