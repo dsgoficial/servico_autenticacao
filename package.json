@@ -11,6 +11,7 @@
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
     "config": "node create_config.js",
     "build": "node create_build.js",
+    "create-docs": "node server/create_documentation.js",
     "start": "pm2 start server/src/index.js --name auth-server",
     "start-all-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\""
   },
