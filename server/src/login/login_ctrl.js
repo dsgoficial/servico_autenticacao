@@ -6,11 +6,9 @@ const bcrypt = require('bcryptjs')
 
 const { db } = require('../database')
 
-const {
-  AppError,
-  httpCode,
-  config: { JWT_SECRET }
-} = require('../utils')
+const { AppError, httpCode } = require('../utils')
+
+const { JWT_SECRET } = require('../config')
 
 const controller = {}
 
