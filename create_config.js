@@ -145,19 +145,19 @@ const createConfig = async () => {
         type: 'input',
         name: 'dbServer',
         message:
-          'Qual o endereço de IP do servidor do banco de dados PostgreSQL?'
+          'Qual é o endereço de IP do servidor do banco de dados PostgreSQL?'
       },
       {
         type: 'input',
         name: 'dbPort',
-        message: 'Qual a porta do servidor do banco de dados PostgreSQL?',
+        message: 'Qual é a porta do servidor do banco de dados PostgreSQL?',
         default: 5432
       },
       {
         type: 'input',
         name: 'dbUser',
         message:
-          'Qual o nome do usuário do PostgreSQL para interação com o Serviço de Autenticação (já existente no banco de dados e ser superusuario)?',
+          'Qual é o nome do usuário do PostgreSQL para interação com o Serviço de Autenticação (já existente no banco de dados e ser superusuario)?',
         default: 'controle_app'
       },
       {
@@ -165,31 +165,31 @@ const createConfig = async () => {
         name: 'dbPassword',
         mask: '*',
         message:
-          'Qual a senha do usuário do PostgreSQL para interação com o Serviço de Autenticação ?'
+          'Qual é a senha deste usuário do PostgreSQL?'
       },
       {
         type: 'input',
         name: 'dbName',
-        message: 'Qual o nome do banco de dados do Serviço de Autenticação ?',
+        message: 'Qual é o nome do banco de dados do Serviço de Autenticação?',
         default: 'servico_autenticacao'
       },
       {
         type: 'input',
         name: 'port',
-        message: 'Qual a porta do serviço do Serviço de Autenticação ?',
+        message: 'Em qual porta será executado o Serviço de Autenticação?',
         default: 3012
       },
       {
         type: 'confirm',
         name: 'dbCreate',
-        message: 'Deseja criar o banco de dados do Serviço de Autenticação ?',
+        message: 'Deseja criar o banco de dados do Serviço de Autenticação?',
         default: true
       },
       {
         type: 'input',
         name: 'authUser',
         message:
-          'Qual o nome que deseja para o usuário administrador do Serviço de Autenticação?',
+          'Qual é o nome que deseja para o usuário administrador do Serviço de Autenticação?',
         when (answers) {
           return answers.dbCreate
         }
@@ -199,7 +199,7 @@ const createConfig = async () => {
         name: 'authPassword',
         mask: '*',
         message:
-          'Qual a senha que deseja para o usuário administrador do Serviço de Autenticação?',
+          'Qual é a senha que deseja para o usuário administrador do Serviço de Autenticação?',
         when (answers) {
           return answers.dbCreate
         }
