@@ -13,4 +13,4 @@ Para mais informações acessar a [Wiki](https://github.com/1cgeo/auth_server/wi
 
 ## Releases
 
-Sem relases concluídas até o momento.
+- [v.1.0.0](https://github.com/1cgeo/auth_server/releases/tag/v.1.0.0)
