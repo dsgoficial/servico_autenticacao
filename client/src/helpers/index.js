@@ -6,6 +6,7 @@ import DialogoConfirmacao from './dialogo_confirmacao'
 import CardGraph from './card_graph'
 import Card from './card'
 import StackedArea from './stacked_area'
+import PrivateRoute from './private_route'
 
 export {
   MessageSnackBar,
@@ -15,5 +16,6 @@ export {
   MaterialTable,
   CardGraph,
   Card,
-  StackedArea
+  StackedArea,
+  PrivateRoute
 }

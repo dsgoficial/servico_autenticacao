@@ -6,13 +6,12 @@ const validateToken = require('./validate_token')
 
 // middleware para verificar o JWT
 const verifyLogin = asyncHandler(async (req, res, next) => {
-  const usuarioUuid = req.params.uuid
   // verifica o header authorization para pegar o token
   const token = req.headers.authorization
 
   const decoded = await validateToken(token)
 
-  if (decoded.uuid !== usuarioUuid) {
+  if (req.params.usuario_uuid && decoded.uuid !== req.params.usuario_uuid) {
     throw new AppError(
       'Usuário só pode acessar sua própria informação',
       httpCode.Unauthorized

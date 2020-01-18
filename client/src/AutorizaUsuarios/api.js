@@ -1,17 +1,15 @@
 import { api } from '../services'
 
 const getUsuarios = async () => {
-  const response = await api.getData('/api/usuarios/completo')
-  if (!response) return false
+  const usuarios = await api.getData('/api/usuarios/completo')
 
-  if (!('usuarios' in response)) {
-    throw new Error()
-  }
-  return response.usuarios
+  return usuarios.filter(u => {
+    return !u.administrador
+  })
 }
 
-const autorizarUsuarios = async (uuids) => {
-  return api.post('/api/usuarios/autorizar/true', { usuarios_uuids: uuids })
+const autorizarUsuarios = async (uuids, autoriza) => {
+  return api.post(`/api/usuarios/autorizacao/${autoriza}`, { usuarios_uuids: uuids })
 }
 
 const resetarSenhas = async (uuids) => {

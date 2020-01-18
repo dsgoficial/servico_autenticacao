@@ -7,11 +7,11 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import ReactLoading from 'react-loading'
 import { Formik, Form, Field } from 'formik'
-import { TextField, Select } from 'formik-material-ui'
+import { TextField, Select, CheckboxWithLabel } from 'formik-material-ui'
 import MenuItem from '@material-ui/core/MenuItem'
 
 import { criaUsuario, getSelectData } from './api'
-import { adicionaSchema } from './validation_schema'
+import { usuarioSchema } from './validation_schema'
 import { SubmitButton } from '../helpers'
 import styles from './styles'
 
@@ -23,7 +23,9 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
     nome: '',
     nomeGuerra: '',
     tipoPostoGradId: '',
-    tipoTurnoId: ''
+    tipoTurnoId: '',
+    ativo: false,
+    administrador: false
   }
 
   const [listaTurnos, setListaTurnos] = useState([])
@@ -69,7 +71,9 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
         values.nome,
         values.nomeGuerra,
         values.tipoTurnoId,
-        values.tipoPostoGradId
+        values.tipoPostoGradId,
+        values.ativo,
+        values.administrador
       )
       if (!response) return
       setSubmitting(false)
@@ -97,7 +101,7 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
           <>
             <Formik
               initialValues={initialValues}
-              validationSchema={adicionaSchema}
+              validationSchema={usuarioSchema}
               onSubmit={handleForm}
             >
               {({ isValid, isSubmitting, isValidating }) => (
@@ -163,6 +167,26 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
                         </MenuItem>
                       ))}
                     </Field>
+                  </div>
+                  <div>
+                    <Field
+                      name='administrador'
+                      component={CheckboxWithLabel}
+                      variant='outlined'
+                      margin='normal'
+                      Label={{ label: 'Administrador' }}
+                      color='primary'
+                    />
+                  </div>
+                  <div>
+                    <Field
+                      name='ativo'
+                      component={CheckboxWithLabel}
+                      variant='outlined'
+                      margin='normal'
+                      Label={{ label: 'Ativo' }}
+                      color='primary'
+                    />
                   </div>
                   <SubmitButton
                     type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}

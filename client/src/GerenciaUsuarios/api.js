@@ -1,13 +1,7 @@
 import { api } from '../services'
 
 const getUsuarios = async () => {
-  const response = await api.getData('/api/usuarios/completo')
-  if (!response) return false
-
-  if (!('usuarios' in response)) {
-    throw new Error()
-  }
-  return response.usuarios
+  return api.getData('/api/usuarios/completo')
 }
 
 const deletarUsuario = async uuid => {
@@ -21,14 +15,16 @@ const getSelectData = async () => {
   })
 }
 
-const criaUsuario = async (usuario, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId) => {
-  return api.post('/api/usuarios', {
+const criaUsuario = async (usuario, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId, ativo, administrador) => {
+  return api.post('/api/usuarios/completo', {
     usuario,
     nome,
     senha: nome,
     nome_guerra: nomeGuerra,
     tipo_turno_id: tipoTurnoId,
-    tipo_posto_grad_id: tipoPostoGradId
+    tipo_posto_grad_id: tipoPostoGradId,
+    ativo,
+    administrador
   })
 }
 
@@ -39,16 +35,6 @@ const atualizaUsuario = async (
   nomeGuerra,
   tipoTurnoId,
   tipoPostoGradId,
-  cpf,
-  identidade,
-  validadeIdentidade,
-  orgaoExpedidor,
-  banco,
-  agencia,
-  contaBancaria,
-  dataNascimento,
-  celular,
-  emailEb,
   administrador,
   ativo
 ) => {
@@ -58,18 +44,8 @@ const atualizaUsuario = async (
     nome_guerra: nomeGuerra,
     tipo_turno_id: tipoTurnoId,
     tipo_posto_grad_id: tipoPostoGradId,
-    cpf: cpf,
-    identidade: identidade,
-    validade_identidade: validadeIdentidade,
-    orgao_expedidor: orgaoExpedidor,
-    banco: banco,
-    agencia: agencia,
-    conta_bancaria: contaBancaria,
-    data_nascimento: dataNascimento,
-    celular: celular,
-    email_eb: emailEb,
-    ativo,
-    administrador
+    administrador,
+    ativo
   })
 }
 

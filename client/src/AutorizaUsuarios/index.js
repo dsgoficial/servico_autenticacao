@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { withRouter } from 'react-router-dom'
 import DoneAllIcon from '@material-ui/icons/DoneAll'
 import LockOpenIcon from '@material-ui/icons/LockOpen'
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline'
 
 import { getUsuarios, autorizarUsuarios, resetarSenhas } from './api'
 import { MessageSnackBar, MaterialTable, DialogoConfirmacao } from '../helpers'
@@ -37,21 +38,30 @@ export default withRouter(props => {
   const handleAutorizarUsuario = (event, data) => {
     setOpenConfirmDialog({
       open: true,
-      title: 'Autorizar usuário',
+      title: 'Autorizar usuários',
       msg: 'Deseja realmente autorizar os usuários selecionados?',
-      handleDialog: executeAutorizarUsuario(data)
+      handleDialog: executeAutorizarUsuario(data, true)
     })
   }
 
-  const executeAutorizarUsuario = data => {
+  const handleRemoverAutorizacao = (event, data) => {
+    setOpenConfirmDialog({
+      open: true,
+      title: 'Remover autorização',
+      msg: 'Deseja realmente remover a autorização dos usuários selecionados?',
+      handleDialog: executeAutorizarUsuario(data, false)
+    })
+  }
+
+  const executeAutorizarUsuario = (data, autoriza) => {
     return async (confirm) => {
       if (confirm) {
         try {
           const uuids = data.map(d => (d.uuid))
-          const success = await autorizarUsuarios(uuids)
+          const success = await autorizarUsuarios(uuids, autoriza)
           if (success) {
             setRefresh(new Date())
-            setSnackbar({ status: 'success', msg: 'Usuários autorizados com sucesso', date: new Date() })
+            setSnackbar({ status: 'success', msg: 'Autorização modificada com sucesso', date: new Date() })
           }
         } catch (err) {
           setRefresh(new Date())
@@ -110,16 +120,18 @@ export default withRouter(props => {
             onClick: handleAutorizarUsuario
           },
           {
+            icon: RemoveCircleOutlineIcon,
+            tooltip: 'Remover autorização',
+            onClick: handleRemoverAutorizacao
+          },
+          {
             icon: LockOpenIcon,
             tooltip: 'Resetar senha',
             onClick: handleResetarSenha
           }
         ]}
         options={{
-          selection: true,
-          selectionProps: rowData => ({
-            disabled: rowData.administrador
-          })
+          selection: true
         }}
       />
       {openConfirmDialog ? (

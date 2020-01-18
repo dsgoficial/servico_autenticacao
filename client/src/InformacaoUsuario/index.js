@@ -7,10 +7,6 @@ import Container from '@material-ui/core/Container'
 import { SubmitButton, MessageSnackBar } from '../helpers'
 import MenuItem from '@material-ui/core/MenuItem'
 import ReactLoading from 'react-loading'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
-import { DatePicker } from 'material-ui-formik-components/DatePicker'
-import ptLocale from 'date-fns/locale/pt-BR'
 import Paper from '@material-ui/core/Paper'
 
 import styles from './styles'
@@ -25,17 +21,7 @@ export default withRouter(props => {
     nome: '',
     nomeGuerra: '',
     tipoPostoGradId: '',
-    tipoTurnoId: '',
-    cpf: '',
-    identidade: '',
-    validadeIdentidade: null,
-    orgaoExpedidor: '',
-    banco: '',
-    agencia: '',
-    contaBancaria: '',
-    dataNascimento: null,
-    celular: '',
-    emailEb: ''
+    tipoTurnoId: ''
   })
 
   const [listaTurnos, setListaTurnos] = useState([])
@@ -58,19 +44,8 @@ export default withRouter(props => {
           nome: usuario.nome,
           nomeGuerra: usuario.nome_guerra,
           tipoPostoGradId: usuario.tipo_posto_grad_id,
-          tipoTurnoId: usuario.tipo_turno_id,
-          cpf: usuario.cpf || '',
-          identidade: usuario.identidade || '',
-          validadeIdentidade: usuario.validade_identidade,
-          orgaoExpedidor: usuario.orgao_expedidor || '',
-          banco: usuario.banco || '',
-          agencia: usuario.agencia || '',
-          contaBancaria: usuario.conta_bancaria || '',
-          dataNascimento: usuario.data_nascimento,
-          celular: usuario.celular || '',
-          emailEb: usuario.email_eb || ''
+          tipoTurnoId: usuario.tipo_turno_id
         })
-
         setListaPostoGrad(listaPostoGrad)
         setListaTurnos(listaTurnos)
         setLoaded(true)
@@ -92,17 +67,7 @@ export default withRouter(props => {
         values.nome,
         values.nomeGuerra,
         values.tipoPostoGradId,
-        values.tipoTurnoId,
-        values.cpf,
-        values.identidade,
-        values.validadeIdentidade,
-        values.orgaoExpedidor,
-        values.banco,
-        values.agencia,
-        values.contaBancaria,
-        values.dataNascimento,
-        values.celular,
-        values.emailEb
+        values.tipoTurnoId
       )
       if (success) {
         setRefresh(new Date())
@@ -184,98 +149,6 @@ export default withRouter(props => {
                         ))}
                       </Field>
                     </div>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-                      <Field
-                        name='dataNascimento'
-                        component={DatePicker}
-                        inputVariant='outlined'
-                        margin='normal'
-                        fullWidth
-                        label='Data de nascimento'
-                        format='dd/MM/yyyy'
-                        autoOk
-                        clearable
-                        disableFuture
-                      />
-                    </MuiPickersUtilsProvider>
-                    <Field
-                      name='celular'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Celular'
-                    />
-                    <Field
-                      name='emailEb'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Email (EB)'
-                    />
-                    <Field
-                      name='cpf'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='CPF'
-                    />
-                    <Field
-                      name='identidade'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Identidade'
-                    />
-                    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-                      <Field
-                        name='validadeIdentidade'
-                        component={DatePicker}
-                        inputVariant='outlined'
-                        margin='normal'
-                        fullWidth
-                        label='Data de validade da identidade'
-                        format='dd/MM/yyyy'
-                        autoOk
-                        clearable
-                        disableFuture
-                      />
-                    </MuiPickersUtilsProvider>
-                    <Field
-                      name='orgaoExpedidor'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Órgão Expedidor'
-                    />
-                    <Field
-                      name='banco'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Banco'
-                    />
-                    <Field
-                      name='agencia'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Agência'
-                    />
-                    <Field
-                      name='contaBancaria'
-                      component={TextField}
-                      variant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Conta bancária'
-                    />
                     <SubmitButton
                       type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
                       fullWidth

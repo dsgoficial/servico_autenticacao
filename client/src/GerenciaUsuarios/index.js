@@ -27,7 +27,6 @@ export default withRouter(props => {
       try {
         const response = await getUsuarios()
         if (!response || !isCurrent) return
-
         setUsuarios(response)
         setLoaded(true)
       } catch (err) {

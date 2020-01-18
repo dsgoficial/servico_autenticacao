@@ -47,7 +47,6 @@ export default withRouter(props => {
         setLoaded(true)
       } catch (err) {
         if (!isCurrent) return
-        props.history.push('/')
         handleApiError(err, setSnackbar)
       }
     }

@@ -11,60 +11,6 @@ const usuarioSchema = require('./usuario_schema')
 
 const router = express.Router()
 
-router.get(
-  '/completo',
-  verifyAdmin,
-  schemaValidation({ query: usuarioSchema.paginacaoUsuariosQuery }),
-  asyncHandler(async (req, res, next) => {
-    const dados = await usuarioCtrl.getUsuarios(
-      req.query.pagina,
-      req.query.total_pagina,
-      req.query.coluna_ordem,
-      req.query.direcao_ordem,
-      req.query.filtro
-    )
-
-    const msg = 'Informação dos usuários retornada com sucesso'
-
-    return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
-  })
-)
-
-router.put(
-  '/completo/:uuid',
-  schemaValidation({
-    body: usuarioSchema.atualizacaoUsuario,
-    params: usuarioSchema.uuidParams
-  }),
-  verifyAdmin,
-  asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.updateUsuarioCompleto(
-      req.params.uuid,
-      req.body.usuario,
-      req.body.nome,
-      req.body.nome_guerra,
-      req.body.administrador,
-      req.body.ativo,
-      req.body.tipo_turno_id,
-      req.body.tipo_posto_grad_id,
-      req.body.cpf,
-      req.body.identidade,
-      req.body.validade_identidade,
-      req.body.orgao_expedidor,
-      req.body.banco,
-      req.body.agencia,
-      req.body.conta_bancaria,
-      req.body.data_nascimento,
-      req.body.celular,
-      req.body.email_eb
-    )
-
-    const msg = 'Usuário atualizado com sucesso'
-
-    return res.sendJsonAndLog(true, msg, httpCode.OK)
-  })
-)
-
 router.post(
   '/senha/resetar',
   verifyAdmin,
@@ -79,7 +25,7 @@ router.post(
 )
 
 router.post(
-  '/autorizar/:ativo',
+  '/autorizacao/:ativo',
   verifyAdmin,
   schemaValidation({
     body: usuarioSchema.listaUsuarios,
@@ -119,37 +65,82 @@ router.get(
   })
 )
 
-router.put(
-  '/:uuid/senha',
-  schemaValidation({
-    body: usuarioSchema.atualizacaoSenha,
-    params: usuarioSchema.uuidParams
-  }),
-  verifyLogin,
+router.get(
+  '/completo',
+  verifyAdmin,
   asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.updateSenha(req.params.uuid, req.body.senha_atual, req.body.senha_nova)
+    const dados = await usuarioCtrl.getUsuariosCompleto()
 
-    const msg = 'Senha do usuário atualizada com sucesso'
+    const msg = 'Usuários retornados com sucesso'
 
-    return res.sendJsonAndLog(true, msg, httpCode.OK)
+    return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
   })
 )
 
-router.get(
-  '/:uuid',
-  schemaValidation({ params: usuarioSchema.uuidParams }),
-  verifyLogin,
+router.post(
+  '/completo',
+  verifyAdmin,
+  schemaValidation({ body: usuarioSchema.criacaoUsuarioCompleto }),
   asyncHandler(async (req, res, next) => {
-    const dados = await usuarioCtrl.getUsuario(req.params.uuid)
+    const dados = await usuarioCtrl.criaUsuarioCompleto(
+      req.body.usuario,
+      req.body.senha,
+      req.body.nome,
+      req.body.nome_guerra,
+      req.body.tipo_turno_id,
+      req.body.tipo_posto_grad_id,
+      req.body.ativo,
+      req.body.administrador
+    )
 
-    const msg = 'Informação do usuário retornada com sucesso'
+    const msg = 'Usuários retornados com sucesso'
 
     return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
   })
 )
 
 router.put(
-  '/:uuid',
+  '/completo/:usuario_uuid',
+  schemaValidation({
+    body: usuarioSchema.atualizacaoUsuarioCompleto,
+    params: usuarioSchema.uuidParams
+  }),
+  verifyAdmin,
+  asyncHandler(async (req, res, next) => {
+    await usuarioCtrl.updateUsuarioCompleto(
+      req.params.usuario_uuid,
+      req.body.usuario,
+      req.body.nome,
+      req.body.nome_guerra,
+      req.body.tipo_turno_id,
+      req.body.tipo_posto_grad_id,
+      req.body.ativo,
+      req.body.administrador
+    )
+
+    const msg = 'Usuário atualizado com sucesso'
+
+    return res.sendJsonAndLog(true, msg, httpCode.OK)
+  })
+)
+
+router.put(
+  '/:usuario_uuid/senha',
+  schemaValidation({
+    body: usuarioSchema.atualizacaoSenha,
+    params: usuarioSchema.uuidParams
+  }),
+  verifyLogin,
+  asyncHandler(async (req, res, next) => {
+    await usuarioCtrl.updateSenha(req.params.usuario_uuid, req.body.senha_atual, req.body.senha_nova)
+
+    const msg = 'Senha do usuário atualizada com sucesso'
+
+    return res.sendJsonAndLog(true, msg, httpCode.OK)
+  })
+)
+router.put(
+  '/:usuario_uuid',
   schemaValidation({
     body: usuarioSchema.atualizacaoUsuario,
     params: usuarioSchema.uuidParams
@@ -157,21 +148,11 @@ router.put(
   verifyLogin,
   asyncHandler(async (req, res, next) => {
     await usuarioCtrl.updateUsuario(
-      req.params.uuid,
+      req.params.usuario_uuid,
       req.body.nome,
       req.body.nome_guerra,
       req.body.tipo_turno_id,
-      req.body.tipo_posto_grad_id,
-      req.body.cpf,
-      req.body.identidade,
-      req.body.validade_identidade,
-      req.body.orgao_expedidor,
-      req.body.banco,
-      req.body.agencia,
-      req.body.conta_bancaria,
-      req.body.data_nascimento,
-      req.body.celular,
-      req.body.email_eb
+      req.body.tipo_posto_grad_id
     )
 
     const msg = 'Usuário atualizado com sucesso'
@@ -181,13 +162,13 @@ router.put(
 )
 
 router.delete(
-  '/:uuid',
+  '/:usuario_uuid',
   schemaValidation({
     params: usuarioSchema.uuidParams
   }),
   verifyAdmin,
   asyncHandler(async (req, res, next) => {
-    await usuarioCtrl.deletaUsuario(req.params.uuid)
+    await usuarioCtrl.deletaUsuario(req.params.usuario_uuid)
 
     const msg = 'Usuário deletado com sucesso'
 
@@ -196,9 +177,23 @@ router.delete(
 )
 
 router.get(
+  '/:usuario_uuid',
+  schemaValidation({
+    params: usuarioSchema.uuidParams
+  }),
+  asyncHandler(async (req, res, next) => {
+    const dados = await usuarioCtrl.getUsuario(req.params.usuario_uuid)
+
+    const msg = 'Usuários retornados com sucesso'
+
+    return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+  })
+)
+
+router.get(
   '/',
   asyncHandler(async (req, res, next) => {
-    const dados = await usuarioCtrl.getInfoPublicaUsuarios()
+    const dados = await usuarioCtrl.getUsuarios()
 
     const msg = 'Usuários retornados com sucesso'
 

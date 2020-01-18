@@ -8,13 +8,9 @@ import ReactLoading from 'react-loading'
 import { Formik, Form, Field } from 'formik'
 import { TextField, Select, CheckboxWithLabel } from 'formik-material-ui'
 import MenuItem from '@material-ui/core/MenuItem'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import DateFnsUtils from '@date-io/date-fns'
-import { DatePicker } from 'material-ui-formik-components/DatePicker'
-import ptLocale from 'date-fns/locale/pt-BR'
 
 import { atualizaUsuario, getSelectData } from './api'
-import { atualizaSchema } from './validation_schema'
+import { usuarioSchema } from './validation_schema'
 import { SubmitButton } from '../helpers'
 import styles from './styles'
 
@@ -27,16 +23,6 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
     nomeGuerra: usuario.nome_guerra || '',
     tipoPostoGradId: usuario.tipo_posto_grad_id || '',
     tipoTurnoId: usuario.tipo_turno_id || '',
-    cpf: usuario.cpf || '',
-    identidade: usuario.identidade || '',
-    validadeIdentidade: usuario.validade_identidade,
-    orgaoExpedidor: usuario.orgao_expedidor || '',
-    banco: usuario.banco || '',
-    agencia: usuario.agencia || '',
-    contaBancaria: usuario.conta_bancaria || '',
-    dataNascimento: usuario.data_nascimento,
-    celular: usuario.celular || '',
-    emailEb: usuario.email_eb || '',
     administrador: usuario.administrador || false,
     ativo: usuario.ativo || false
   }), [usuario])
@@ -86,16 +72,6 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
         values.nomeGuerra,
         values.tipoTurnoId,
         values.tipoPostoGradId,
-        values.cpf,
-        values.identidade,
-        values.validadeIdentidade,
-        values.orgaoExpedidor,
-        values.banco,
-        values.agencia,
-        values.contaBancaria,
-        values.dataNascimento,
-        values.celular,
-        values.emailEb,
         values.administrador,
         values.ativo
       )
@@ -125,7 +101,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
           <>
             <Formik
               initialValues={initialValues}
-              validationSchema={atualizaSchema}
+              validationSchema={usuarioSchema}
               onSubmit={handleForm}
             >
               {({ isValid, isSubmitting, isValidating }) => (
@@ -192,98 +168,6 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                       ))}
                     </Field>
                   </div>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-                    <Field
-                      name='dataNascimento'
-                      component={DatePicker}
-                      inputVariant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Data de nascimento'
-                      format='dd/MM/yyyy'
-                      autoOk
-                      clearable
-                      disableFuture
-                    />
-                  </MuiPickersUtilsProvider>
-                  <Field
-                    name='celular'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Celular'
-                  />
-                  <Field
-                    name='emailEb'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Email (EB)'
-                  />
-                  <Field
-                    name='cpf'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='CPF'
-                  />
-                  <Field
-                    name='identidade'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Identidade'
-                  />
-                  <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
-                    <Field
-                      name='validadeIdentidade'
-                      component={DatePicker}
-                      inputVariant='outlined'
-                      margin='normal'
-                      fullWidth
-                      label='Data de validade da identidade'
-                      format='dd/MM/yyyy'
-                      autoOk
-                      clearable
-                      disableFuture
-                    />
-                  </MuiPickersUtilsProvider>
-                  <Field
-                    name='orgaoExpedidor'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Órgão Expedidor'
-                  />
-                  <Field
-                    name='banco'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Banco'
-                  />
-                  <Field
-                    name='agencia'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Agência'
-                  />
-                  <Field
-                    name='contaBancaria'
-                    component={TextField}
-                    variant='outlined'
-                    margin='normal'
-                    fullWidth
-                    label='Conta bancária'
-                  />
                   <div>
                     <Field
                       name='administrador'

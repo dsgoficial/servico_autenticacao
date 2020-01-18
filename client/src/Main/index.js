@@ -14,6 +14,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import styles from './styles'
 import { MainListItems, AdminListItems } from './list_items'
 import { handleLogout } from './api.js'
+import { PrivateRoute } from '../helpers'
 
 import InformacaoUsuario from '../InformacaoUsuario'
 import AlteraSenha from '../AlteraSenha'
@@ -90,10 +91,10 @@ export default withRouter(props => {
           <Container maxWidth='xl' className={classes.container}>
             <Route exact path='/' component={InformacaoUsuario} />
             <Route exact path='/alterar_senha' component={AlteraSenha} />
-            <Route exact path='/gerenciar_usuarios' component={GerenciaUsuarios} />
-            <Route exact path='/autorizar_usuarios' component={AutorizaUsuarios} />
-            <Route exact path='/dashboard' component={Dashboard} />
-            <Route exact path='/gerenciar_aplicacoes' component={GerenciarAplicacoes} />
+            <PrivateRoute role='ADMIN' exact path='/gerenciar_usuarios' component={GerenciaUsuarios} />
+            <PrivateRoute role='ADMIN' exact path='/autorizar_usuarios' component={AutorizaUsuarios} />
+            <PrivateRoute role='ADMIN' exact path='/dashboard' component={Dashboard} />
+            <PrivateRoute role='ADMIN' exact path='/gerenciar_aplicacoes' component={GerenciarAplicacoes} />
           </Container>
         </main>
       </HashRouter>
