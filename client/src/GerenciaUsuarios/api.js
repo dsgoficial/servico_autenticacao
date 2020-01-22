@@ -19,7 +19,7 @@ const criaUsuario = async (usuario, nome, nomeGuerra, tipoTurnoId, tipoPostoGrad
   return api.post('/api/usuarios/completo', {
     usuario,
     nome,
-    senha: nome,
+    senha: usuario,
     nome_guerra: nomeGuerra,
     tipo_turno_id: tipoTurnoId,
     tipo_posto_grad_id: tipoPostoGradId,
