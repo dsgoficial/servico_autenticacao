@@ -20,11 +20,9 @@ export default withRouter(props => {
   const [initialValues, setInitialValues] = useState({
     nome: '',
     nomeGuerra: '',
-    tipoPostoGradId: '',
-    tipoTurnoId: ''
+    tipoPostoGradId: ''
   })
 
-  const [listaTurnos, setListaTurnos] = useState([])
   const [listaPostoGrad, setListaPostoGrad] = useState([])
 
   const [snackbar, setSnackbar] = useState('')
@@ -39,15 +37,13 @@ export default withRouter(props => {
         const response = await getData()
         if (!response || !isCurrent) return
 
-        const { usuario, listaPostoGrad, listaTurnos } = response
+        const { usuario, listaPostoGrad } = response
         setInitialValues({
           nome: usuario.nome,
           nomeGuerra: usuario.nome_guerra,
-          tipoPostoGradId: usuario.tipo_posto_grad_id,
-          tipoTurnoId: usuario.tipo_turno_id
+          tipoPostoGradId: usuario.tipo_posto_grad_id
         })
         setListaPostoGrad(listaPostoGrad)
-        setListaTurnos(listaTurnos)
         setLoaded(true)
       } catch (err) {
         if (!isCurrent) return
@@ -66,8 +62,7 @@ export default withRouter(props => {
       const success = await handleUpdate(
         values.nome,
         values.nomeGuerra,
-        values.tipoPostoGradId,
-        values.tipoTurnoId
+        values.tipoPostoGradId
       )
       if (success) {
         setRefresh(new Date())
@@ -124,25 +119,6 @@ export default withRouter(props => {
                           Selecione seu Posto/Graduação
                         </MenuItem>
                         {listaPostoGrad.map(option => (
-                          <MenuItem key={option.code} value={option.code}>
-                            {option.nome}
-                          </MenuItem>
-                        ))}
-                      </Field>
-                    </div>
-                    <div>
-                      <Field
-                        name='tipoTurnoId'
-                        label='Turno'
-                        variant='outlined'
-                        component={Select}
-                        displayEmpty
-                        className={classes.select}
-                      >
-                        <MenuItem value='' disabled>
-                          Selecione seu turno de trabalho
-                        </MenuItem>
-                        {listaTurnos.map(option => (
                           <MenuItem key={option.code} value={option.code}>
                             {option.nome}
                           </MenuItem>

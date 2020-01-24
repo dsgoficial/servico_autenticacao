@@ -22,12 +22,10 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
     nome: usuario.nome || '',
     nomeGuerra: usuario.nome_guerra || '',
     tipoPostoGradId: usuario.tipo_posto_grad_id || '',
-    tipoTurnoId: usuario.tipo_turno_id || '',
     administrador: usuario.administrador || false,
     ativo: usuario.ativo || false
   }), [usuario])
 
-  const [listaTurnos, setListaTurnos] = useState([])
   const [listaPostoGrad, setListaPostoGrad] = useState([])
 
   const [submitting, setSubmitting] = useState(false)
@@ -40,9 +38,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
         const response = await getSelectData()
         if (!response || !isCurrent) return
 
-        const { listaPostoGrad, listaTurnos } = response
-        setListaPostoGrad(listaPostoGrad)
-        setListaTurnos(listaTurnos)
+        setListaPostoGrad(response)
         setLoaded(true)
       } catch (err) {
         handleDialog && handleDialog('error', 'Ocorreu um erro ao se comunicar com o servidor.')
@@ -70,7 +66,6 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
         values.usuario,
         values.nome,
         values.nomeGuerra,
-        values.tipoTurnoId,
         values.tipoPostoGradId,
         values.administrador,
         values.ativo
@@ -143,25 +138,6 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
                         Selecione seu Posto/Graduação
                       </MenuItem>
                       {listaPostoGrad.map(option => (
-                        <MenuItem key={option.code} value={option.code}>
-                          {option.nome}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                  </div>
-                  <div>
-                    <Field
-                      name='tipoTurnoId'
-                      label='Turno'
-                      variant='outlined'
-                      component={Select}
-                      displayEmpty
-                      className={classes.select}
-                    >
-                      <MenuItem value='' disabled>
-                        Selecione seu turno de trabalho
-                      </MenuItem>
-                      {listaTurnos.map(option => (
                         <MenuItem key={option.code} value={option.code}>
                           {option.nome}
                         </MenuItem>

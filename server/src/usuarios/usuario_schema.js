@@ -26,10 +26,6 @@ models.criacaoUsuario = Joi.object().keys({
   senha: Joi.string().required(),
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),
-  tipo_turno_id: Joi.number()
-    .integer()
-    .strict()
-    .required(),
   tipo_posto_grad_id: Joi.number()
     .integer()
     .strict()
@@ -41,10 +37,6 @@ models.criacaoUsuarioCompleto = Joi.object().keys({
   senha: Joi.string().required(),
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),
-  tipo_turno_id: Joi.number()
-    .integer()
-    .strict()
-    .required(),
   tipo_posto_grad_id: Joi.number()
     .integer()
     .strict()
@@ -57,10 +49,6 @@ models.atualizacaoUsuarioCompleto = Joi.object().keys({
   usuario: Joi.string().required(),
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),
-  tipo_turno_id: Joi.number()
-    .integer()
-    .strict()
-    .required(),
   tipo_posto_grad_id: Joi.number()
     .integer()
     .strict()
@@ -72,10 +60,6 @@ models.atualizacaoUsuarioCompleto = Joi.object().keys({
 models.atualizacaoUsuario = Joi.object().keys({
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),
-  tipo_turno_id: Joi.number()
-    .integer()
-    .strict()
-    .required(),
   tipo_posto_grad_id: Joi.number()
     .integer()
     .strict()

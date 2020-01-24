@@ -55,17 +55,6 @@ router.get(
 )
 
 router.get(
-  '/tipo_turno',
-  asyncHandler(async (req, res, next) => {
-    const dados = await usuarioCtrl.getTipoTurno()
-
-    const msg = 'Tipos de Turno retornados com sucesso'
-
-    return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
-  })
-)
-
-router.get(
   '/completo',
   verifyAdmin,
   asyncHandler(async (req, res, next) => {
@@ -87,7 +76,6 @@ router.post(
       req.body.senha,
       req.body.nome,
       req.body.nome_guerra,
-      req.body.tipo_turno_id,
       req.body.tipo_posto_grad_id,
       req.body.ativo,
       req.body.administrador
@@ -112,7 +100,6 @@ router.put(
       req.body.usuario,
       req.body.nome,
       req.body.nome_guerra,
-      req.body.tipo_turno_id,
       req.body.tipo_posto_grad_id,
       req.body.ativo,
       req.body.administrador
@@ -151,7 +138,6 @@ router.put(
       req.params.usuario_uuid,
       req.body.nome,
       req.body.nome_guerra,
-      req.body.tipo_turno_id,
       req.body.tipo_posto_grad_id
     )
 
@@ -210,7 +196,6 @@ router.post(
       req.body.senha,
       req.body.nome,
       req.body.nome_guerra,
-      req.body.tipo_turno_id,
       req.body.tipo_posto_grad_id
     )
     const msg = 'Usuário criado com sucesso'

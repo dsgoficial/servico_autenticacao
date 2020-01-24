@@ -29,14 +29,4 @@ INSERT INTO dominio.tipo_posto_grad (code, nome,nome_abrev) VALUES
 (18, 'General de Divisão', 'Gen Div'),
 (19, 'General de Exército', 'Gen Ex');
 
-CREATE TABLE dominio.tipo_turno(
-	code SMALLINT NOT NULL PRIMARY KEY,
-	nome VARCHAR(255) NOT NULL
-);
-
-INSERT INTO dominio.tipo_turno (code, nome) VALUES
-(1, 'Manhã'),
-(2, 'Tarde'),
-(3, 'Integral');
-
 COMMIT;

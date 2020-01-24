@@ -59,8 +59,8 @@ const createAdminUser = async (login, senha, connection) => {
 
   return connection.none(
     `
-    INSERT INTO dgeo.usuario (login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id) VALUES
-    ($<login>, $<hash>, $<login>, $<login>, TRUE, TRUE, 3, 13)
+    INSERT INTO dgeo.usuario (login, senha, nome, nome_guerra, administrador, ativo, tipo_posto_grad_id) VALUES
+    ($<login>, $<hash>, $<login>, $<login>, TRUE, TRUE, 13)
   `,
     { login, hash }
   )

@@ -5,22 +5,19 @@ const getData = async () => {
 
   return api.axiosAll({
     usuario: api.getData(`/api/usuarios/${uuid}`),
-    listaPostoGrad: api.getData('/api/usuarios/tipo_posto_grad'),
-    listaTurnos: api.getData('/api/usuarios/tipo_turno')
+    listaPostoGrad: api.getData('/api/usuarios/tipo_posto_grad')
   })
 }
 
 const handleUpdate = async (
   nome,
   nomeGuerra,
-  tipoPostoGradId,
-  tipoTurnoId
+  tipoPostoGradId
 ) => {
   const uuid = auth.getUUID()
   return api.put(`/api/usuarios/${uuid}`, {
     nome,
     nome_guerra: nomeGuerra,
-    tipo_turno_id: tipoTurnoId,
     tipo_posto_grad_id: tipoPostoGradId
   })
 }

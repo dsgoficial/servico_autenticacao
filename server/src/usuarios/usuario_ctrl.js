@@ -62,16 +62,9 @@ controller.getTipoPostoGrad = async () => {
   )
 }
 
-controller.getTipoTurno = async () => {
-  return db.conn.any(
-    `SELECT code, nome
-    FROM dominio.tipo_turno`
-  )
-}
-
 controller.getUsuariosCompleto = async () => {
   return db.conn.any(
-    `SELECT u.uuid, u.login, u.nome, u.nome_guerra, u.tipo_turno_id, u.tipo_posto_grad_id, tpg.nome_abrev AS tipo_posto_grad,
+    `SELECT u.uuid, u.login, u.nome, u.nome_guerra, u.tipo_posto_grad_id, tpg.nome_abrev AS tipo_posto_grad,
     u.ativo, u.administrador
     FROM dgeo.usuario AS u
     INNER JOIN dominio.tipo_posto_grad AS tpg ON tpg.code = u.tipo_posto_grad_id`
@@ -83,7 +76,6 @@ controller.criaUsuarioCompleto = async (
   senha,
   nome,
   nomeGuerra,
-  tipoTurnoId,
   tipoPostoGradId,
   ativo,
   administrador
@@ -100,9 +92,9 @@ controller.criaUsuarioCompleto = async (
   const hash = await bcrypt.hash(senha, 10)
 
   return db.conn.none(
-    `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id)
-    VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, $<administrador>, $<ativo>, $<tipoTurnoId>, $<tipoPostoGradId>)`,
-    { login, hash, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId, ativo, administrador }
+    `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_posto_grad_id)
+    VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, $<administrador>, $<ativo>, $<tipoPostoGradId>)`,
+    { login, hash, nome, nomeGuerra, tipoPostoGradId, ativo, administrador }
   )
 }
 
@@ -111,14 +103,13 @@ controller.updateUsuarioCompleto = async (
   login,
   nome,
   nomeGuerra,
-  tipoTurnoId,
   tipoPostoGradId,
   ativo,
   administrador
 ) => {
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
-    SET login = $<login>, nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, tipo_posto_grad_id = $<tipoPostoGradId>,
+    SET login = $<login>, nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_posto_grad_id = $<tipoPostoGradId>,
     ativo = $<ativo>, administrador = $<administrador>
     WHERE uuid = $<uuid>`,
     {
@@ -126,7 +117,6 @@ controller.updateUsuarioCompleto = async (
       login,
       nome,
       nomeGuerra,
-      tipoTurnoId,
       tipoPostoGradId,
       ativo,
       administrador
@@ -158,18 +148,16 @@ controller.updateUsuario = async (
   uuid,
   nome,
   nomeGuerra,
-  tipoTurnoId,
   tipoPostoGradId
 ) => {
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
-    SET nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_turno_id = $<tipoTurnoId>, tipo_posto_grad_id = $<tipoPostoGradId>
+    SET nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_posto_grad_id = $<tipoPostoGradId>
     WHERE uuid = $<uuid>`,
     {
       uuid,
       nome,
       nomeGuerra,
-      tipoTurnoId,
       tipoPostoGradId
     }
   )
@@ -208,7 +196,7 @@ controller.deletaUsuario = async uuid => {
 
 controller.getUsuario = async uuid => {
   const usuario = db.conn.oneOrNone(
-    `SELECT u.uuid, u.login, u.nome, u.nome_guerra, u.tipo_turno_id, u.tipo_posto_grad_id, tpg.nome_abrev AS tipo_posto_grad
+    `SELECT u.uuid, u.login, u.nome, u.nome_guerra, u.tipo_posto_grad_id, tpg.nome_abrev AS tipo_posto_grad
     FROM dgeo.usuario AS u
     INNER JOIN dominio.tipo_posto_grad AS tpg ON tpg.code = u.tipo_posto_grad_id
     WHERE u.ativo IS TRUE AND u.uuid = $<uuid>`, { uuid }
@@ -223,7 +211,7 @@ controller.getUsuario = async uuid => {
 
 controller.getUsuarios = async () => {
   return db.conn.any(
-    `SELECT u.uuid, u.login, u.nome, u.nome_guerra, u.tipo_turno_id, u.tipo_posto_grad_id, tpg.nome_abrev AS tipo_posto_grad
+    `SELECT u.uuid, u.login, u.nome, u.nome_guerra, u.tipo_posto_grad_id, tpg.nome_abrev AS tipo_posto_grad
     FROM dgeo.usuario AS u
     INNER JOIN dominio.tipo_posto_grad AS tpg ON tpg.code = u.tipo_posto_grad_id
     WHERE u.ativo IS TRUE`
@@ -235,7 +223,6 @@ controller.criaUsuario = async (
   senha,
   nome,
   nomeGuerra,
-  tipoTurnoId,
   tipoPostoGradId
 ) => {
   const usuarioExiste = await db.conn.oneOrNone(
@@ -250,9 +237,9 @@ controller.criaUsuario = async (
   const hash = await bcrypt.hash(senha, 10)
 
   return db.conn.none(
-    `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_turno_id, tipo_posto_grad_id)
-    VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoTurnoId>, $<tipoPostoGradId>)`,
-    { login, hash, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId }
+    `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_posto_grad_id)
+    VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoPostoGradId>)`,
+    { login, hash, nome, nomeGuerra, tipoPostoGradId }
   )
 }
 

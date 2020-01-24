@@ -9,19 +9,15 @@ const deletarUsuario = async uuid => {
 }
 
 const getSelectData = async () => {
-  return api.axiosAll({
-    listaPostoGrad: api.getData('/api/usuarios/tipo_posto_grad'),
-    listaTurnos: api.getData('/api/usuarios/tipo_turno')
-  })
+  return api.getData('/api/usuarios/tipo_posto_grad')
 }
 
-const criaUsuario = async (usuario, nome, nomeGuerra, tipoTurnoId, tipoPostoGradId, ativo, administrador) => {
+const criaUsuario = async (usuario, nome, nomeGuerra, tipoPostoGradId, ativo, administrador) => {
   return api.post('/api/usuarios/completo', {
     usuario,
     nome,
     senha: usuario,
     nome_guerra: nomeGuerra,
-    tipo_turno_id: tipoTurnoId,
     tipo_posto_grad_id: tipoPostoGradId,
     ativo,
     administrador
@@ -33,7 +29,6 @@ const atualizaUsuario = async (
   usuario,
   nome,
   nomeGuerra,
-  tipoTurnoId,
   tipoPostoGradId,
   administrador,
   ativo
@@ -42,7 +37,6 @@ const atualizaUsuario = async (
     usuario,
     nome,
     nome_guerra: nomeGuerra,
-    tipo_turno_id: tipoTurnoId,
     tipo_posto_grad_id: tipoPostoGradId,
     administrador,
     ativo
