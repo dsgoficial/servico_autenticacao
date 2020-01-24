@@ -17,7 +17,7 @@ controller.deletaAplicacao = async id => {
   return db.conn.tx(async t => {
     const aplicacaoDefault = await t.oneOrNone(
       `SELECT id FROM dgeo.aplicacao 
-      WHERE id = $<id> AND nome_abrev IN ('auth_web', 'sap_fp', 'sap_fg', 'sap_web', 'sca_qgis', 'sca_web', 'scm_web', 'dsgdocs_web', 'sapdashboard_web')`,
+      WHERE id = $<id> AND nome_abrev IN ('auth_web', 'sap_fp', 'sap_fg', 'sap_web', 'sca_qgis', 'sca_web', 'scm_web', 'dsgdocs_web', 'sapdashboard_web', 'rh_web')`,
       { id }
     )
 
@@ -95,7 +95,7 @@ controller.updateAplicacao = async (
 
     const aplicacaoDefault = await t.oneOrNone(
       `SELECT id FROM dgeo.aplicacao 
-      WHERE id = $<id> AND nome_abrev IN ('auth_web', 'sap_fp', 'sap_fg', 'sap_web', 'sca_qgis', 'sca_web', 'scm_web', 'dsgdocs_web', 'sapdashboard_web')
+      WHERE id = $<id> AND nome_abrev IN ('auth_web', 'sap_fp', 'sap_fg', 'sap_web', 'sca_qgis', 'sca_web', 'scm_web', 'dsgdocs_web', 'sapdashboard_web', 'rh_web')
       AND (nome != $<nome> OR nome_abrev != $<nomeAbrev>)`,
       { id, nome, nomeAbrev }
     )

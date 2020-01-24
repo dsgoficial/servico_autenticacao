@@ -34,7 +34,8 @@ INSERT INTO dgeo.aplicacao (nome, nome_abrev, ativa) VALUES
 ('Sistema de Controle do Acervo - Cliente Web', 'sca_web', TRUE),
 ('Sistema de Controle da Mapoteca - Cliente Web', 'scm_web', TRUE),
 ('DSGDocs - Cliente Web', 'dsgdocs_web', TRUE),
-('SAP Dashboard - Cliente Web', 'sapdashboard_web', TRUE);
+('SAP Dashboard - Cliente Web', 'sapdashboard_web', TRUE),
+('Sistema de Controle de RH - Cliente Web', 'rh_web', TRUE);
 
 CREATE TABLE dgeo.login(
   id SERIAL NOT NULL PRIMARY KEY,
