@@ -13,7 +13,7 @@
     "build": "node create_build.js",
     "create-docs": "node server/create_documentation.js",
     "start": "pm2 start server/src/index.js --name auth-server",
-    "start-all-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\""
+    "start-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\""
   },
   "keywords": [
     "Autenticação",
@@ -31,10 +31,10 @@
     "colors": "^1.4.0",
     "concurrently": "^5.0.2",
     "fs-extra": "^8.1.0",
-    "inquirer": "^7.0.1",
+    "inquirer": "^7.0.4",
     "npm-run": "^5.0.1",
-    "pg-promise": "^10.3.2",
+    "pg-promise": "^10.3.5",
     "pgtools": "^0.3.0",
-    "pm2": "^4.2.1"
+    "pm2": "^4.2.3"
   }
 }
