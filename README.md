@@ -4,6 +4,7 @@ Serviço em Node.js e Cliente Web para autenticação de usuários. Sua utiliza�
 
 - [Sistema de Apoio a Produção (SAP)](https://github.com/1cgeo/sap)
 - [Gerenciador do FME](https://github.com/1cgeo/gerenciador_fme)
+- [Sistema de Controle de Recursos Humanos](https://github.com/1cgeo/controle_rh)
 - [Sistema de Controle do Acervo](https://github.com/1cgeo/controle_acervo)
 - [Sistema de Pedidos da Mapoteca](https://github.com/1cgeo/mapoteca)
 - [DSGDocs](https://github.com/1cgeo/DSGDocs)
