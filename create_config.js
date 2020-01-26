@@ -177,7 +177,7 @@ const createConfig = async () => {
         type: 'input',
         name: 'port',
         message: 'Em qual porta será executado o Serviço de Autenticação?',
-        default: 3012
+        default: 3010
       },
       {
         type: 'confirm',
@@ -190,7 +190,7 @@ const createConfig = async () => {
         name: 'authUser',
         message:
           'Qual é o nome que deseja para o usuário administrador do Serviço de Autenticação?',
-        when (answers) {
+        when(answers) {
           return answers.dbCreate
         }
       },
@@ -200,7 +200,7 @@ const createConfig = async () => {
         mask: '*',
         message:
           'Qual é a senha que deseja para o usuário administrador do Serviço de Autenticação?',
-        when (answers) {
+        when(answers) {
           return answers.dbCreate
         }
       },
@@ -210,7 +210,7 @@ const createConfig = async () => {
         mask: '*',
         message:
           'Confirme a senha para o usuário administrador do Serviço de Autenticação?',
-        when (answers) {
+        when(answers) {
           return answers.dbCreate
         }
       }
