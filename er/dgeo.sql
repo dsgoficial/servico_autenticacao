@@ -13,6 +13,7 @@ CREATE TABLE dgeo.usuario(
   administrador BOOLEAN NOT NULL DEFAULT FALSE,
   ativo BOOLEAN NOT NULL DEFAULT FALSE,
   tipo_posto_grad_id SMALLINT NOT NULL REFERENCES dominio.tipo_posto_grad (code),
+  tipo_turno_id SMALLINT NOT NULL REFERENCES dominio.tipo_turno (code),
   uuid UUID NOT NULL DEFAULT uuid_generate_v4()
 );
 

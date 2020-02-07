@@ -9,6 +9,8 @@ const usuarioSchema = Yup.object().shape({
     .required('Preencha seu nome de guerra'),
   tipoPostoGradId: Yup.number()
     .required('Preencha seu posto/graduação'),
+  tipoTurnoId: Yup.number()
+    .required('Preencha seu turno de trabalho'),
   ativo: Yup.boolean(),
   administrador: Yup.boolean()
 })

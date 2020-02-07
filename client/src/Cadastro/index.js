@@ -24,10 +24,12 @@ export default withRouter(props => {
     confirmarSenha: '',
     nome: '',
     nomeGuerra: '',
-    tipoPostoGradId: ''
+    tipoPostoGradId: '',
+    tipoTurnoId: ''
   }
 
   const [listaPostoGrad, setListaPostoGrad] = useState([])
+  const [listaTurno, setListaTurno] = useState([])
 
   const [snackbar, setSnackbar] = useState('')
   const [loaded, setLoaded] = useState(false)
@@ -39,7 +41,8 @@ export default withRouter(props => {
         const response = await getData()
         if (!response || !isCurrent) return
 
-        setListaPostoGrad(response)
+        setListaPostoGrad(response.listaPostoGrad)
+        setListaTurno(response.listaTurno)
         setLoaded(true)
       } catch (err) {
         if (!isCurrent) return
@@ -60,7 +63,8 @@ export default withRouter(props => {
         values.senha,
         values.nome,
         values.nomeGuerra,
-        values.tipoPostoGradId
+        values.tipoPostoGradId,
+        values.tipoTurnoId,
       )
       if (success) {
         resetForm(initialValues)
@@ -86,6 +90,7 @@ export default withRouter(props => {
                 validationSchema={validationSchema}
                 onSubmit={handleForm}
                 listaPostoGrad={listaPostoGrad}
+                listaTurno={listaTurno}
               />
               <Grid container justify='flex-end'>
                 <Grid item>

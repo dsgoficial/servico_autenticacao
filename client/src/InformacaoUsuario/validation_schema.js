@@ -6,7 +6,9 @@ const validationSchema = Yup.object().shape({
   nomeGuerra: Yup.string()
     .required('Preencha seu nome de guerra'),
   tipoPostoGradId: Yup.number()
-    .required('Preencha seu posto/graduação')
+    .required('Preencha seu posto/graduação'),
+  tipoTurnoId: Yup.number()
+    .required('Preencha seu turno de trabalho')
 })
 
 export default validationSchema

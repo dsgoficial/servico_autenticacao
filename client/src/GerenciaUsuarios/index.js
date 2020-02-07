@@ -105,6 +105,7 @@ export default withRouter(props => {
         columns={[
           { title: 'Login', field: 'login' },
           { title: 'Posto/Graducao', field: 'tipo_posto_grad' },
+          { title: 'Turno', field: 'tipo_turno' },
           { title: 'Nome Guerra', field: 'nome_guerra' },
           { title: 'Nome completo', field: 'nome' },
           { title: 'Ativo', field: 'ativo', type: 'boolean' },

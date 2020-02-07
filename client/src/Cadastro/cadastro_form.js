@@ -7,7 +7,7 @@ import styles from './styles'
 
 import { SubmitButton } from '../helpers'
 
-export default ({ initialValues, validationSchema, onSubmit, listaPostoGrad = [] }) => {
+export default ({ initialValues, validationSchema, onSubmit, listaPostoGrad = [], listaTurno = [] }) => {
   const classes = styles()
 
   return (
@@ -71,6 +71,25 @@ export default ({ initialValues, validationSchema, onSubmit, listaPostoGrad = []
                 Selecione seu Posto/Graduação
               </MenuItem>
               {listaPostoGrad.map(option => (
+                <MenuItem key={option.code} value={option.code}>
+                  {option.nome}
+                </MenuItem>
+              ))}
+            </Field>
+          </div>
+          <div>
+            <Field
+              name='tipoTurnoId'
+              label='Turno'
+              variant='outlined'
+              component={Select}
+              displayEmpty
+              className={classes.select}
+            >
+              <MenuItem value='' disabled>
+                Selecione seu turno de trabalho
+              </MenuItem>
+              {listaTurno.map(option => (
                 <MenuItem key={option.code} value={option.code}>
                   {option.nome}
                 </MenuItem>
