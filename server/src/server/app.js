@@ -15,6 +15,8 @@ const swaggerOptions = require('./swagger_options')
 const swaggerSpec = swaggerJSDoc(swaggerOptions)
 
 const {
+  AppError,
+  httpCode,
   logger,
   errorHandler,
   sendJsonAndLogMiddleware
@@ -47,6 +49,16 @@ const limiter = rateLimit({
 // apply limit all requests
 app.use(limiter)
 
+app.use((req, res, next) => {
+  const url = req.protocol + '://' + req.get('host') + req.originalUrl
+
+  logger.info(`${req.method} request`, {
+    url,
+    ip: req.ip
+  })
+  return next()
+})
+
 // All routes used by the App
 app.use('/api', appRoutes)
 
@@ -59,13 +71,13 @@ app.use('/api/js_docs', express.static(path.join(__dirname, '..', 'js_docs')))
 // Serve Client
 app.use(express.static(path.join(__dirname, '..', 'build')))
 
-app.get('/*', function (req, res) {
-  const url = req.protocol + '://' + req.get('host') + req.originalUrl
-
-  logger.info('GET request', {
-    url
-  })
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'build', 'index.html'))
+})
+
+app.use((req, res, next) => {
+  const err = new AppError(`URL não encontrada para o método ${req.method}`, httpCode.NotFound)
+  return next(err)
 })
 
 // Error handling
