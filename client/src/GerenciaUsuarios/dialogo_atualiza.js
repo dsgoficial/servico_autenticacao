@@ -18,6 +18,7 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
   const classes = styles()
 
   const initialValues = useMemo(() => ({
+    uuid: usuario.uuid || '',
     usuario: usuario.login || '',
     nome: usuario.nome || '',
     nomeGuerra: usuario.nome_guerra || '',
@@ -72,7 +73,8 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
         values.tipoPostoGradId,
         values.tipoTurnoId,
         values.administrador,
-        values.ativo
+        values.ativo,
+        values.uuid
       )
       if (!response) return
       setSubmitting(false)
@@ -105,6 +107,14 @@ const DialogoAtualiza = ({ open = false, usuario = {}, handleDialog }) => {
             >
               {({ isValid, isSubmitting, isValidating }) => (
                 <Form className={classes.form}>
+                  <Field
+                    name='uuid'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='UUID'
+                  />
                   <Field
                     name='usuario'
                     component={TextField}

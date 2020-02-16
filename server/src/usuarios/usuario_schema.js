@@ -37,6 +37,8 @@ models.criacaoUsuario = Joi.object().keys({
 })
 
 models.criacaoUsuarioCompleto = Joi.object().keys({
+  uuid: Joi.string()
+    .guid({ version: 'uuidv4' }),
   usuario: Joi.string().required(),
   senha: Joi.string().required(),
   nome: Joi.string().required(),
@@ -54,6 +56,9 @@ models.criacaoUsuarioCompleto = Joi.object().keys({
 })
 
 models.atualizacaoUsuarioCompleto = Joi.object().keys({
+  uuid: Joi.string()
+    .guid({ version: 'uuidv4' })
+    .required(),
   usuario: Joi.string().required(),
   nome: Joi.string().required(),
   nome_guerra: Joi.string().required(),

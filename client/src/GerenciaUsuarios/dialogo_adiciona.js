@@ -19,6 +19,7 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
   const classes = styles()
 
   const initialValues = {
+    uuid: '',
     usuario: '',
     nome: '',
     nomeGuerra: '',
@@ -72,7 +73,8 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
         values.tipoPostoGradId,
         values.tipoTurnoId,
         values.ativo,
-        values.administrador
+        values.administrador,
+        values.uuid
       )
       if (!response) return
       setSubmitting(false)
@@ -187,6 +189,14 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
                       color='primary'
                     />
                   </div>
+                  <Field
+                    name='uuid'
+                    component={TextField}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    label='UUID'
+                  />
                   <SubmitButton
                     type='submit' disabled={isValidating || !isValid} submitting={isSubmitting}
                     fullWidth
@@ -199,6 +209,9 @@ const DialogoAdiciona = ({ open = false, handleDialog }) => {
                 </Form>
               )}
             </Formik>
+            <DialogContentText>
+              UUID pode ser deixado em branco, sendo gerado automaticamente.
+            </DialogContentText>
             <DialogContentText>
               A senha do usuário criado será igual ao login.
             </DialogContentText>

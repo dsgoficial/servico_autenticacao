@@ -90,7 +90,8 @@ router.post(
       req.body.tipo_posto_grad_id,
       req.body.tipo_turno_id,
       req.body.ativo,
-      req.body.administrador
+      req.body.administrador,
+      req.body.uuid
     )
 
     const msg = 'Usuários retornados com sucesso'
@@ -115,7 +116,8 @@ router.put(
       req.body.tipo_posto_grad_id,
       req.body.tipo_turno_id,
       req.body.ativo,
-      req.body.administrador
+      req.body.administrador,
+      req.body.uuid
     )
 
     const msg = 'Usuário atualizado com sucesso'

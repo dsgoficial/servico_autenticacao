@@ -1,6 +1,7 @@
 import * as Yup from 'yup'
 
 const usuarioSchema = Yup.object().shape({
+  uuid: Yup.string(),
   usuario: Yup.string()
     .required('Preencha seu usuário').matches(/^[a-z]+$/, 'O nome do usuário deve ser em minúsculo e não conter espaços ou caracteres especiais'),
   nome: Yup.string()
