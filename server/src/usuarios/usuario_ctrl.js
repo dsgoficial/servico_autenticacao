@@ -20,12 +20,7 @@ controller.resetaSenhaUsuarios = async usuariosUUID => {
       throw new AppError('Usuários não encontrados', httpCode.NotFound)
     }
 
-    const table = new db.pgp.helpers.TableName({
-      table: 'usuario',
-      schema: 'dgeo'
-    })
-
-    const cs = new db.pgp.helpers.ColumnSet(['?id', 'senha'], { table })
+    const cs = new db.pgp.helpers.ColumnSet(['?id', 'senha'])
 
     const values = []
 
@@ -37,7 +32,7 @@ controller.resetaSenhaUsuarios = async usuariosUUID => {
       })
     }
     const query =
-      db.pgp.helpers.update(values, cs, null, {
+      db.pgp.helpers.update(values, cs, { table: 'usuario', schema: 'dgeo' }, {
         tableAlias: 'X',
         valueAlias: 'Y'
       }) + 'WHERE Y.id = X.id'
