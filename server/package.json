@@ -30,7 +30,7 @@
     "joi": "^14.3.1",
     "jsdoc": "^3.6.3",
     "jsonwebtoken": "^8.5.1",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.2",
     "nodemon": "^2.0.2",
     "pg-promise": "^10.3.5",
     "pgtools": "^0.3.0",
