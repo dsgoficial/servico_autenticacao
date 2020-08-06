@@ -29,12 +29,12 @@
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "colors": "^1.4.0",
-    "concurrently": "^5.1.0",
-    "fs-extra": "^9.0.0",
-    "inquirer": "^7.1.0",
+    "concurrently": "^5.2.0",
+    "fs-extra": "^9.0.1",
+    "inquirer": "^7.3.3",
     "npm-run": "^5.0.1",
-    "pg-promise": "^10.4.4",
+    "pg-promise": "^10.5.8",
     "pgtools": "^0.3.0",
-    "pm2": "^4.2.3"
+    "pm2": "^4.4.0"
   }
 }
