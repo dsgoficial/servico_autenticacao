@@ -15,7 +15,7 @@
     "filefy": "^0.1.10",
     "formik": "^2.1.5",
     "formik-material-ui": "^2.0.1",
-    "material-table": "^1.68.0",
+    "material-table": "1.67.0",
     "material-ui-formik-components": "^0.7.1",
     "react": "^16.13.1",
     "react-async-hook": "^3.6.1",
