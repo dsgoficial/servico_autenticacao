@@ -20,7 +20,7 @@ const {
   httpCode,
   logger,
   errorHandler,
-  sendJsonAndLogMiddleware
+  sendJsonAndLogMiddleware,
 } = require("../utils");
 
 const appRoutes = require("../routes");
@@ -39,12 +39,11 @@ app.use(cors());
 
 // Helmet Protection
 app.use(helmet());
-// Disables cache https://helmetjs.github.io/docs/nocache/
 app.use(noCache());
 
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 minuto
-  max: 200 // limite por minuto por IP
+  max: 200, // limite por minuto por IP
 });
 
 // apply limit all requests
@@ -55,7 +54,7 @@ app.use((req, res, next) => {
 
   logger.info(`${req.method} request`, {
     url,
-    ip: req.ip
+    ip: req.ip,
   });
   return next();
 });
