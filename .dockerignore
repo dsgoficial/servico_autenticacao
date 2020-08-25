@@ -4,3 +4,6 @@ Dockerfile
 .dockerignore
 .git
 .gitignore
+build
+logs
+js_docs
