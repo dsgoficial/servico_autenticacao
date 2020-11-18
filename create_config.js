@@ -11,6 +11,7 @@ const promise = require('bluebird')
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 
+
 const pgp = require('pg-promise')({
   promiseLib: promise
 })
@@ -51,7 +52,7 @@ const givePermission = async ({
 
     connection = pgp(connectionString)
   }
-  await connection.none(readSqlFile('./er/permissao.sql'), [dbUser])
+  return connection.none(readSqlFile('./er/permissao.sql'), [dbUser])
 }
 
 const createAdminUser = async (login, senha, connection) => {
@@ -82,12 +83,13 @@ const createDatabase = async (
     host: dbServer
   }
 
+
   await pgtools.createdb(config, dbName)
 
   const connectionString = `postgres://${dbUser}:${dbPassword}@${dbServer}:${dbPort}/${dbName}`
 
   const conn = pgp(connectionString)
-  await conn.tx(async t => {
+  return conn.tx(async t => {
     await t.none(readSqlFile('./er/versao.sql'))
     await t.none(readSqlFile('./er/dominio.sql'))
     await t.none(readSqlFile('./er/dgeo.sql'))
@@ -266,6 +268,7 @@ const createConfig = async () => {
       }
       return answers
     })
+
 
     if (dbCreate) {
       await createDatabase(

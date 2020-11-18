@@ -13,7 +13,8 @@
     "build": "node create_build.js",
     "create-docs": "node server/create_documentation.js",
     "start": "pm2 start server/src/index.js --name auth-server",
-    "start-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\""
+    "start-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\"",
+    "preinstall": "npx npm-force-resolutions"
   },
   "keywords": [
     "Autenticação",
@@ -33,9 +34,14 @@
     "concurrently": "^5.3.0",
     "fs-extra": "^9.0.1",
     "inquirer": "^7.3.3",
+    "npm-force-resolutions": "0.0.3",
     "npm-run": "^5.0.1",
     "pg-promise": "^10.5.8",
     "pgtools": "^0.3.0",
     "pm2": "^4.4.0"
+  },
+  "resolutions": {
+    "pg": "8.4.0",
+    "pg-connection-string": "2.4.0"
   }
 }
