@@ -5,7 +5,6 @@ const inquirer = require('inquirer')
 const colors = require('colors')
 colors.enable()
 
-const pgtools = require('pgtools')
 const path = require('path')
 const promise = require('bluebird')
 const crypto = require('crypto')
@@ -52,6 +51,8 @@ const givePermission = async ({
 
     connection = pgp(connectionString)
   }
+  console.log('Executando permissões...')
+
   return connection.none(readSqlFile('./er/permissao.sql'), [dbUser])
 }
 
@@ -83,10 +84,15 @@ const createDatabase = async (
     host: dbServer
   }
 
+  console.log('Criando Banco...')
+  const postgresConnectionString = `postgres://${dbUser}:${dbPassword}@${dbServer}:${dbPort}/postgres`
+  const postgresConn = pgp(postgresConnectionString);
+  await postgresConn.none('CREATE DATABASE $1:name', [dbName]);
 
-  await pgtools.createdb(config, dbName)
 
   const connectionString = `postgres://${dbUser}:${dbPassword}@${dbServer}:${dbPort}/${dbName}`
+
+  console.log('Executando SQLs...')
 
   const conn = pgp(connectionString)
   return conn.tx(async t => {
