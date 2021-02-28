@@ -1,10 +1,8 @@
 import React from 'react'
 import { MaterialTable } from '../helpers'
-import DateFnsUtils from '@date-io/date-fns'
+import { format } from 'date-fns'
 
-const dateFns = new DateFnsUtils()
-
-export default ({ usuarios }) => {
+const UsuariosLogados = ({ usuarios }) => {
   return (
     <>
       <MaterialTable
@@ -16,10 +14,12 @@ export default ({ usuarios }) => {
           { title: 'Turno', field: 'tipo_turno' },
           { title: 'Nome Guerra', field: 'nome_guerra' },
           { title: 'Aplicação', field: 'aplicacao' },
-          { title: 'Último login', field: 'ultimo_login', render: rowData => { return dateFns.format(dateFns.date(rowData.ultimo_login), dateFns.time24hFormat) } }
+          { title: 'Último login', field: 'ultimo_login', render: rowData => format(new Date(rowData.ultimo_login), "yyyy-MM-dd -- HH:mm:ss") }
         ]}
         data={usuarios}
       />
     </>
   )
 }
+
+export default UsuariosLogados;
