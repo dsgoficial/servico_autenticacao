@@ -12,7 +12,7 @@ import styles from './styles'
 import validationSchema from './validation_schema'
 import { handleUpdate } from './api'
 
-export default withRouter(props => {
+const AlterarSenha = withRouter(props => {
   const classes = styles()
 
   const initialValues = {
@@ -100,3 +100,5 @@ export default withRouter(props => {
     </>
   )
 })
+
+export default AlterarSenha;

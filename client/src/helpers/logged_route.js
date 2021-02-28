@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { auth } from "../services";
 
-export default ({ component: Component, exact, path, ...rest }) => (
+const LoggedRoute = ({ component: Component, exact, path, ...rest }) => (
   <Route
     {...rest}
     exact={exact}
@@ -20,3 +20,5 @@ export default ({ component: Component, exact, path, ...rest }) => (
     }}
   />
 );
+
+export default LoggedRoute;

@@ -14,7 +14,7 @@ import validationSchema from './validation_schema'
 import { getData, handleUpdate } from './api'
 import { handleApiError } from '../services'
 
-export default withRouter(props => {
+const InformacaoUsuario = withRouter(props => {
   const classes = styles()
 
   const [initialValues, setInitialValues] = useState({
@@ -174,3 +174,5 @@ export default withRouter(props => {
     </>
   )
 })
+
+export default InformacaoUsuario;

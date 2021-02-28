@@ -8,7 +8,7 @@ import { getUsuarios, autorizarUsuarios, resetarSenhas } from './api'
 import { MessageSnackBar, MaterialTable, DialogoConfirmacao } from '../helpers'
 import { handleApiError } from '../services'
 
-export default withRouter(props => {
+const AutorizaUsuarios = withRouter(props => {
   const [usuarios, setUsuarios] = useState([])
   const [snackbar, setSnackbar] = useState('')
   const [refresh, setRefresh] = useState(false)
@@ -147,3 +147,5 @@ export default withRouter(props => {
     </>
   )
 })
+
+export default AutorizaUsuarios;

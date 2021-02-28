@@ -23,7 +23,7 @@ import AutorizaUsuarios from "../AutorizaUsuarios";
 import GerenciarAplicacoes from "../GerenciarAplicacoes";
 import Dashboard from "../Dashboard";
 
-export default withRouter((props) => {
+const Main = withRouter((props) => {
   const classes = styles();
 
   const [open, setOpen] = useState(false);
@@ -139,3 +139,5 @@ export default withRouter((props) => {
     </div>
   );
 });
+
+export default Main

@@ -7,7 +7,7 @@ import styles from './styles'
 
 import { SubmitButton } from '../helpers'
 
-export default ({ initialValues, validationSchema, onSubmit, listaPostoGrad = [], listaTurno = [] }) => {
+const CadastroForm = ({ initialValues, validationSchema, onSubmit, listaPostoGrad = [], listaTurno = [] }) => {
   const classes = styles()
 
   return (
@@ -110,3 +110,5 @@ export default ({ initialValues, validationSchema, onSubmit, listaPostoGrad = []
     </Formik>
   )
 }
+
+export default CadastroForm;

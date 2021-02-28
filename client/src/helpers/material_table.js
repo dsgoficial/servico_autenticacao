@@ -53,7 +53,7 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-export default (props) => {
+const Table = (props) => {
   const classes = styles();
 
   return props.loaded ? (
@@ -115,3 +115,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default Table;

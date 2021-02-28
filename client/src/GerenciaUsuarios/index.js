@@ -44,7 +44,7 @@ export default withRouter((props) => {
   const deletarUsuario = (event, rowData) => {
     setOpenDeleteDialog({
       open: true,
-      title: "Resetar senha",
+      title: "Deletar usuário",
       msg: `Deseja realmente deletar o usuário ${rowData.tipo_posto_grad} ${rowData.nome_guerra}`,
       handleDialog: executeDelete(rowData.uuid),
     });

@@ -16,7 +16,7 @@ import styles from './styles'
 import validationSchema from './validation_schema'
 import { getData, handleCadastro } from './api'
 
-export default withRouter(props => {
+const Cadastro = withRouter(props => {
   const classes = styles()
   const initialValues = {
     usuario: '',
@@ -112,3 +112,5 @@ export default withRouter(props => {
     </BackgroundImages>
   )
 })
+
+export default Cadastro;

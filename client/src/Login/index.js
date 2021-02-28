@@ -16,7 +16,7 @@ import LoginForm from './login_form'
 import { MessageSnackBar, BackgroundImages } from '../helpers'
 import { handleApiError } from '../services'
 
-export default withRouter(props => {
+const Login = withRouter(props => {
   const classes = styles()
   const values = { usuario: '', senha: '' }
 
@@ -61,3 +61,5 @@ export default withRouter(props => {
     </BackgroundImages>
   )
 })
+
+export default Login
