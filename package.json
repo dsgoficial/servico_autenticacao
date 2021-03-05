@@ -13,7 +13,8 @@
     "build": "node create_build.js",
     "create-docs": "node server/create_documentation.js",
     "start": "pm2 start server/src/index.js --name auth-server",
-    "start-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\""
+    "start-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\"",
+    "start-https": "pm2 start server/src/index.js --name auth-server-https -- --https "
   },
   "keywords": [
     "Autenticação",
