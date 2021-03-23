@@ -38,7 +38,7 @@ app.use(xss());
 app.use(cors());
 
 // Helmet Protection
-app.use(helmet());
+//app.use(helmet());
 app.use(noCache());
 
 const limiter = rateLimit({
