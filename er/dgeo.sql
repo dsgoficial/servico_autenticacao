@@ -28,14 +28,8 @@ INSERT INTO dgeo.aplicacao (nome, nome_abrev, ativa) VALUES
 ('Serviço Autenticação - Cliente Web', 'auth_web', TRUE),
 ('Sistema de Apoio a Produção - Ferramentas de Produção', 'sap_fp', TRUE),
 ('Sistema de Apoio a Produção - Ferramentas de Gerëncia', 'sap_fg', TRUE),
-('Sistema de Apoio a Produção - Cliente Web', 'sap_web', TRUE),
 ('Gerenciador FME - Cliente Web', 'fme_web', TRUE),
-('Sistema de Controle do Acervo - Cliente QGIS', 'sca_qgis', TRUE),
-('Sistema de Controle do Acervo - Cliente Web', 'sca_web', TRUE),
-('Sistema de Controle da Mapoteca - Cliente Web', 'scm_web', TRUE),
-('DSGDocs - Cliente Web', 'dsgdocs_web', TRUE),
-('SAP Dashboard - Cliente Web', 'sapdashboard_web', TRUE),
-('Sistema de Controle de RH - Cliente Web', 'rh_web', TRUE);
+('SAP Dashboard - Cliente Web', 'sapdashboard_web', TRUE);
 
 CREATE TABLE dgeo.login(
   id SERIAL NOT NULL PRIMARY KEY,
