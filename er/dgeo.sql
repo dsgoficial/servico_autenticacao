@@ -25,10 +25,10 @@ CREATE TABLE dgeo.aplicacao(
 );
 
 INSERT INTO dgeo.aplicacao (nome, nome_abrev, ativa) VALUES
-('Serviço Autenticação - Cliente Web', 'auth_web', TRUE),
-('Sistema de Apoio a Produção', 'sap', TRUE),
-('Sistema de Apoio a Produção - Ferramentas de Produção', 'sap_fp', TRUE),
-('Sistema de Apoio a Produção - Ferramentas de Gerëncia', 'sap_fg', TRUE),
+('Serviço de Autenticação - Cliente Web', 'auth_web', TRUE),
+('Sistema de Apoio à Produção', 'sap', TRUE),
+('Sistema de Apoio à Produção - Ferramentas de Produção', 'sap_fp', TRUE),
+('Sistema de Apoio à Produção - Ferramentas de Gerência', 'sap_fg', TRUE),
 ('Gerenciador FME - Cliente Web', 'fme_web', TRUE),
 ('SAP Dashboard - Cliente Web', 'sapdashboard_web', TRUE);
 
