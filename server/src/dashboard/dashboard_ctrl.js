@@ -159,7 +159,7 @@ controller.getLoginsUsuarios = async (total = 14, max = 10) => {
     if (usuariosFixed.indexOf(d.usuario) !== -1) {
       resultDict[d.data_login][d.usuario] = +d.logins;
     } else {
-      resultDict[d.data_login].outros += d.logins;
+      resultDict[d.data_login].outros += +d.logins;
     }
   });
 
