@@ -123,6 +123,18 @@ controller.updateUsuarioCompleto = async (
   administrador,
   novoUuid
 ) => {
+
+  if(!administrador){
+    const ultimoAdministrador = await db.conn.oneOrNone(
+      'SELECT id FROM dgeo.usuario WHERE login != $<login> AND administrador IS TRUE AND ativo IS TRUE LIMIT 1',
+      { login }
+    )
+  
+    if (!ultimoAdministrador) {
+      throw new AppError('Este usuário é o último administrador do sistema', httpCode.BadRequest)
+    }
+  }
+
   const result = await db.conn.result(
     `UPDATE dgeo.usuario
     SET login = $<login>, nome = $<nome>, nome_guerra = $<nomeGuerra>, tipo_posto_grad_id = $<tipoPostoGradId>,
