@@ -165,8 +165,7 @@ const createConfig = async () => {
         type: 'input',
         name: 'dbUser',
         message:
-          'Qual é o nome do usuário do PostgreSQL para interação com o Serviço de Autenticação (já existente no banco de dados e ser superusuario)?',
-        default: 'controle_app'
+          'Qual é o nome do usuário do PostgreSQL para interação com o Serviço de Autenticação (já existente no banco de dados e ser superusuario)?'
       },
       {
         type: 'password',
