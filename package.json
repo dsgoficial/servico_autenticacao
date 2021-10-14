@@ -30,11 +30,11 @@
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "colors": "^1.4.0",
-    "concurrently": "^6.2.1",
+    "concurrently": "^6.3.0",
     "fs-extra": "^10.0.0",
-    "inquirer": "^8.1.5",
+    "inquirer": "^8.2.0",
     "npm-run": "^5.0.1",
     "pg-promise": "^10.11.0",
-    "pm2": "^5.1.1"
+    "pm2": "^5.1.2"
   }
 }
