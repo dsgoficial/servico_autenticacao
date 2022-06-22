@@ -30,6 +30,7 @@
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.7.2",
     "colors": "^1.4.0",
+    "commander": "^9.3.0",
     "concurrently": "^6.3.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.2.0",

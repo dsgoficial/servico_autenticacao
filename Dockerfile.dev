@@ -1,0 +1,12 @@
+FROM node:current-slim
+
+WORKDIR /app
+
+COPY . .
+
+EXPOSE 3010
+
+RUN npm run install-all
+RUN npm run build
+
+CMD sleep infinity
