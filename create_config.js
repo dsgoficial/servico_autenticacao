@@ -182,7 +182,7 @@ const getConfigFromUser = options => {
       default: 3010
     })
   }
-  if (options.dbCreate) {
+  if (!options.dbCreate) {
     questions.push({
       type: 'confirm',
       name: 'dbCreate',
@@ -198,14 +198,6 @@ const getConfigFromUser = options => {
       when(answers) {
         return answers.dbCreate
       }
-    })
-  }
-  if (options.dbCreate) {
-    questions.push({
-      type: 'confirm',
-      name: 'dbCreate',
-      message: 'Deseja criar o banco de dados do Serviço de Autenticação?',
-      default: true
     })
   }
   if (!options.authPassword) {
