@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:current-alpine3.14
 
 WORKDIR /app
 
@@ -10,4 +10,3 @@ RUN npm run build
 EXPOSE 3010
 
 CMD ["node", "server/src/index.js"]
-
