@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Typography, Container, Avatar, Paper } from '@mui/material';
+import { Typography, Container, Avatar, Paper, Button } from '@mui/material';
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import * as Yup from 'yup'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Link as RouterLink } from 'react-router-dom'
 import Page from '../components/Page';
 import SubmitButton from '../components/SubmitButton'
 import { useSnackbar } from 'notistack';
@@ -120,6 +120,12 @@ export default function LoginPage() {
                                         >
                                             Entrar
                                         </SubmitButtonStyled>
+                                        <Button
+                                            variant="text"
+                                            component={RouterLink}
+                                            to={'/cadastro'}>
+                                            Criar novo usuário
+                                        </Button>
                                     </FormStyled>
                                 )}
                             </Formik>

@@ -28,7 +28,7 @@ const validationSchema = yup.object({
 export default function UserPasswordCard() {
 
     const {
-        atualizarSenhas,
+        updatePasswords,
         getUUID
     } = useAPI()
 
@@ -47,14 +47,14 @@ export default function UserPasswordCard() {
         },
         validationSchema: validationSchema,
         onSubmit: async (values, { resetForm }) => {
-            try {
-                const uuid = getUUID()
-                const response = await atualizarSenhas(uuid, values.senhaAtual, values.novaSenha)
-                showSnackbar(response.data.message, 'success')
-                resetForm()
-            } catch (error) {
-                showSnackbar(error.message, 'error')
+            const uuid = getUUID()
+            const data = await updatePasswords(uuid, values.senhaAtual, values.novaSenha)
+            if (!data) {
+                showSnackbar('Falha ao atualizar senha!', 'error')
+                return
             }
+            showSnackbar('Senha atualizada com sucesso!', 'success')
+            resetForm()
         },
     });
 

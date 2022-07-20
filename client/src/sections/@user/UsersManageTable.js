@@ -20,7 +20,7 @@ export default function ManageUsersTable() {
     const [openAtualizaDialog, setOpenAtualizaDialog] = useState({});
 
     const {
-        getUsuarios
+        getUsers
     } = useAPI()
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function ManageUsersTable() {
     const fetchData = async () => {
         try {
             const [usuarios] = await Promise.all([
-                getUsuarios()
+                getUsers()
             ])
             setUsuarios(usuarios)
             setLoaded(true);

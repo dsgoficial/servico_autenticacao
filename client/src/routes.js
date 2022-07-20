@@ -13,6 +13,7 @@ const UsersManagePage = lazy(() => import('./pages/UsersManagePage'))
 const UsersAuthPage = lazy(() => import('./pages/UsersAuthPage'))
 const ApplicationsManagePage = lazy(() => import('./pages/ApplicationsManagePage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
+const SignUpPage = lazy(() => import('./pages/SignUpPage'))
 
 export default function Router() {
   return useRoutes([
@@ -33,6 +34,13 @@ export default function Router() {
       children: [{
         path: '/login',
         element: <LoginPage />
+      }]
+    },
+    {
+      path: '/cadastro',
+      children: [{
+        path: '/cadastro',
+        element: <SignUpPage />
       }]
     },
     {

@@ -49,9 +49,9 @@ export default function UserEditDialog({
 }) {
 
     const {
-        getTurnos,
-        getPostos,
-        atualizaUsuario
+        getRotation,
+        getPositions,
+        updateUser
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -81,8 +81,8 @@ export default function UserEditDialog({
     const fetchData = async () => {
         try {
             const [listaPostoGrad, listaTurno] = await Promise.all([
-                getPostos(),
-                getTurnos()
+                getPositions(),
+                getRotation()
             ])
             setListaPostoGrad(listaPostoGrad)
             setListaTurno(listaTurno)
@@ -103,10 +103,10 @@ export default function UserEditDialog({
         onClose();
     };
 
-    const updateUser = async (values, { resetForm }) => {
+    const handleUpdateUser = async (values, { resetForm }) => {
         try {
             setSubmitting(true);
-            const response = await atualizaUsuario(
+            const data = await updateUser(
                 usuario.uuid,
                 values.usuario,
                 values.nome,
@@ -117,15 +117,19 @@ export default function UserEditDialog({
                 values.ativo,
                 values.uuid
             );
-            setSubmitting(false);
-            showSnackbar("Usuário criado com sucesso.", "success");
-            callback()
+            if(!data){
+                showSnackbar("Falha ao atualizar usuário!", "error");
+                return
+            }
+            showSnackbar("Usuário atualizado com sucesso!", "success");
             handleClose()
             resetForm(formik.initialValues);
         } catch (error) {
             showSnackbar(error.message, 'error')
-            setSubmitting(false);
             resetForm(formik.initialValues);
+        } finally {
+            setSubmitting(false);
+            callback()
         }
     }
 
@@ -141,7 +145,7 @@ export default function UserEditDialog({
             administrador: false,
         },
         validationSchema: validationSchema,
-        onSubmit: updateUser
+        onSubmit: handleUpdateUser
     });
 
     return (

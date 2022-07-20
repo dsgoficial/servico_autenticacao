@@ -19,7 +19,7 @@ export default function UserDeleteDialog({
 }) {
 
     const {
-        deletarUsuario
+        deleteUser
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -29,14 +29,19 @@ export default function UserDeleteDialog({
         enqueueSnackbar(message, { variant });
     };
 
-    const deleteUser = async () => {
+    const handleDeleteUser = async () => {
         try {
-            const res = await deletarUsuario(userUUID);
-            showSnackbar(res.data.message, "success")
-            callback()
+            const data = await deleteUser(userUUID);
+            if(!data){
+                showSnackbar('Falha ao deletar usuário!', "success")
+                return
+            }
+            showSnackbar(data.message, "success")
             handleClose()
         } catch (error) {
             showSnackbar(error.message, 'error')
+        } finally {
+            callback()
         }
     };
 
@@ -54,7 +59,7 @@ export default function UserDeleteDialog({
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Não</Button>
-                <Button onClick={deleteUser}>Sim</Button>
+                <Button onClick={handleDeleteUser}>Sim</Button>
             </DialogActions>
         </Dialog>
     );

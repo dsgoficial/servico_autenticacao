@@ -35,11 +35,11 @@ const validationSchema = yup.object({
 export default function UserInfoCard() {
 
     const {
-        getUsuarioInfo,
-        getTurnos,
-        getPostos,
+        getUserInfo,
+        getRotation,
+        getPositions,
         getUUID,
-        atualizaUsuarioInfo
+        updateUserInfo
     } = useAPI()
 
     const [userInfo, setUserInfo] = useState(null)
@@ -54,9 +54,9 @@ export default function UserInfoCard() {
 
     const fetchData = async () => {
         const [usuario, listaPostoGrad, listaTurno] = await Promise.all([
-            getUsuarioInfo(),
-            getPostos(),
-            getTurnos()
+            getUserInfo(),
+            getPositions(),
+            getRotation()
         ])
         setUserInfo(usuario)
         setListaPostoGrad(listaPostoGrad)
@@ -75,19 +75,19 @@ export default function UserInfoCard() {
     }, [userInfo]);
 
     const onSubmit = async (values) => {
-        try {
-            const response = await atualizaUsuarioInfo(
-                getUUID(),
-                values.nome,
-                values.nomeGuerra,
-                values.tipoPostoGradId,
-                values.tipoTurnoId,
-            )
-            fetchData()
-            showSnackbar(response.data.message, 'success')
-        } catch (error) {
-            showSnackbar(error.message, 'error')
+        const data = await updateUserInfo(
+            getUUID(),
+            values.nome,
+            values.nomeGuerra,
+            values.tipoPostoGradId,
+            values.tipoTurnoId,
+        )
+        if (!data) {
+            showSnackbar('Falha ao atualizar usuário', 'error')
+            return
         }
+        fetchData()
+        showSnackbar('Usuário atualizado com sucesso!', 'success')
     }
 
     const formik = useFormik({

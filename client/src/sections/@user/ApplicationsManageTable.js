@@ -12,10 +12,10 @@ export default function ManageApplicationsTable() {
     const [loaded, setLoaded] = useState(false)
 
     const {
-        getAplicacoes,
-        atualizaAplicacao,
-        deletaAplicacao,
-        criaAplicacao
+        getApplications,
+        updateApplication,
+        deleteApplication,
+        createApplication
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -25,15 +25,14 @@ export default function ManageApplicationsTable() {
     }, []);
 
     const fetchData = async () => {
-        try {
-            const [application] = await Promise.all([
-                getAplicacoes()
-            ])
-            setApplication(application)
+        const data = await getApplications()
+        if (!data?.dados) {
+            showSnackbar('Falha ao obter dados!', 'error')
             setLoaded(true);
-        } catch (error) {
-            showSnackbar(error.message, 'error')
+            return
         }
+        setApplication(data.dados)
+        setLoaded(true);
     }
 
     const showSnackbar = (message, variant) => {
@@ -45,9 +44,9 @@ export default function ManageApplicationsTable() {
         fetchData()
     }
 
-    const addApplication = async newData => {
+    const handleCreateApplication = async newData => {
         try {
-            const response = await criaAplicacao(newData)
+            const response = await createApplication(newData)
             if (!response) return
             updateTable()
             showSnackbar('Aplicação adicionada com sucesso', 'success')
@@ -56,9 +55,9 @@ export default function ManageApplicationsTable() {
         }
     }
 
-    const updateApplication = async (newData, oldData) => {
+    const handleUpdateApplication = async (newData, oldData) => {
         try {
-            const response = await atualizaAplicacao(newData)
+            const response = await updateApplication(newData)
             if (!response) return
             updateTable()
             showSnackbar('Aplicação atualizada com sucesso', 'success')
@@ -67,9 +66,9 @@ export default function ManageApplicationsTable() {
         }
     }
 
-    const deleteApplication = async oldData => {
+    const handleDeleteApplication = async oldData => {
         try {
-            const response = await deletaAplicacao(oldData.id)
+            const response = await deleteApplication(oldData.id)
             if (!response) return
             updateTable()
             showSnackbar('Aplicação deletada com sucesso', 'success')
@@ -90,9 +89,10 @@ export default function ManageApplicationsTable() {
                         editComponent: props => (
                             <TextField
                                 type='text'
+                                placeholder='Nome aplicação'
                                 value={props.value || ''}
-                                SX={{
-                                    width: 500
+                                sx={{
+                                    width: 300
                                 }}
                                 onChange={e => props.onChange(e.target.value)}
                             />
@@ -103,9 +103,9 @@ export default function ManageApplicationsTable() {
                 ]}
                 data={application}
                 editable={{
-                    onRowAdd: addApplication,
-                    onRowUpdate: updateApplication,
-                    onRowDelete: deleteApplication
+                    onRowAdd: handleCreateApplication,
+                    onRowUpdate: handleUpdateApplication,
+                    onRowDelete: handleDeleteApplication
                 }}
             />
         </>

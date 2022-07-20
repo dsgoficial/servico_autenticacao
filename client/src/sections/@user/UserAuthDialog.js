@@ -20,7 +20,7 @@ export default function UserAuthDialog({
 }) {
 
     const {
-        autorizarUsuarios
+        authorizeUsers
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -30,14 +30,19 @@ export default function UserAuthDialog({
         enqueueSnackbar(message, { variant });
     };
 
-    const authUser = async () => {
+    const handleAuthorizeUsers = async () => {
         try {
-            const res = await autorizarUsuarios(userUUIDs, authorize);
-            showSnackbar(res.data.message, "success")
-            callback()
-            handleClose()
+            const data = await authorizeUsers(userUUIDs, authorize);
+            if(!data){
+                showSnackbar(`Falha ao ${authorize? 'autorizar': 'desautorizar'} usuários!`, 'error')
+                return
+            }
+            showSnackbar(`Usuários ${authorize? 'autorizados': 'desautorizados'} com sucesso!`, "success")
         } catch (error) {
             showSnackbar(error.message, 'error')
+        } finally {
+            handleClose()
+            callback()
         }
     };
 
@@ -55,7 +60,7 @@ export default function UserAuthDialog({
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Não</Button>
-                <Button onClick={authUser}>Sim</Button>
+                <Button onClick={handleAuthorizeUsers}>Sim</Button>
             </DialogActions>
         </Dialog>
     );

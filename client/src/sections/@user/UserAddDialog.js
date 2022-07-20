@@ -48,9 +48,9 @@ export default function UserAddDialog({
 }) {
 
     const {
-        getTurnos,
-        getPostos,
-        criaUsuario
+        getRotation,
+        getPositions,
+        createUser
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -66,8 +66,8 @@ export default function UserAddDialog({
     const fetchData = async () => {
         try {
             const [listaPostoGrad, listaTurno] = await Promise.all([
-                getPostos(),
-                getTurnos()
+                getPositions(),
+                getRotation()
             ])
             setListaPostoGrad(listaPostoGrad)
             setListaTurno(listaTurno)
@@ -88,10 +88,10 @@ export default function UserAddDialog({
         onClose();
     };
 
-    const createUser = async (values, { resetForm }) => {
+    const handleCreateUser = async (values, { resetForm }) => {
+        setSubmitting(true);
         try {
-            setSubmitting(true);
-            const response = await criaUsuario(
+            const data = await createUser(
                 values.usuario,
                 values.nome,
                 values.nomeGuerra,
@@ -101,15 +101,19 @@ export default function UserAddDialog({
                 values.administrador,
                 values.uuid
             );
-            setSubmitting(false);
+            if(!data){
+                showSnackbar("Falha ao criar usuário!", "error");
+                return
+            }
             showSnackbar("Usuário criado com sucesso.", "success");
-            callback()
             handleClose()
             resetForm(formik.initialValues);
         } catch (error) {
             showSnackbar(error.message, 'error')
-            setSubmitting(false);
             resetForm(formik.initialValues);
+        } finally {
+            setSubmitting(false);
+            callback()
         }
     }
 
@@ -125,7 +129,7 @@ export default function UserAddDialog({
             administrador: false,
         },
         validationSchema: validationSchema,
-        onSubmit: createUser
+        onSubmit: handleCreateUser
     });
 
     return (

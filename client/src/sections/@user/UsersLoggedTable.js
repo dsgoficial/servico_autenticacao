@@ -17,7 +17,7 @@ export default function AuthUsersTable() {
     const [loaded, setLoaded] = useState(false)
 
     const {
-        getUsuarios
+        getUsers
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -29,7 +29,7 @@ export default function AuthUsersTable() {
     const fetchData = async () => {
         try {
             const [usuarios] = await Promise.all([
-                getUsuarios()
+                getUsers()
             ])
             setUsuarios(usuarios.filter(user => !user.administrador))
             setLoaded(true);

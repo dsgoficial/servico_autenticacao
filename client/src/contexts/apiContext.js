@@ -1,26 +1,15 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { createBrowserHistory } from 'history'
-import axios from 'axios'
+import { useSnackbar } from 'notistack';
+import { useAxios } from './axiosContext';
 
-axios.defaults.baseURL = process.env.REACT_APP_BE_URL;
-
-const APLICACAO = 'auth_web'
+import { APLICACAO, TOKEN_KEY, USER_AUTHORIZATION_KEY, USER_UUID_KEY } from './settings'
 
 const APIContext = createContext('');
 
 const customHistory = createBrowserHistory()
 
-const TOKEN_KEY = '@authserver-Token'
-
-const USER_AUTHORIZATION_KEY = '@authserver-User-Authorization'
-
-const USER_UUID_KEY = '@authserver-User-uuid'
-
-const ROLES = {
-  Admin: 'ADMIN',
-  User: 'USER'
-}
 
 APIProvider.propTypes = {
   children: PropTypes.node.isRequired
@@ -28,22 +17,10 @@ APIProvider.propTypes = {
 
 export default function APIProvider({ children }) {
 
-  const axiosInstance = axios.create()
+  // variant could be success, error, warning, info, or default
+  const { enqueueSnackbar } = useSnackbar();
 
-  axiosInstance.defaults.headers.common['Content-Type'] = 'application/json'
-
-  axiosInstance.interceptors.response.use(
-    response => response,
-    error => errorHandler(error)
-  )
-
-  axiosInstance.interceptors.request.use(async config => {
-    const token = getToken()
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  })
+  const { callAxios } = useAxios()
 
   const isAuthenticated = () => {
     return window.localStorage.getItem(TOKEN_KEY) !== null &&
@@ -75,113 +52,22 @@ export default function APIProvider({ children }) {
 
   const setUUID = uuid => window.localStorage.setItem(USER_UUID_KEY, uuid)
 
-  const axiosAll = async requestsObject => {
-    const requestsName = []
-    const requests = []
-    let index = 0
-    for (const key in requestsObject) {
-      requestsName[index] = key
-      requests[index] = requestsObject[key]
-      index++
-    }
-
-    return new Promise((resolve, reject) => {
-      axios.all(requests)
-        .then(response => {
-          let cancelled = false
-          response.forEach(r => {
-            if (!r) {
-              cancelled = true
-            }
-          })
-          if (cancelled) {
-            return resolve(false)
-          }
-
-          const responseObject = {}
-          response.forEach((r, i) => {
-            responseObject[requestsName[i]] = r
-          })
-
-          return resolve(responseObject)
-        })
-        .catch(e => {
-          reject(e)
-        })
-    })
-  }
-
-  const handleCancel = func => {
-    return async function (url, params) {
-      try {
-        const response = await axiosInstance[func](url, params)
-        return response
-      } catch (err) {
-        if (!axios.isCancel(err)) {
-          throw err
-        }
-        return false
-      }
+  const handleError = (error) => {
+    if ([401, 403].includes(error.response.status)) {
+      logout()
+      customHistory.go('/login')
     }
   }
 
-  const getData = async (url, params) => {
-    const response = await handleCancel('get')(
-      url,
-      params
-    )
-    if (!response) return false
-    if (
-      !('status' in response) ||
-      response.status !== 200 ||
-      !('data' in response) ||
-      !('dados' in response.data)
-    ) {
-      throw new Error()
-    }
-    return response.data
-  }
-
-  const postData = async (url, params) => {
-    const response = await handleCancel('post')(
-      url,
-      params
-    )
-    if (!response) return false
-    return response
-  }
-
-  const putData = async (url, params) => {
-    const response = await handleCancel('put')(
-      url,
-      params
-    )
-    if (!response) return false
-    return response
-  }
-
-  const deleteData = async (url, params) => {
-    const response = await handleCancel('delete')(
-      url,
-      params
-    )
-    if (!response) return false
-    return response
-  }
-
-  const handleLogin = async (usuario, senha) => {
-    const response = await handleCancel('post')('/api/login', { usuario, senha, aplicacao: APLICACAO, cliente: 'sap' })
-    if (!response) return false
-    console.log(response)
-    if (
-      !('status' in response) ||
-      response.status !== 201 ||
-      !('data' in response) ||
-      !('dados' in response.data) ||
-      !('token' in response.data.dados) ||
-      !('administrador' in response.data.dados)
-    ) {
-      throw new Error()
+  const login = async (usuario, senha) => {
+    const response = await callAxios(
+      '/api/login',
+      "POST",
+      { usuario, senha, aplicacao: APLICACAO, cliente: 'sap' }
+    );
+    if (response.error) {
+      enqueueSnackbar('Usuário e Senha não encontrado!', { variant: 'error' });
+      return false
     }
     setToken(response.data.dados.token)
     setAuthorization(response.data.dados.administrador)
@@ -189,74 +75,108 @@ export default function APIProvider({ children }) {
     return true
   }
 
-  const errorHandler = error => {
-    console.log(error.response.status)
-    if (error.response && [401, 403].indexOf(error.response.status) !== -1) {
-      logout()
-      customHistory.push('/')
-      throw new axios.Cancel('Operation canceled by redirect due 401/403.')
+  const signUp = async (usuario, senha, nome, nomeGuerra, tipoPostoGradId, tipoTurnoId) => {
+    const response = await callAxios(
+      '/api/usuarios',
+      "POST",
+      {
+        usuario,
+        senha,
+        nome,
+        nome_guerra: nomeGuerra,
+        tipo_posto_grad_id: tipoPostoGradId,
+        tipo_turno_id: tipoTurnoId,
+      }
+    );
+    if (response.error) {
+      return false
     }
-    if (error.response && [500].indexOf(error.response.status) !== -1) {
-      customHistory.push('/erro')
-      throw new axios.Cancel('Operation canceled by redirect due 500.')
-    }
-    return Promise.reject(error)
+    return true
   }
 
-  const handleApiError = (err) => {
-    if (
-      'response' in err &&
-      'data' in err.response &&
-      'message' in err.response.data
-    ) {
-      return { status: 'error', msg: err.response.data.message, date: new Date() }
-    } else {
-      return { status: 'error', msg: 'Ocorreu um erro ao se comunicar com o servidor.', date: new Date() }
-    }
-  }
-
-  const getUsuarioInfo = async () => {
+  const getUserInfo = async () => {
     const uuid = getUUID()
-    const usuario = await getData(`/api/usuarios/${uuid}`)
+    const response = await callAxios(
+      `/api/usuarios/${uuid}`,
+      "GET",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
     return {
-      nome: usuario.dados.nome,
-      nomeGuerra: usuario.dados.nome_guerra,
-      tipoPostoGradId: usuario.dados.tipo_posto_grad_id,
-      tipoTurnoId: usuario.dados.tipo_turno_id,
+      nome: response.data.dados.nome,
+      nomeGuerra: response.data.dados.nome_guerra,
+      tipoPostoGradId: response.data.dados.tipo_posto_grad_id,
+      tipoTurnoId: response.data.dados.tipo_turno_id,
     }
   }
 
-  const getTurnos = async () => {
-    const res = await getData('/api/usuarios/tipo_turno')
-    return res.dados
+  const getRotation = async () => {
+    const response = await callAxios(
+      '/api/usuarios/tipo_turno',
+      "GET",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return []
+    }
+    return response.data?.dados
   }
 
-  const getPostos = async () => {
-    const res = await getData('/api/usuarios/tipo_posto_grad')
-    return res.dados
+  const getPositions = async () => {
+    const response = await callAxios(
+      '/api/usuarios/tipo_posto_grad',
+      "GET",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return []
+    }
+    return response.data?.dados
   }
 
-  const getUsuarios = async () => {
-    const res = await getData('/api/usuarios/completo')
-    return res.dados
+  const getUsers = async () => {
+    const response = await callAxios(
+      '/api/usuarios/completo',
+      "GET",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return []
+    }
+    return response.data?.dados
   }
 
-  const atualizaUsuarioInfo = async (
+  const updateUserInfo = async (
     uuid,
     nome,
     nomeGuerra,
     tipoPostoGradId,
     tipoTurnoId,
   ) => {
-    return putData(`/api/usuarios/${uuid}`, {
-      nome,
-      nome_guerra: nomeGuerra,
-      tipo_posto_grad_id: tipoPostoGradId,
-      tipo_turno_id: tipoTurnoId,
-    })
+    const response = await callAxios(
+      `/api/usuarios/${uuid}`,
+      "PUT",
+      {
+        nome,
+        nome_guerra: nomeGuerra,
+        tipo_posto_grad_id: tipoPostoGradId,
+        tipo_turno_id: tipoTurnoId,
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const criaUsuario = async (usuario, nome, nomeGuerra, tipoPostoGradId, tipoTurnoId, ativo, administrador, uuid) => {
+  const createUser = async (usuario, nome, nomeGuerra, tipoPostoGradId, tipoTurnoId, ativo, administrador, uuid) => {
     const data = {
       usuario,
       nome,
@@ -272,14 +192,32 @@ export default function APIProvider({ children }) {
       data.uuid = uuid
     }
 
-    return postData('/api/usuarios/completo', data)
+    const response = await callAxios(
+      '/api/usuarios/completo',
+      "POST",
+      data
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const deletarUsuario = async uuid => {
-    return deleteData(`/api/usuarios/${uuid}`)
+  const deleteUser = async uuid => {
+    const response = await callAxios(
+      `/api/usuarios/${uuid}`,
+      "DELETE",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const atualizaUsuario = async (
+  const updateUser = async (
     uuid,
     usuario,
     nome,
@@ -290,55 +228,122 @@ export default function APIProvider({ children }) {
     ativo,
     novoUuid
   ) => {
-    return putData(`/api/usuarios/completo/${uuid}`, {
-      uuid: novoUuid,
-      usuario,
-      nome,
-      nome_guerra: nomeGuerra,
-      tipo_posto_grad_id: tipoPostoGradId,
-      tipo_turno_id: tipoTurnoId,
-      administrador,
-      ativo
-    })
+    const response = await callAxios(
+      `/api/usuarios/completo/${uuid}`,
+      "PUT",
+      {
+        uuid: novoUuid,
+        usuario,
+        nome,
+        nome_guerra: nomeGuerra,
+        tipo_posto_grad_id: tipoPostoGradId,
+        tipo_turno_id: tipoTurnoId,
+        administrador,
+        ativo
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const autorizarUsuarios = async (uuids, autoriza) => {
-    return postData(`/api/usuarios/autorizacao/${autoriza}`, { usuarios_uuids: uuids })
+  const authorizeUsers = async (uuids, autoriza) => {
+    const response = await callAxios(
+      `/api/usuarios/autorizacao/${autoriza}`,
+      "POST",
+      { usuarios_uuids: uuids }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const resetarSenhas = async (uuids) => {
-    return postData('/api/usuarios/senha/resetar', { usuarios_uuids: uuids })
+  const resetPasswords = async (uuids) => {
+    const response = await callAxios(
+      '/api/usuarios/senha/resetar',
+      "POST",
+      { usuarios_uuids: uuids }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const atualizarSenhas = async (uuid, senhaAtual, novaSenha) => {
-    return await putData(
+  const updatePasswords = async (uuid, senhaAtual, novaSenha) => {
+    const response = await callAxios(
       `/api/usuarios/${uuid}/senha`,
+      "PUT",
       {
         senha_atual: senhaAtual,
         senha_nova: novaSenha
       }
-    )
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const getAplicacoes = async () => {
-    const res = await getData('/api/aplicacoes')
-    return res.dados
+  const getApplications = async () => {
+    const response = await callAxios(
+      '/api/aplicacoes',
+      "GET",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const atualizaAplicacao = async (dados) => {
-    return putData(`/api/aplicacoes/${dados.id}`, dados)
+  const updateApplication = async (dados) => {
+    const response = await callAxios(
+      `/api/aplicacoes/${dados.id}`,
+      "PUT",
+      dados
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const deletaAplicacao = async (id) => {
-    return deleteData(`/api/aplicacoes/${id}`)
+  const deleteApplication = async (id) => {
+    const response = await callAxios(
+      `/api/aplicacoes/${id}`,
+      "DELETE",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
-  const criaAplicacao = async (dados) => {
-    return postData('/api/aplicacoes', dados)
+  const createApplication = async (dados) => {
+    const response = await callAxios(
+      '/api/aplicacoes',
+      "POST",
+      dados
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
   }
 
   const getDashboardData = async () => {
-
     const [
       usuariosLogados,
       usuariosAtivos,
@@ -347,16 +352,28 @@ export default function APIProvider({ children }) {
       loginsPorMes,
       loginsPorAplicacao,
       loginsPorUsuario
-    ] = await Promise.all([
-      getData('/api/dashboard/usuarios_logados'),
-      getData('/api/dashboard/usuarios_ativos'),
-      getData('/api/dashboard/aplicacoes_ativas'),
-      getData('/api/dashboard/logins/dia?total=14'),
-      getData('/api/dashboard/logins/mes?total=12'),
-      getData('/api/dashboard/logins/aplicacoes?max=14&total=10'),
-      getData('/api/dashboard/logins/usuarios?max=14&total=10')
-    ])
-
+    ] = await Promise.all(
+      [
+        '/api/dashboard/usuarios_logados',
+        '/api/dashboard/usuarios_ativos',
+        '/api/dashboard/aplicacoes_ativas',
+        '/api/dashboard/logins/dia?total=14',
+        '/api/dashboard/logins/mes?total=12',
+        '/api/dashboard/logins/aplicacoes?max=14&total=10',
+        '/api/dashboard/logins/usuarios?max=14&total=10'
+      ].map(async url => {
+        const response = await callAxios(
+          url,
+          "GET",
+          {}
+        );
+        if (response.error) {
+          handleError(response.error)
+          return []
+        }
+        return response.data
+      })
+    )
     return {
       usuariosLogados: usuariosLogados.dados,
       usuariosAtivos: usuariosAtivos.dados,
@@ -372,32 +389,29 @@ export default function APIProvider({ children }) {
     <APIContext.Provider
       value={{
         history: customHistory,
-        handleLogin,
+        handleLogin: login,
         logout,
-        handleApiError,
         isAuthenticated,
         getAuthorization,
         isAdmin,
-        getData,
-        postData,
-        putData,
         getUUID,
-        getUsuarioInfo,
-        getTurnos,
-        getPostos,
-        getUsuarios,
-        criaUsuario,
-        deletarUsuario,
-        atualizaUsuario,
-        autorizarUsuarios,
-        resetarSenhas,
-        getAplicacoes,
-        atualizaAplicacao,
-        deletaAplicacao,
-        criaAplicacao,
-        atualizaUsuarioInfo,
-        atualizarSenhas,
-        getDashboardData
+        getUserInfo,
+        getRotation,
+        getPositions,
+        getUsers,
+        createUser,
+        deleteUser,
+        updateUser,
+        authorizeUsers,
+        resetPasswords,
+        getApplications,
+        updateApplication,
+        deleteApplication,
+        createApplication,
+        updateUserInfo,
+        updatePasswords,
+        getDashboardData,
+        signUp
       }}>
       {children}
     </APIContext.Provider>

@@ -19,7 +19,7 @@ export default function UserResetPasswordDialog({
 }) {
 
     const {
-        resetarSenhas
+        resetPasswords
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -29,14 +29,20 @@ export default function UserResetPasswordDialog({
         enqueueSnackbar(message, { variant });
     };
 
-    const resetPassword = async () => {
+    const handleResetPasswords = async () => {
         try {
-            const res = await resetarSenhas(userUUIDs);
-            showSnackbar(res.data.message, "success")
-            callback()
-            handleClose()
+            const data = await resetPasswords(userUUIDs);
+            if (!data) {
+                showSnackbar('Falha ao resetar senhas!', "error")
+                return
+            }
+            showSnackbar('Senhas resetadas com sucesso!', "success")
+
         } catch (error) {
             showSnackbar(error.message, 'error')
+        } finally {
+            handleClose()
+            callback()
         }
     };
 
@@ -54,7 +60,7 @@ export default function UserResetPasswordDialog({
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Não</Button>
-                <Button onClick={resetPassword}>Sim</Button>
+                <Button onClick={handleResetPasswords}>Sim</Button>
             </DialogActions>
         </Dialog>
     );
