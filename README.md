@@ -8,5 +8,5 @@ Serviço em Node.js e Cliente Web para autenticação de usuários. Sua utiliza�
 Para mais informações acessar a [Wiki](https://github.com/1cgeo/auth_server/wiki).
 
 ## Releases
-
+- [v.1.1.0](https://github.com/1cgeo/auth_server/releases/tag/v.1.1.0)
 - [v.1.0.0](https://github.com/1cgeo/auth_server/releases/tag/v.1.0.0)
