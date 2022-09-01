@@ -12,6 +12,7 @@ const createBuild = async () => {
   npmRun.exec('npm run build', { cwd: path.join(__dirname, 'client') }, async (err, stdout, stderr) => {
     if (err) {
       console.log('Erro ao criar build!'.red)
+      console.log(err)
       process.exit(0)
     }
     console.log('Build criada com sucesso!')
