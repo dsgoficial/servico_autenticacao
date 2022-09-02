@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
     Typography,
     Container,
     Paper,
-    CardContent,
-    Card,
     InputLabel,
     Select,
     MenuItem,
@@ -19,7 +16,6 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Navigate, Link as RouterLink } from 'react-router-dom'
 import Page from '../components/Page';
-import SubmitButton from '../components/SubmitButton'
 import { useSnackbar } from 'notistack';
 import BackgroundImages from '../components/BackgroundImages'
 import { useAPI } from '../contexts/apiContext'
@@ -64,10 +60,6 @@ const PaperStyled = styled(Paper)(({ theme }) => ({
     elevation: 3
 }));
 
-const SubmitButtonStyled = styled(SubmitButton)(({ theme }) => ({
-    margin: theme.spacing(3, 0, 2)
-}));
-
 export default function SignUpPage() {
     const {
         signUp,
@@ -83,7 +75,7 @@ export default function SignUpPage() {
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchData = async () => {
         const [listaPostoGrad, listaTurno] = await Promise.all([

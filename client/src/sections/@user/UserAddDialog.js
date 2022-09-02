@@ -9,7 +9,6 @@ import {
     TextField,
     Button,
     Box,
-    LinearProgress,
     InputLabel,
     Select,
     MenuItem,
@@ -61,7 +60,7 @@ export default function UserAddDialog({
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchData = async () => {
         try {

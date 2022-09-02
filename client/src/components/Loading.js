@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactLoading from "react-loading";
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 const RootDiv = styled('div')(({ theme }) => ({
     width: "100%",

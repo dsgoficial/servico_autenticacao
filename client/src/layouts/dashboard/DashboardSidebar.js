@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import { useEffect, useState, lazy } from 'react';
+import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import MuiDrawer from '@mui/material/Drawer';
 import {
@@ -96,7 +95,7 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
         if (isOpenSidebar) {
             onCloseSidebar();
         }
-    }, [pathname]);
+    }, [pathname]);// eslint-disable-line react-hooks/exhaustive-deps
 
     const getAdminItems = () => {
         return (
@@ -110,7 +109,7 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
                         }}
                         component={RouterLink}
                         to={routers['dashboard']}
-                        selected={routers['dashboard'] == pathname}
+                        selected={routers['dashboard'] === pathname}
                     >
 
                         <ListItemIcon
@@ -136,7 +135,7 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
                         }}
                         component={RouterLink}
                         to={routers['manageUsers']}
-                        selected={routers['manageUsers'] == pathname}
+                        selected={routers['manageUsers'] === pathname}
                     >
                         <ListItemIcon
                             sx={{
@@ -159,7 +158,7 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
                         }}
                         component={RouterLink}
                         to={routers['authUser']}
-                        selected={routers['authUser'] == pathname}
+                        selected={routers['authUser'] === pathname}
                     >
                         <ListItemIcon
                             sx={{
@@ -182,7 +181,7 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
                         }}
                         component={RouterLink}
                         to={routers['manageApplications']}
-                        selected={routers['manageApplications'] == pathname}
+                        selected={routers['manageApplications'] === pathname}
                     >
                         <ListItemIcon
                             sx={{
@@ -227,7 +226,7 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
                         }}
                         component={RouterLink}
                         to={routers['userInfo']}
-                        selected={routers['userInfo'] == pathname}
+                        selected={routers['userInfo'] === pathname}
                     >
                         <ListItemIcon
                             sx={{
@@ -250,7 +249,7 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
                         }}
                         component={RouterLink}
                         to={routers['userPassword']}
-                        selected={routers['userPassword'] == pathname}
+                        selected={routers['userPassword'] === pathname}
                     >
                         <ListItemIcon
                             sx={{

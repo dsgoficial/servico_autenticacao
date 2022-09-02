@@ -7,7 +7,7 @@ import { AreaChart, Area, ResponsiveContainer } from 'recharts'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import { green, red } from '@material-ui/core/colors'
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 const CardContentStyle = styled(CardContent)(({ theme }) => ({
     textAlign: 'center',

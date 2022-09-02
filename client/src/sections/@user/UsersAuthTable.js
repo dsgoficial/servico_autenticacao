@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import DoneAllIcon from '@mui/icons-material/DoneAll'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
-import { CsvBuilder } from "filefy";
 import MaterialTable from '../../components/Table';
 import UserAuthDialog from './UserAuthDialog'
 import UserResetPasswordDialog from './UserResetPasswordDialog'
@@ -24,7 +23,7 @@ export default function AuthUsersTable() {
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchData = async () => {
         try {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MaterialTable from '../../components/Table';
 import {
     TextField
@@ -22,7 +22,7 @@ export default function ManageApplicationsTable() {
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchData = async () => {
         const data = await getApplications()

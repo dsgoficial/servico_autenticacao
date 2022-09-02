@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography, Card, CardContent } from '@mui/material'
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 const CardContentStyle = styled(CardContent)(({ theme }) => ({
     textAlign: 'center',

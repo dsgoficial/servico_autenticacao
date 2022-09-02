@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { createBrowserHistory } from 'history'
 import { useSnackbar } from 'notistack';
@@ -29,10 +29,10 @@ export default function APIProvider({ children }) {
   }
 
   const isAdmin = () => {
-    return getAuthorization() == 'ADMIN'
+    return getAuthorization() === 'ADMIN'
   }
 
-  const getToken = () => window.localStorage.getItem(TOKEN_KEY)
+  //const getToken = () => window.localStorage.getItem(TOKEN_KEY)
 
   const setToken = token => window.localStorage.setItem(TOKEN_KEY, token)
 

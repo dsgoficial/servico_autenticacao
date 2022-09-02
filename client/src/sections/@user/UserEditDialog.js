@@ -9,7 +9,6 @@ import {
     TextField,
     Button,
     Box,
-    LinearProgress,
     InputLabel,
     Select,
     MenuItem,
@@ -72,11 +71,11 @@ export default function UserEditDialog({
             administrador: usuario.administrador,
             ativo: usuario.ativo,
         })
-    }, [usuario]);
+    }, [usuario]);// eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchData = async () => {
         try {

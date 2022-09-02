@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Edit from "@mui/icons-material/Edit";
 import Add from "@mui/icons-material/Add";
 import Delete from "@mui/icons-material/Delete";
@@ -25,7 +25,7 @@ export default function ManageUsersTable() {
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchData = async () => {
         try {

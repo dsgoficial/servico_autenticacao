@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { Container, Grid } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { Grid } from '@mui/material';
 import Page from '../components/Page';
 import { useAPI } from '../contexts/apiContext'
 import { useSnackbar } from 'notistack';
@@ -41,7 +41,7 @@ export default function DashboardPage() {
             }
         }
         load()
-    }, [])
+    }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
     const showSnackbar = (message, variant) => {
         // variant could be success, error, warning, info, or default

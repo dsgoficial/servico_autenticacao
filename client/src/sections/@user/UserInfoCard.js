@@ -50,7 +50,7 @@ export default function UserInfoCard() {
 
     useEffect(() => {
         fetchData()
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const fetchData = async () => {
         const [usuario, listaPostoGrad, listaTurno] = await Promise.all([
@@ -72,7 +72,7 @@ export default function UserInfoCard() {
     useEffect(() => {
         if (!userInfo) return
         formik.setValues(userInfo)
-    }, [userInfo]);
+    }, [userInfo]);// eslint-disable-line react-hooks/exhaustive-deps
 
     const onSubmit = async (values) => {
         const data = await updateUserInfo(
