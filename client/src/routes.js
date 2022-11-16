@@ -14,6 +14,7 @@ const UsersAuthPage = lazy(() => import('./pages/UsersAuthPage'))
 const ApplicationsManagePage = lazy(() => import('./pages/ApplicationsManagePage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
 const SignUpPage = lazy(() => import('./pages/SignUpPage'))
+const LDAPManagePage = lazy(() => import('./pages/LDAPManagePage'))
 
 export default function Router() {
   return useRoutes([
@@ -27,6 +28,7 @@ export default function Router() {
         { path: '/autorizar_usuarios', element: <PrivateRoute><UsersAuthPage /></PrivateRoute> },
         { path: '/gerenciar_aplicacoes', element: <PrivateRoute><ApplicationsManagePage /></PrivateRoute> },
         { path: '/dashboard', element: <PrivateRoute><DashboardPage /></PrivateRoute> },
+        { path: '/sincronizar_usuarios_ldap', element: <PrivateRoute><LDAPManagePage /></PrivateRoute> },
       ]
     },
     {
