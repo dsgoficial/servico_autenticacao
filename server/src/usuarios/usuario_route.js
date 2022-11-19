@@ -8,6 +8,7 @@ const { verifyLogin, verifyAdmin } = require('../login')
 
 const usuarioCtrl = require('./usuario_ctrl')
 const usuarioSchema = require('./usuario_schema')
+const LDAPusersCtrl = require('./ldap_ctrl')
 
 const router = express.Router()
 
@@ -74,6 +75,16 @@ router.get(
     const msg = 'Usuários retornados com sucesso'
 
     return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+  })
+)
+
+router.get(
+  '/getldapusers',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.getLDAPusers('ldap://127.0.0.1:389','dc=eb,dc=mil,dc=br').then(function (dados) {
+      const msg = 'Usuários retornados com sucesso'
+      return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
   })
 )
 

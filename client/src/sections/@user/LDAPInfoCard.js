@@ -19,17 +19,17 @@ import { useSnackbar } from 'notistack';
 
 const validationSchema = yup.object({
     basedn: yup
-        .string('Informe o Distinguished Name (Base DN)')
+        .string('Informe o Base Distinguished Name (Base DN)')
         .required('Campo obrigatório'),
     ldapurl: yup
-        .string('Informe o Host do seriço LDAP')
+        .string('Informe a URL do seriço LDAP')
         .required('Campo obrigatório'),
 });
 
 export default function LDAPInfoCard() {
 
     const {
-        updateUserInfo
+        getLDAPUsers
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -40,7 +40,12 @@ export default function LDAPInfoCard() {
     };
 
     const onSubmit = async (values) => {
-        console.log('Usuário atualizado com sucesso!', 'success')
+        const data = await getLDAPUsers(
+            values.basedn,
+            values.ldapurl
+        )
+        // TODO colocar numa tabela
+        showSnackbar('Usuário encontrados com sucesso!', 'success')
     }
 
     const formik = useFormik({

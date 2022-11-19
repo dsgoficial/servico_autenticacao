@@ -385,6 +385,25 @@ export default function APIProvider({ children }) {
     }
   }
 
+  const getLDAPUsers = async (
+    basedn,
+    ldapurl,
+  ) => {
+    const response = await callAxios(
+      `/api/usuarios/getldapusers`,
+      "GET",
+      {
+        basedn: basedn,
+        ldapurl: ldapurl,
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
   return (
     <APIContext.Provider
       value={{
@@ -411,7 +430,8 @@ export default function APIProvider({ children }) {
         updateUserInfo,
         updatePasswords,
         getDashboardData,
-        signUp
+        signUp,
+        getLDAPUsers
       }}>
       {children}
     </APIContext.Provider>

@@ -1,54 +1,56 @@
 'use strict'
 
-const { db } = require('../database')
-
-const { AppError, httpCode } = require('../utils')
-
-const { loginController } = require('../login')
-
-const bcrypt = require('bcryptjs')
-
-const users = {}
-
 const ldap = require('ldapjs');
+var promise = require('bluebird');
 
-var ldapurl = 'ldap://127.0.0.1:389';
-var basedn = '';
-const opts = {
-    filter: '(objectClass=*)',
-    scope: 'sub',
-    attributes: ['dn', 'sn', 'cn']
-  };
+//var ldapurl = 'ldap://127.0.0.1:389';
+//var basedn = 'dc=eb,dc=mil,dc=br';
+const controller = {}
 
-const client = ldap.createClient({
-  url: [ldapurl]
-});
+controller.getLDAPusers = (ldapurl,basedn) => {
+  return new Promise(function(resolve, reject) {
+    const opts = {
+        filter: '(objectClass=inetOrgPerson)',
+        scope: 'sub',
+        attributes: ['dn', 'sn', 'cn']
+      };
 
-client.on('error', (err) => {
-  console.log(err)
-})
+    const client = ldap.createClient({
+      url: [ldapurl]
+    });
 
-client.search(basedn, opts, (err, res) => {
-    if(err){
-        console.log(err)
-    }
-    else{
-        res.on('searchRequest', (searchRequest) => {
-        console.log('searchRequest: ', searchRequest.messageID);
-        });
-        res.on('searchEntry', (entry) => {
-        console.log('entry: ' + JSON.stringify(entry.object));
-        });
-        res.on('searchReference', (referral) => {
-        console.log('referral: ' + referral.uris.join());
-        });
-        res.on('error', (err) => {
-        console.error('error: ' + err.message);
-        });
-        res.on('end', (result) => {
-        console.log('status: ' + result.status);
-        });
-    }
-  });
+    var users = [];
+    
+    client.on('error', (err) => {
+      console.log(err);
+      return err
+    })
+    client.search(basedn, opts, (err, res) => {
 
-console.log("Node is working");
+        if(err){
+            console.log(err);
+            return err
+        }
+        else{
+            res.on('searchEntry', (entry) => {
+            //console.log('entry: ' + JSON.stringify(entry.object));
+            users.push(entry.object);
+            });
+            res.on('error', (err) => {
+            console.error('error: ' + err.message);
+            });
+            res.on('end', (result) => {
+            console.log('status: ' + result.status);
+            resolve(users)
+            });
+        }
+      });
+    });
+}
+
+/*controller.getLDAPusers('ldap://127.0.0.1:389','dc=eb,dc=mil,dc=br').then(function (users) {
+      const msg = 'Usuários retornados com sucesso'
+      console.log(msg,users)
+    });
+*/
+module.exports = controller
