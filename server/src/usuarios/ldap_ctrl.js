@@ -12,7 +12,7 @@ controller.getLDAPusers = (ldapurl,basedn) => {
     const opts = {
         filter: '(objectClass=inetOrgPerson)',
         scope: 'sub',
-        attributes: ['dn', 'sn', 'cn']
+        attributes: ['givenName', 'sn', 'cn']
       };
 
     const client = ldap.createClient({
@@ -33,14 +33,12 @@ controller.getLDAPusers = (ldapurl,basedn) => {
         }
         else{
             res.on('searchEntry', (entry) => {
-            //console.log('entry: ' + JSON.stringify(entry.object));
             users.push(entry.object);
             });
             res.on('error', (err) => {
             console.error('error: ' + err.message);
             });
             res.on('end', (result) => {
-            console.log('status: ' + result.status);
             resolve(users)
             });
         }

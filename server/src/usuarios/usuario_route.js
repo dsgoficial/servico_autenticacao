@@ -78,12 +78,15 @@ router.get(
   })
 )
 
-router.get(
+router.post(
   '/getldapusers',
   asyncHandler(async (req, res, next) => {
-    LDAPusersCtrl.getLDAPusers('ldap://127.0.0.1:389','dc=eb,dc=mil,dc=br').then(function (dados) {
-      const msg = 'Usuários retornados com sucesso'
-      return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    LDAPusersCtrl.getLDAPusers(
+      req.body.ldapurl,
+      req.body.basedn)
+      .then(function (dados) {
+        const msg = 'Usuários retornados com sucesso';
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
     });
   })
 )

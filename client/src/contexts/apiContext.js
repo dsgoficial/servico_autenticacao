@@ -391,7 +391,7 @@ export default function APIProvider({ children }) {
   ) => {
     const response = await callAxios(
       `/api/usuarios/getldapusers`,
-      "GET",
+      "POST",
       {
         basedn: basedn,
         ldapurl: ldapurl,

@@ -43,9 +43,13 @@ export default function LDAPInfoCard() {
         const data = await getLDAPUsers(
             values.basedn,
             values.ldapurl
-        )
-        // TODO colocar numa tabela
-        showSnackbar('Usuário encontrados com sucesso!', 'success')
+        );
+        const users = data.dados.map(({cn,sn,givenName}) => {
+            cn = "ldap:"+cn;
+            return {cn,sn,givenName}
+        }); 
+        console.log(users);
+        showSnackbar(users.length+' usuários encontrados com sucesso!', 'success')
     }
 
     const formik = useFormik({
