@@ -92,6 +92,30 @@ router.post(
 )
 
 router.post(
+  '/saveldapenv',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.setLDAPenv(
+      req.body.basedn,
+      req.body.ldapurl,)
+      .then(function (dados) {
+        const msg = 'Arquivo salvo com sucesso';
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
+  })
+)
+
+router.get(
+  '/getldapenv',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.getLDAPenv()
+      .then(function (dados) {
+        const msg = 'Arquivo lido com sucesso';
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
+  })
+)
+
+router.post(
   '/completo',
   verifyAdmin,
   schemaValidation({ body: usuarioSchema.criacaoUsuarioCompleto }),

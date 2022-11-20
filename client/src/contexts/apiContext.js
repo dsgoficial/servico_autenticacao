@@ -404,6 +404,38 @@ export default function APIProvider({ children }) {
     return response.data
   }
 
+  const saveLDAPenv = async (
+    basedn,
+    ldapurl,
+  ) => {
+    const response = await callAxios(
+      `/api/usuarios/saveldapenv`,
+      "POST",
+      {
+        basedn: basedn,
+        ldapurl: ldapurl,
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
+  const getLDAPenv = async () => {
+    const response = await callAxios(
+      `/api/usuarios/getldapenv`,
+      "GET",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
   return (
     <APIContext.Provider
       value={{
@@ -431,7 +463,9 @@ export default function APIProvider({ children }) {
         updatePasswords,
         getDashboardData,
         signUp,
-        getLDAPUsers
+        getLDAPUsers,
+        saveLDAPenv,
+        getLDAPenv
       }}>
       {children}
     </APIContext.Provider>

@@ -2,10 +2,13 @@
 
 const ldap = require('ldapjs');
 var promise = require('bluebird');
+const fs = require('fs');
 
-//var ldapurl = 'ldap://127.0.0.1:389';
-//var basedn = 'dc=eb,dc=mil,dc=br';
 const controller = {}
+const path = require('path')
+const configPath = path.join(__dirname, '..', '..', 'ldap.env')
+const dotenv = require('dotenv')
+
 
 controller.getLDAPusers = (ldapurl,basedn) => {
   return new Promise(function(resolve, reject) {
@@ -23,7 +26,7 @@ controller.getLDAPusers = (ldapurl,basedn) => {
     
     client.on('error', (err) => {
       console.log(err);
-      return err
+      resolve(err)
     })
     client.search(basedn, opts, (err, res) => {
 
@@ -46,9 +49,29 @@ controller.getLDAPusers = (ldapurl,basedn) => {
     });
 }
 
-/*controller.getLDAPusers('ldap://127.0.0.1:389','dc=eb,dc=mil,dc=br').then(function (users) {
-      const msg = 'Usuários retornados com sucesso'
-      console.log(msg,users)
-    });
-*/
+controller.setLDAPenv = (basedn,ldapurl) => {
+  return new Promise(function(resolve, reject) {
+var msg=`basedn=${basedn}
+ldapurl=${ldapurl}`
+console.log(msg);
+try{
+    fs.writeFileSync(configPath, msg);
+    resolve('Configurações Salvas com sucesso')
+}catch (err){
+    console.log(err);
+}
+});
+}
+
+controller.getLDAPenv = (basedn,ldapurl) => {
+  return new Promise(function(resolve, reject) {
+try{
+    const data = fs.readFileSync(configPath, 'utf-8');
+    const config = dotenv.parse(data)
+    resolve(config)
+}catch (err){
+    console.log(err);
+}
+});
+}
 module.exports = controller
