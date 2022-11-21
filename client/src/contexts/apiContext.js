@@ -436,6 +436,25 @@ export default function APIProvider({ children }) {
     return response.data
   }
 
+  const upsertLDAPuser = async (usuario, nome, nomeGuerra) => {
+    console.log(usuario, nome, nomeGuerra );
+
+    const response = await callAxios(
+      `/api/usuarios/upsertldapuser`,
+      "POST",
+      {
+        usuario: usuario,
+        nome: nome,
+        nomeGuerra: nomeGuerra,
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
   return (
     <APIContext.Provider
       value={{
@@ -465,7 +484,8 @@ export default function APIProvider({ children }) {
         signUp,
         getLDAPUsers,
         saveLDAPenv,
-        getLDAPenv
+        getLDAPenv,
+        upsertLDAPuser
       }}>
       {children}
     </APIContext.Provider>

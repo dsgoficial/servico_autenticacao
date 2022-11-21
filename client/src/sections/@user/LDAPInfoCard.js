@@ -35,10 +35,15 @@ export default function LDAPInfoCard() {
 
     const [searchusersloading, setsearchusersLoading] = useState(false);
 
+    const [syncbuttondisabled, setsyncbuttondisabled] = useState(true);
+
+    const [users, setusers] = useState([]);
+
     const {
         getLDAPUsers,
         saveLDAPenv,
-        getLDAPenv
+        getLDAPenv,
+        upsertLDAPuser
     } = useAPI()
 
     const { enqueueSnackbar } = useSnackbar();
@@ -50,7 +55,6 @@ export default function LDAPInfoCard() {
 
     const onSubmit = async (values) => {
         setsearchusersLoading(true);
-        // TODO:loading icon not loading...
         const data = await getLDAPUsers(
             values.basedn,
             values.ldapurl
@@ -62,14 +66,12 @@ export default function LDAPInfoCard() {
               }
             showSnackbar(msg, 'error');
         }else{
-            const users = data.dados.map(({cn,sn,givenName}) => {
-                cn = "ldap:"+cn;
-                return {cn,sn,givenName}
-            }); 
-            console.log(users);
-            showSnackbar(users.length+' usuários encontrados com sucesso!', 'success');
+            setusers(data.dados);
+            console.log(data.dados);
+            showSnackbar(data.dados.length+' usuários encontrados com sucesso!', 'success');
         }
         setsearchusersLoading(false);
+        setsyncbuttondisabled(false)
     }
 
     const formik = useFormik({
@@ -105,7 +107,6 @@ export default function LDAPInfoCard() {
     }
 
     function SearchButton(props) {
-
         return (
             <LoadingButton
                 color="primary" 
@@ -114,7 +115,7 @@ export default function LDAPInfoCard() {
                 variant="contained" 
                 type="submit">
                 Procurar usuários
-        </LoadingButton>
+            </LoadingButton>
         );
     }
 
@@ -127,7 +128,7 @@ export default function LDAPInfoCard() {
             }
         }
         console.log(ldapenv.dados);
-    }, []);
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSaveClick = async () =>{
         setsaveLoading(true);
@@ -151,12 +152,28 @@ export default function LDAPInfoCard() {
     );
     }
     
-    const SyncLDAPClick = () =>{
-        setprogress(progress+1);
-        console.log(formik.values.basedn);
-        console.log(formik.values.ldapurl);
+    const SyncLDAPClick = async () =>{
+        var r;
+        for (var i=0; i<users.length ;i++){
+            setprogress(Math.round(i*100/users.length));
+            r = await upsertLDAPuser(users[i].cn, users[i].givenName,users[i].sn);
+            console.log(r);
+        }
+        setprogress(100);
     }
     
+    function SyncButton(props) {
+    return (
+        <Button 
+            disabled={syncbuttondisabled}
+            color="warning" 
+            variant="contained" 
+            onClick={SyncLDAPClick}>
+            Trazer usuários
+        </Button>
+        );
+    }
+
     function LinearWithValueLabel() {
         var sx = { width: '100%' };
         if (progress===0){
@@ -217,7 +234,7 @@ export default function LDAPInfoCard() {
                     </Stack>
                     <Box sx={{ '& > button': { m: 1 } }}>
                         <SaveButton
-                            color="success"
+                            color="primary"
                             onClick={handleSaveClick}
                             loadingPosition="start"
                             startIcon={<SaveIcon />}
@@ -225,9 +242,7 @@ export default function LDAPInfoCard() {
                             Salvar
                         </SaveButton>
                         <SearchButton />
-                        <Button color="warning" variant="contained" onClick={SyncLDAPClick}>
-                            Trazer usuários
-                        </Button>
+                        <SyncButton />
                     </Box>
                     <LinearWithValueLabel />
                 </form>

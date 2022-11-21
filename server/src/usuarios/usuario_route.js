@@ -85,7 +85,12 @@ router.post(
       req.body.ldapurl,
       req.body.basedn)
       .then(function (dados) {
-        const msg = 'Usuários retornados com sucesso';
+        if (typeof dados === 'string'){
+          dados = {'errno': dados};
+          var msg = 'Erro';
+        }else{
+          var msg = 'Usuários retornados com sucesso';
+        }
         return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
     });
   })
@@ -107,8 +112,21 @@ router.post(
 router.get(
   '/getldapenv',
   asyncHandler(async (req, res, next) => {
-    LDAPusersCtrl.getLDAPenv()
-      .then(function (dados) {
+    LDAPusersCtrl.getLDAPenv().then(function (dados) {
+        const msg = 'Arquivo lido com sucesso';
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
+  })
+)
+
+router.post(
+  '/upsertldapuser',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.upsertLDAPuser(
+      req.body.usuario,
+      req.body.nome,
+      req.body.nomeGuerra
+    ).then(function (dados) {
         const msg = 'Arquivo lido com sucesso';
         return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
     });

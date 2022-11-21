@@ -8,14 +8,18 @@ const controller = {}
 const path = require('path')
 const configPath = path.join(__dirname, '..', '..', 'ldap.env')
 const dotenv = require('dotenv')
-
+const { db } = require('../database')
 
 controller.getLDAPusers = (ldapurl,basedn) => {
   return new Promise(function(resolve, reject) {
     const opts = {
         filter: '(objectClass=inetOrgPerson)',
         scope: 'sub',
-        attributes: ['givenName', 'sn', 'cn']
+        attributes: ['givenName', 'sn', 'cn'],
+        paged: {
+          pageSize: 250,
+          pagePause: false
+        },
       };
 
     const client = ldap.createClient({
@@ -39,7 +43,11 @@ controller.getLDAPusers = (ldapurl,basedn) => {
             users.push(entry.object);
             });
             res.on('error', (err) => {
-            console.error('error: ' + err.message);
+              console.error('error: ' + err.message);
+              resolve(err.message)
+            });
+            res.on('page', (result) => {
+              console.log('next ldapsearch page');
             });
             res.on('end', (result) => {
             resolve(users)
@@ -74,4 +82,18 @@ try{
 }
 });
 }
+
+controller.upsertLDAPuser = (usuario,nome,nomeGuerra) => {
+  console.log(usuario, nome, nomeGuerra );
+  var login = 'ldap:'+usuario;
+  const hash = '$2a$10$ElIB/ay0mBLx2sqUgI1U6uMWwkrhda.lYhmjryHcRLJKb32d7EFeu';
+  const tipoPostoGradId = 8;
+  const tipoTurnoId = 3;
+  return db.conn.none(
+    `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_posto_grad_id, tipo_turno_id)
+    VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoPostoGradId>, $<tipoTurnoId>)`,
+    { login, hash, nome, nomeGuerra, tipoPostoGradId, tipoTurnoId }
+  )
+}
+
 module.exports = controller
