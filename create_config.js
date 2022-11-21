@@ -100,7 +100,7 @@ const createDatabase = async (
   })
 }
 
-const handleError = error => {
+const handleError = (error) => {
   if (
     error.message ===
     'Postgres error. Cause: permission denied to create database'

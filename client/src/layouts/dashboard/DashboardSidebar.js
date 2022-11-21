@@ -19,6 +19,7 @@ import GroupIcon from '@mui/icons-material/Group'
 import InsertChartIcon from '@mui/icons-material/InsertChart'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import DesktopMacIcon from '@mui/icons-material/DesktopMac'
+import CloudSyncIcon from '@mui/icons-material/CloudSync'
 
 import { useAPI } from '../../contexts/apiContext'
 import { styled, useTheme } from '@mui/material/styles';
@@ -88,7 +89,8 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
         'manageUsers': '/gerenciar_usuarios',
         'dashboard': '/dashboard',
         'authUser': '/autorizar_usuarios',
-        'manageApplications': '/gerenciar_aplicacoes'
+        'manageApplications': '/gerenciar_aplicacoes',
+        'manageLDAP': '/sincronizar_usuarios_ldap'
     }
 
     useEffect(() => {
@@ -193,6 +195,29 @@ export default function MarketplaceSidebar({ isOpenSidebar, onCloseSidebar }) {
                             <DesktopMacIcon />
                         </ListItemIcon>
                         <ListItemText primary={'Gerenciar aplicações'} sx={{ opacity: isOpenSidebar ? 1 : 0 }} />
+                    </ListItemButton>
+                </Tooltip>
+                <Tooltip title="Sincronizar usuários LDAP">
+                    <ListItemButton
+                        sx={{
+                            minHeight: 48,
+                            justifyContent: isOpenSidebar ? 'initial' : 'center',
+                            px: 2.5,
+                        }}
+                        component={RouterLink}
+                        to={routers['manageLDAP']}
+                        selected={routers['manageLDAP'] === pathname}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: isOpenSidebar ? 3 : 'auto',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <CloudSyncIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Sincronizar usuários LDAP'} sx={{ opacity: isOpenSidebar ? 1 : 0 }} />
                     </ListItemButton>
                 </Tooltip>
             </>

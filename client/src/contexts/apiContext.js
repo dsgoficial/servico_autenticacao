@@ -385,6 +385,74 @@ export default function APIProvider({ children }) {
     }
   }
 
+  const getLDAPUsers = async (
+    basedn,
+    ldapurl,
+  ) => {
+    const response = await callAxios(
+      `/api/usuarios/getldapusers`,
+      "POST",
+      {
+        basedn: basedn,
+        ldapurl: ldapurl,
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
+  const saveLDAPenv = async (
+    basedn,
+    ldapurl,
+  ) => {
+    const response = await callAxios(
+      `/api/usuarios/saveldapenv`,
+      "POST",
+      {
+        basedn: basedn,
+        ldapurl: ldapurl,
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
+  const getLDAPenv = async () => {
+    const response = await callAxios(
+      `/api/usuarios/getldapenv`,
+      "GET",
+      {}
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
+  const upsertLDAPuser = async (usuario, nome, nomeGuerra) => {
+    const response = await callAxios(
+      `/api/usuarios/upsertldapuser`,
+      "POST",
+      {
+        usuario: usuario,
+        nome: nome,
+        nomeGuerra: nomeGuerra,
+      }
+    );
+    if (response.error) {
+      handleError(response.error)
+      return
+    }
+    return response.data
+  }
+
   return (
     <APIContext.Provider
       value={{
@@ -411,7 +479,11 @@ export default function APIProvider({ children }) {
         updateUserInfo,
         updatePasswords,
         getDashboardData,
-        signUp
+        signUp,
+        getLDAPUsers,
+        saveLDAPenv,
+        getLDAPenv,
+        upsertLDAPuser
       }}>
       {children}
     </APIContext.Provider>

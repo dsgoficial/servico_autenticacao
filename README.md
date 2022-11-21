@@ -11,3 +11,39 @@ Para mais informações acessar a [Wiki](https://github.com/1cgeo/auth_server/wi
 ## Releases
 - [v.1.1.0](https://github.com/1cgeo/auth_server/releases/tag/v.1.1.0)
 - [v.1.0.0](https://github.com/1cgeo/auth_server/releases/tag/v.1.0.0)
+
+## Requisitos para sincronização com serviço LDAP local (existente no SPED).
+
+1. Certifique-se que o serviço LDAP do SPED está aberto para a serviço de autenticação:
+    Executar no computador do serviço LDAP:
+    ```
+    $ nano /etc/default/slapd # Editar:
+    #SLAPD_SERVICES="ldap://127.0.0.1:389/ ldaps:/// ldapi:///"
+    SLAPD_SERVICES="ldap://<IP_SERVIÇO_AUTENTICAÇÃO>/ ldapi://<IP_SERVIÇO_AUTENTICAÇÃO>/"
+
+    $ service slapd restart
+    ```
+
+    Executar no computador do serviço de autenticação:
+    ```
+    $ apt install ldap-utils
+    $ ldapsearch -H ldap://<IP_LDAP> -x -b dc=eb,dc=mil,dc=br # deve retornar até 500 usuários
+    ```
+
+2. Autorizar a pesquisa de mais de 500 usuários:
+    Executar no computador do serviço LDAP:
+    ```
+    $ nano sizelimit.ldif # Adicionar o seguinte conteúdo
+    dn: cn=config
+    changetype: modify
+    replace: olcSizeLimit
+    olcSizeLimit: 7000
+
+    $ ldapmodify -Q -Y EXTERNAL -H ldapi:// -f sizelimit.ldif
+    ```
+
+    Executar no computador do serviço de autenticação:
+    ```
+    $ apt install ldap-utils
+    $ ldapsearch -H ldap://<IP_LDAP> -x -b dc=eb,dc=mil,dc=br # deve retornar até 7000 usuários
+    ```

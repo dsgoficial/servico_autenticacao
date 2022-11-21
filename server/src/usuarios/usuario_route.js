@@ -8,6 +8,7 @@ const { verifyLogin, verifyAdmin } = require('../login')
 
 const usuarioCtrl = require('./usuario_ctrl')
 const usuarioSchema = require('./usuario_schema')
+const LDAPusersCtrl = require('./ldap_ctrl')
 
 const router = express.Router()
 
@@ -74,6 +75,59 @@ router.get(
     const msg = 'Usuários retornados com sucesso'
 
     return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+  })
+)
+
+router.post(
+  '/getldapusers',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.getLDAPusers(
+      req.body.ldapurl,
+      req.body.basedn)
+      .then(function (dados) {
+        if (typeof dados === 'string'){
+          dados = {'errno': dados};
+          var msg = 'Erro';
+        }else{
+          var msg = 'Usuários retornados com sucesso';
+        }
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
+  })
+)
+
+router.post(
+  '/saveldapenv',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.setLDAPenv(
+      req.body.basedn,
+      req.body.ldapurl,)
+      .then(function (dados) {
+        const msg = 'Arquivo salvo com sucesso';
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
+  })
+)
+
+router.get(
+  '/getldapenv',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.getLDAPenv().then(function (dados) {
+        const msg = 'Arquivo lido com sucesso';
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
+  })
+)
+
+router.post(
+  '/upsertldapuser',
+  asyncHandler(async (req, res, next) => {
+    LDAPusersCtrl.upsertLDAPuser(
+      req.body.usuario,
+    ).then(function (dados) {
+        const msg = req.body.usuario.length+' usuários sincronizados com sucesso';
+        return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
+    });
   })
 )
 

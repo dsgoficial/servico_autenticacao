@@ -29,6 +29,7 @@
     "joi": "^17.6.0",
     "jsdoc": "^3.6.10",
     "jsonwebtoken": "^8.5.1",
+    "ldapjs": "^2.3.3",
     "minimist": "^1.2.6",
     "nocache": "^3.0.4",
     "nodemon": "^2.0.18",

@@ -10,6 +10,16 @@ const { AppError, httpCode } = require("../utils");
 
 const { JWT_SECRET } = require("../config");
 
+const path = require('path');
+const configPath = path.join(__dirname, '..', '..', 'ldap.env');
+const ldap = require('ldapjs');
+const dotenv = require('dotenv');
+const fs = require('fs');
+const data = fs.readFileSync(configPath, 'utf-8');
+const config = dotenv.parse(data);
+const basedn = config.basedn;
+const ldapurl = config.ldapurl;
+
 const controller = {};
 
 const gravaLogin = async (usuarioId, aplicacaoId, connection) => {
@@ -43,6 +53,34 @@ const comparePassword = async (senhaFornecida, senhaDb) => {
   return bcrypt.compare(senhaFornecida, senhaDb);
 };
 
+const compareLDAPPassword = async (senha, usuario) => {
+  return new Promise(function(resolve, reject) {
+    const opts = {
+         filter: '(objectClass=inetOrgPerson)',
+         scope: 'sub',
+         attributes: ['givenName', 'sn', 'cn'],
+       };
+ 
+     const client = ldap.createClient({
+       url: [ldapurl]
+     });
+      
+     client.on('error', (err) => {
+       console.log(err);
+       resolve(false);
+     });
+     client.bind(`cn=${usuario},${basedn}`, senha, (err) => {
+      if(err){
+        console.log(err);
+        resolve(false);
+      }
+      else{
+        resolve(true);
+      }
+    });
+  });
+ }
+
 controller.login = async (usuario, senha, aplicacao) => {
   return db.conn.tx(async (t) => {
     const aplicacaoId = await t.oneOrNone(
@@ -66,8 +104,12 @@ controller.login = async (usuario, senha, aplicacao) => {
         httpCode.BadRequest
       );
     }
-
-    const correctPassword = await comparePassword(senha, usuarioDb.senha);
+    var correctPassword = false;
+    if (usuario.includes("ldap:")){
+      correctPassword = await compareLDAPPassword(senha, usuario.replace("ldap:",""));
+    }else{         
+      correctPassword = await comparePassword(senha, usuarioDb.senha);
+    }
     if (!correctPassword) {
       throw new AppError("Usuário ou senha inválida", httpCode.BadRequest);
     }
