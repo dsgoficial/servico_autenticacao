@@ -124,10 +124,8 @@ router.post(
   asyncHandler(async (req, res, next) => {
     LDAPusersCtrl.upsertLDAPuser(
       req.body.usuario,
-      req.body.nome,
-      req.body.nomeGuerra
     ).then(function (dados) {
-        const msg = 'Arquivo lido com sucesso';
+        const msg = req.body.usuario.length+' usuários sincronizados com sucesso';
         return res.sendJsonAndLog(true, msg, httpCode.OK, dados)
     });
   })

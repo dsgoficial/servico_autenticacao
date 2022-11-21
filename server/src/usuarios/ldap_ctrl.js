@@ -1,18 +1,18 @@
 'use strict'
 
 const ldap = require('ldapjs');
-var promise = require('bluebird');
 const fs = require('fs');
 
 const controller = {}
 const path = require('path')
 const configPath = path.join(__dirname, '..', '..', 'ldap.env')
 const dotenv = require('dotenv')
-const { db } = require('../database')
+const { db } = require('../database');
 
 controller.getLDAPusers = (ldapurl,basedn) => {
   return new Promise(function(resolve, reject) {
-    const opts = {
+
+   const opts = {
         filter: '(objectClass=inetOrgPerson)',
         scope: 'sub',
         attributes: ['givenName', 'sn', 'cn'],
@@ -33,7 +33,6 @@ controller.getLDAPusers = (ldapurl,basedn) => {
       resolve(err)
     })
     client.search(basedn, opts, (err, res) => {
-
         if(err){
             console.log(err);
             return err
@@ -50,7 +49,7 @@ controller.getLDAPusers = (ldapurl,basedn) => {
               console.log('next ldapsearch page');
             });
             res.on('end', (result) => {
-            resolve(users)
+              resolve(users)
             });
         }
       });
@@ -83,17 +82,14 @@ try{
 });
 }
 
-controller.upsertLDAPuser = (usuario,nome,nomeGuerra) => {
-  console.log(usuario, nome, nomeGuerra );
-  var login = 'ldap:'+usuario;
-  const hash = '$2a$10$ElIB/ay0mBLx2sqUgI1U6uMWwkrhda.lYhmjryHcRLJKb32d7EFeu';
-  const tipoPostoGradId = 8;
-  const tipoTurnoId = 3;
-  return db.conn.none(
-    `INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_posto_grad_id, tipo_turno_id)
-    VALUES ($<login>, $<hash>, $<nome>, $<nomeGuerra>, FALSE, FALSE, $<tipoPostoGradId>, $<tipoTurnoId>)`,
-    { login, hash, nome, nomeGuerra, tipoPostoGradId, tipoTurnoId }
-  )
-}
+controller.upsertLDAPuser = async (grouped_users) => {
+  return db.conn.tx(t => {
+    const queries = grouped_users.map(l => {
+        return t.none(`INSERT INTO dgeo.usuario(login, senha, nome, nome_guerra, administrador, ativo, tipo_posto_grad_id, tipo_turno_id) 
+        VALUES('ldap:${l.cn}','','${l.sn}','${l.givenName}',FALSE,FALSE,6,3) ON CONFLICT DO NOTHING;`, l);
+    });
+    return t.batch(queries); // array of n-nulls
+  })
+} 
 
 module.exports = controller

@@ -437,8 +437,6 @@ export default function APIProvider({ children }) {
   }
 
   const upsertLDAPuser = async (usuario, nome, nomeGuerra) => {
-    console.log(usuario, nome, nomeGuerra );
-
     const response = await callAxios(
       `/api/usuarios/upsertldapuser`,
       "POST",

@@ -154,12 +154,24 @@ export default function LDAPInfoCard() {
     
     const SyncLDAPClick = async () =>{
         var r;
-        for (var i=0; i<users.length ;i++){
-            setprogress(Math.round(i*100/users.length));
-            r = await upsertLDAPuser(users[i].cn, users[i].givenName,users[i].sn);
+        var count = 0 ;
+        var grouped_users = [];
+        // Para evitar o erro Too Many Requests NodeJs aceita apenas 150 req/min
+        // Um banco com 1000 registros para agrupamentos de 10 ==> 100 req (ainda passa!)
+        const n = 10; 
+        for (var i = 0, j = 0; i < users.length; i++) {
+            if (i >= n && i % n === 0){j++;}
+            grouped_users[j] = grouped_users[j] || [];
+            grouped_users[j].push(users[i])
+        }
+        const grouped_users_reversed = grouped_users.reverse();
+        for (var i=0; i<grouped_users_reversed.length ;i++){
+            setprogress(Math.round(i*100/grouped_users_reversed.length));
+            r = await upsertLDAPuser(grouped_users_reversed[i]);
             console.log(r);
         }
         setprogress(100);
+        showSnackbar(users.length+' usuários sincronizados com sucesso!', 'success');
     }
     
     function SyncButton(props) {
