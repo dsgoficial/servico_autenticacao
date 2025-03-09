@@ -109,6 +109,6 @@ sslcert
 
 test_request.http
 
-tsconfig.tsbuildinfo
-
 package-lock.json
+
+tsconfig.tsbuildinfo
