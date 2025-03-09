@@ -34,7 +34,7 @@ const MainStyle = styled(Box)(({ theme }) => ({
 }));
 
 const AppLayout = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
   // Simple toggle function for the drawer
   const handleDrawerToggle = () => {

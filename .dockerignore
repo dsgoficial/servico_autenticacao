@@ -1,14 +1,79 @@
+# Dependency directories
 node_modules
-npm-debug.log
-Dockerfile
-Dockerfile.dev
-.dockerignore
+*/node_modules
+
+# Environment files
+.env
+*.env
+**/*.env
+config.env
+config_testing.env
+*/config.env
+*/config_testing.env
+
+# Log files
+logs
+*/logs
+*.log
+npm-debug.log*
+
+# Build directories
+dist
+*/dist
+build
+*/build
+
+# Version control
 .git
 .gitignore
-build
-logs
-js_docs
-*.env
-./server/config.env
-./auth_server/node_modules
-./*/node_modules
+.github
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+.DS_Store
+
+# Test coverage
+coverage
+*/coverage
+
+# Debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+temp
+tmp
+.tmp
+*.tmp
+
+# Docker files (not needed in build context)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Documentation
+README.md
+CHANGELOG.md
+docs
+*/docs
+
+# Development configuration files
+nodemon.json
+.eslintrc*
+.prettierrc*
+*/.eslintrc*
+*/.prettierrc*
+tsconfig.json
+*/tsconfig.json
+jest.config.js
+*/jest.config.js
+
+# Package manager lock files (we'll be using package.json)
+yarn.lock
+package-lock.json
+*/yarn.lock
+*/package-lock.json

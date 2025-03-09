@@ -2,7 +2,6 @@
   "name": "auth-server",
   "version": "1.0.0",
   "description": "Serviço de Autenticação",
-  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/1cgeo/auth_server"
@@ -11,10 +10,9 @@
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
     "config": "node create_config.js",
     "build": "node create_build.js",
-    "create-docs": "node server/create_documentation.js",
-    "start": "pm2 start server/src/index.js --name auth-server",
-    "start-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run start\"",
-    "start-https": "pm2 start server/src/index.js --name auth-server-https -- --https "
+    "start": "pm2 start server/dist/index.js --name auth-server",
+    "start-dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "start-https": "pm2 start server/dist/index.js --name auth-server-https -- --https "
   },
   "keywords": [
     "Autenticação",
@@ -27,15 +25,15 @@
     "url": "https://github.com/1cgeo/auth_server/issues"
   },
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.2",
     "bluebird": "^3.7.2",
     "colors": "^1.4.0",
-    "commander": "^9.3.0",
-    "concurrently": "^7.2.2",
-    "fs-extra": "^10.1.0",
-    "inquirer": "8.2.2",
+    "commander": "^13.1.0",
+    "concurrently": "^9.1.2",
+    "fs-extra": "^11.3.0",
+    "inquirer": "12.4.3",
     "npm-run": "^5.0.1",
-    "pg-promise": "^10.11.1",
-    "pm2": "^5.2.0"
+    "pg-promise": "^11.10.2",
+    "pm2": "^5.4.3"
   }
 }

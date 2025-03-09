@@ -1,6 +1,6 @@
 // Path: config.ts
 import dotenv from 'dotenv';
-import Joi from 'joi';
+import { z } from 'zod';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -16,72 +16,78 @@ const configFile =
 
 const configPath = path.join(__dirname, '..', configFile);
 
-if (!fs.existsSync(configPath)) {
-  errorHandler.critical(
-    new AppError(
-      'Arquivo de configuração não encontrado. Configure o serviço primeiro.',
-    ),
-  );
+// First try to load from config file, but don't fail if it doesn't exist
+if (fs.existsSync(configPath)) {
+  dotenv.config({
+    path: configPath
+  });
+} else {
+  console.log(`Config file ${configPath} not found. Using environment variables instead.`);
 }
-
-dotenv.config({
-  path: configPath,
-});
 
 export const VERSION = '1.0.0';
 export const MIN_DATABASE_VERSION = '1.0.0';
 
-interface Config {
-  PORT: number;
-  DB_SERVER: string;
-  DB_PORT: number;
-  DB_NAME: string;
-  DB_USER: string;
-  DB_PASSWORD: string;
-  JWT_SECRET: string;
-  VERSION: string;
-  MIN_DATABASE_VERSION: string;
-}
-
-const configSchema = Joi.object<Config>({
-  PORT: Joi.number().integer().required(),
-  DB_SERVER: Joi.string().required(),
-  DB_PORT: Joi.number().integer().required(),
-  DB_NAME: Joi.string().required(),
-  DB_USER: Joi.string().required(),
-  DB_PASSWORD: Joi.string().required(),
-  JWT_SECRET: Joi.string().required(),
-  VERSION: Joi.string().required(),
-  MIN_DATABASE_VERSION: Joi.string().required(),
+// Define the config schema with Zod
+const configSchema = z.object({
+  PORT: z.coerce.number().int().positive(),
+  DB_SERVER: z.string().min(1),
+  DB_PORT: z.coerce.number().int().positive(),
+  DB_NAME: z.string().min(1),
+  DB_USER: z.string().min(1),
+  DB_PASSWORD: z.string().min(1),
+  JWT_SECRET: z.string().min(1),
+  VERSION: z.string().min(1),
+  MIN_DATABASE_VERSION: z.string().min(1)
 });
 
-const config: Config = {
-  PORT: Number(process.env.PORT),
-  DB_SERVER: process.env.DB_SERVER || '',
-  DB_PORT: Number(process.env.DB_PORT),
-  DB_NAME: process.env.DB_NAME || '',
-  DB_USER: process.env.DB_USER || '',
-  DB_PASSWORD: process.env.DB_PASSWORD || '',
-  JWT_SECRET: process.env.JWT_SECRET || '',
+// Infer the type from the schema
+type Config = z.infer<typeof configSchema>;
+
+// Create config object with defaults
+const rawConfig = {
+  PORT: process.env.PORT,
+  DB_SERVER: process.env.DB_SERVER,
+  DB_PORT: process.env.DB_PORT,
+  DB_NAME: process.env.DB_NAME,
+  DB_USER: process.env.DB_USER,
+  DB_PASSWORD: process.env.DB_PASSWORD,
+  JWT_SECRET: process.env.JWT_SECRET,
   VERSION,
-  MIN_DATABASE_VERSION,
+  MIN_DATABASE_VERSION
 };
 
-const { error } = configSchema.validate(config, {
-  abortEarly: false,
-});
-
-if (error) {
-  const { details } = error;
-  const message = details.map(i => i.message).join(',');
-
+// Validate and parse the config
+let config: Config;
+try {
+  config = configSchema.parse(rawConfig);
+} catch (error) {
+  // Handle validation errors from Zod
+  if (error instanceof z.ZodError) {
+    const details = error.errors.map(err => 
+      `${err.path.join('.')}: ${err.message}`
+    ).join(', ');
+    
+    errorHandler.critical(
+      new AppError(
+        `Configuração inválida. Configure novamente o serviço. Detalhes: ${details}`,
+        HttpCode.InternalError,
+        new Error(details)
+      )
+    );
+  }
+  
+  // Handle other types of errors
   errorHandler.critical(
     new AppError(
-      'Arquivo de configuração inválido. Configure novamente o serviço.',
+      'Erro inesperado ao validar configuração.',
       HttpCode.InternalError,
-      new Error(message),
-    ),
+      error instanceof Error ? error : new Error(String(error))
+    )
   );
+  
+  // This will never execute due to errorHandler.critical, but TypeScript needs it
+  throw new Error('Configuration validation failed');
 }
 
 export default config;

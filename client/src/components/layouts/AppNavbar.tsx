@@ -121,11 +121,11 @@ const AppNavbar = ({ onDrawerToggle }: AppNavbarProps) => {
           </IconButton>
 
           <Typography
-            variant={isSmallScreen ? 'body1' : 'h6'}
+            variant='h6'
             noWrap
             component="div"
             sx={{
-              fontSize: { xs: '0.9rem', sm: '1.25rem' },
+              fontSize: '1.25rem',
               color: theme.palette.text.primary,
             }}
           >
