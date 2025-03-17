@@ -5,7 +5,7 @@ import { logoutAndRedirect } from '../stores/authStore';
 import { tokenService } from '../services/tokenService';
 
 // Access environment variables with correct Vite syntax
-const apiUrl = import.meta.env?.VITE_API_URL || 'http://localhost:3010';
+const apiUrl = import.meta.env?.VITE_API_URL || '/';
 
 // Create axios instance with default config
 const apiClient: AxiosInstance = axios.create({
