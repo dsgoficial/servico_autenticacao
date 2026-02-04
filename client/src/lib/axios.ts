@@ -33,9 +33,12 @@ apiClient.interceptors.request.use(
 // Response interceptor to handle errors
 apiClient.interceptors.response.use(
   response => response,
-  (error: AxiosError) => {
+  (error: AxiosError<{ message?: string }>) => {
     const apiError: ApiError = {
-      message: error.message || 'An unexpected error occurred',
+      message:
+        error.response?.data?.message ||
+        error.message ||
+        'An unexpected error occurred',
       status: error.response?.status,
     };
 

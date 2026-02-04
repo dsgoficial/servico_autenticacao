@@ -90,7 +90,7 @@ export const signUp = async (data: {
 }): Promise<ApiResponse<any>> => {
   try {
     const response = await apiClient.post<ApiResponse<any>>(
-      '/api/usuarios/cadastro',
+      '/api/usuarios/',
       {
         usuario: data.usuario,
         senha: data.senha,
