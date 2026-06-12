@@ -9,6 +9,7 @@ import { Usuario, TipoPostoGrad, TipoTurno } from './usuario_types.js';
 interface UsuarioLogin {
   id: number;
   login: string;
+  uuid: string;
 }
 
 const controller = {
@@ -21,6 +22,21 @@ const controller = {
 
       if (!logins || logins.length === 0) {
         throw new AppError('Usuários não encontrados', HttpCode.NotFound);
+      }
+
+      // Reporta os UUIDs solicitados que não foram processados (inexistentes
+      // ou administradores), em vez de ignorá-los silenciosamente. A
+      // transação garante atomicidade: nenhum reset é aplicado se algum
+      // UUID solicitado for inválido.
+      const naoProcessados = usuariosUUID.filter(
+        uuid => !logins.some(l => l.uuid === uuid),
+      );
+
+      if (naoProcessados.length > 0) {
+        throw new AppError(
+          `Os seguintes usuários não foram encontrados ou são administradores: ${naoProcessados.join(', ')}`,
+          HttpCode.BadRequest,
+        );
       }
 
       const cs = new db.pgp.helpers.ColumnSet(['?id', 'senha']);
@@ -130,35 +146,40 @@ const controller = {
     administrador: boolean,
     novoUuid: string,
   ): Promise<void> => {
-    if (!administrador) {
-      const ultimoAdministrador = await db.conn.oneOrNone(
-        SQL.CHECK_OTHER_ADMIN_EXISTS,
-        { login },
-      );
-
-      if (!ultimoAdministrador) {
-        throw new AppError(
-          'Este usuário é o último administrador do sistema',
-          HttpCode.BadRequest,
+    await db.conn.tx(async t => {
+      // Verifica e atualiza na mesma transação para evitar corrida entre a
+      // checagem do "último administrador" e o UPDATE. O alvo é identificado
+      // pelo uuid do path (linha realmente editada), não pelo login do body.
+      if (!administrador) {
+        const outroAdministrador = await t.oneOrNone(
+          SQL.CHECK_OTHER_ADMIN_EXISTS,
+          { uuid },
         );
+
+        if (!outroAdministrador) {
+          throw new AppError(
+            'Este usuário é o último administrador do sistema',
+            HttpCode.BadRequest,
+          );
+        }
       }
-    }
 
-    const result = await db.conn.result(SQL.UPDATE_USER_COMPLETE, {
-      uuid,
-      login,
-      nome,
-      nomeGuerra,
-      tipoPostoGradId,
-      tipoTurnoId,
-      ativo,
-      administrador,
-      novoUuid,
+      const result = await t.result(SQL.UPDATE_USER_COMPLETE, {
+        uuid,
+        login,
+        nome,
+        nomeGuerra,
+        tipoPostoGradId,
+        tipoTurnoId,
+        ativo,
+        administrador,
+        novoUuid,
+      });
+
+      if (!result.rowCount || result.rowCount < 1) {
+        throw new AppError('Usuário não encontrado', HttpCode.NotFound);
+      }
     });
-
-    if (!result.rowCount || result.rowCount < 1) {
-      throw new AppError('Usuário não encontrado', HttpCode.NotFound);
-    }
   },
 
   updateSenha: async (

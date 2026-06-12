@@ -1,5 +1,5 @@
 // Path: features\users\components\UsersManageTable.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CsvBuilder } from 'filefy';
 import { Table } from '@/components/ui/Table';
 import { useUsers } from '@/hooks/useUsers';
@@ -14,7 +14,14 @@ import { MouseEvent } from 'react';
 
 const UsersManageTable = () => {
   const { users, isLoading } = useUsers();
-  const { selectedUsers, selectUsers } = useUserStore();
+  const { selectedUsers, selectUsers, clearSelection } = useUserStore();
+
+  // A seleção é global (zustand); limpa ao entrar e sair desta tela para
+  // não vazar para a tabela de autorização nem persistir após operações.
+  useEffect(() => {
+    clearSelection();
+    return () => clearSelection();
+  }, [clearSelection]);
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState<{
     open: boolean;

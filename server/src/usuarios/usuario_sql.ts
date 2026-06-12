@@ -1,7 +1,7 @@
 // Path: usuarios\usuario_sql.ts
 export const SQL = {
   GET_NON_ADMIN_USERS: `
-      SELECT id, login FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID:csv>) AND administrador IS FALSE
+      SELECT id, login, uuid FROM dgeo.usuario WHERE uuid IN ($<usuariosUUID:csv>) AND administrador IS FALSE
     `,
 
   UPDATE_USER_PASSWORD: `
@@ -48,7 +48,7 @@ export const SQL = {
     `,
 
   CHECK_OTHER_ADMIN_EXISTS: `
-      SELECT id FROM dgeo.usuario WHERE login != $<login> AND administrador IS TRUE AND ativo IS TRUE LIMIT 1
+      SELECT id FROM dgeo.usuario WHERE uuid != $<uuid> AND administrador IS TRUE AND ativo IS TRUE LIMIT 1
     `,
 
   UPDATE_USER_COMPLETE: `

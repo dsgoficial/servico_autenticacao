@@ -14,7 +14,7 @@ const verifyAdmin = asyncHandler(
     const decoded = await validateToken(token);
 
     if (!decoded.uuid) {
-      throw new AppError('Falta informação de usuário');
+      throw new AppError('Falta informação de usuário', HttpCode.Unauthorized);
     }
 
     const response = await db.conn.oneOrNone<{ administrador: boolean }>(

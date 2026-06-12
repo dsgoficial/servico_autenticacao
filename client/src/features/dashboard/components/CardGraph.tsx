@@ -4,6 +4,7 @@ import { Typography, Card, Grid, CardContent } from '@mui/material';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { styled } from '@mui/material/styles';
 
 interface CardGraphProps {
@@ -58,6 +59,26 @@ export const CardGraph = ({
     return series[series.length - 1][seriesKey] || 0;
   }, [series, seriesKey]);
 
+  // Tendência: alta (verde), queda (vermelho) ou estável (neutro).
+  // Sem este terceiro caso, variação 0 caía no ramo de queda.
+  const trend =
+    variation > 0
+      ? {
+          icon: <ArrowDropUpIcon sx={{ color: 'success.main' }} />,
+          color: 'success.main',
+        }
+      : variation < 0
+        ? {
+            icon: <ArrowDropDownIcon sx={{ color: 'error.main' }} />,
+            color: 'error.main',
+          }
+        : {
+            icon: (
+              <RemoveIcon sx={{ color: 'text.secondary', fontSize: '1rem' }} />
+            ),
+            color: 'text.secondary',
+          };
+
   return (
     <Card elevation={3}>
       <CardContentStyle>
@@ -81,39 +102,19 @@ export const CardGraph = ({
         <Typography variant="subtitle1" color="textSecondary">
           {label}
         </Typography>
-        {variation > 0 ? (
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item>
-              <ArrowDropUpIcon sx={{ color: 'success.main' }} />
-            </Grid>
-            <Grid item>
-              <Typography variant="subtitle2" sx={{ color: 'success.main' }}>
-                {`${variation}%`}
-              </Typography>
-            </Grid>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item>{trend.icon}</Grid>
+          <Grid item>
+            <Typography variant="subtitle2" sx={{ color: trend.color }}>
+              {`${Math.abs(variation)}%`}
+            </Typography>
           </Grid>
-        ) : (
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item>
-              <ArrowDropDownIcon sx={{ color: 'error.main' }} />
-            </Grid>
-            <Grid item>
-              <Typography variant="subtitle2" sx={{ color: 'error.main' }}>
-                {`${Math.abs(variation)}%`}
-              </Typography>
-            </Grid>
-          </Grid>
-        )}
+        </Grid>
       </CardContentStyle>
     </Card>
   );

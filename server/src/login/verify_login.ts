@@ -15,7 +15,7 @@ const verifyLogin = asyncHandler(
     const decoded = await validateToken(token);
 
     if (!decoded.uuid) {
-      throw new AppError('Falta informação de usuário');
+      throw new AppError('Falta informação de usuário', HttpCode.Unauthorized);
     }
 
     if (req.params.usuario_uuid && decoded.uuid !== req.params.usuario_uuid) {

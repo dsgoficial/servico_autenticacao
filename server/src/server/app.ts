@@ -75,8 +75,13 @@ app.use('/api/js_docs', express.static(path.join(__dirname, '..', 'js_docs')));
 // Serve Client
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
-app.get('/*', (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+app.get('/*', (req: Request, res: Response, next: NextFunction) => {
+  // Não serve o index.html do SPA para rotas de API inexistentes; deixa
+  // cair no middleware 404 abaixo para retornar JSON em vez de HTML 200.
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  return res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
 app.use((req: Request, _res: Response, next: NextFunction) => {

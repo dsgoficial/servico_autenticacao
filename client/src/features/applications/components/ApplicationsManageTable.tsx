@@ -1,6 +1,6 @@
 // Path: features\applications\components\ApplicationsManageTable.tsx
 import React from 'react';
-import { Box, TextField, Chip, Alert } from '@mui/material';
+import { Box, TextField, Chip, Alert, Button } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { Application } from '@/types/application';
 import { useApplications } from '@/hooks/useApplications';
@@ -17,6 +17,7 @@ export const ApplicationsManageTable: React.FC = () => {
     createApplication,
     updateApplication,
     deleteApplication,
+    refetch,
   } = useApplications();
 
   // Table columns definition
@@ -88,10 +89,18 @@ export const ApplicationsManageTable: React.FC = () => {
     }
   };
 
-  // If there's an error, display it
+  // If there's an error, display it with a retry action
   if (isError) {
     return (
-      <Alert severity="error" sx={{ mt: 2 }}>
+      <Alert
+        severity="error"
+        sx={{ mt: 2 }}
+        action={
+          <Button color="inherit" size="small" onClick={() => refetch()}>
+            Tentar novamente
+          </Button>
+        }
+      >
         Erro ao carregar aplicações: {error}
       </Alert>
     );

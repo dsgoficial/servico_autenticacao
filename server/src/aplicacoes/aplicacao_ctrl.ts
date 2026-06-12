@@ -52,7 +52,7 @@ const controller = {
         );
       }
 
-      t.none(SQL.INSERT_APLICACAO, { nome, nomeAbrev, ativa });
+      await t.none(SQL.INSERT_APLICACAO, { nome, nomeAbrev, ativa });
     });
   },
 
@@ -108,7 +108,7 @@ const controller = {
         );
       }
 
-      t.none(SQL.UPDATE_APLICACAO, { id, nome, nomeAbrev, ativa });
+      await t.none(SQL.UPDATE_APLICACAO, { id, nome, nomeAbrev, ativa });
     });
   },
 };

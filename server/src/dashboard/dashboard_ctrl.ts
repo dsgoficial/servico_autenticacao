@@ -59,7 +59,7 @@ const controller = {
   ): Promise<LoginAplicacao[]> => {
     const aplicacoes = await db.conn.any<AplicacaoLoginCount>(
       SQL.GET_APLICACOES_WITH_LOGINS,
-      { total: total - 1, max: max - 1 },
+      { total: total - 1, max },
     );
 
     const dados = await db.conn.any<{
@@ -97,7 +97,7 @@ const controller = {
   getLoginsUsuarios: async (total = 14, max = 10): Promise<LoginUsuario[]> => {
     const usuarios = await db.conn.any<UsuarioLoginCount>(
       SQL.GET_USUARIOS_WITH_LOGINS,
-      { total: total - 1, max: max - 1 },
+      { total: total - 1, max },
     );
 
     const dados = await db.conn.any<{

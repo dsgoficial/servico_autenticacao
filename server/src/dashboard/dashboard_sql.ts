@@ -58,23 +58,23 @@ export const SQL = {
   `,
 
   GET_USUARIOS_WITH_LOGINS: `
-    SELECT COALESCE(pg.nome_abrev || ' ' || u.nome_guerra, 'Usuário deletado') AS usuario, count(l.id) AS logins 
+    SELECT COALESCE(pg.nome_abrev || ' ' || u.nome_guerra || ' (' || u.login || ')', 'Usuário deletado') AS usuario, count(l.id) AS logins
     FROM dgeo.login AS l
     LEFT JOIN dgeo.usuario AS u ON u.id = l.usuario_id
     LEFT JOIN dominio.tipo_posto_grad AS pg ON pg.code = u.tipo_posto_grad_id
     WHERE l.data_login::date >= (now() - interval '$<total:raw> day')::date
-    GROUP BY pg.nome_abrev || ' ' || u.nome_guerra
+    GROUP BY u.id, pg.nome_abrev, u.nome_guerra, u.login
     ORDER BY count(l.id) DESC
     LIMIT $<max:raw>
   `,
 
   GET_LOGINS_USUARIOS_BY_DAY: `
-    SELECT day::date AS data_login, COALESCE(pg.nome_abrev || ' ' || u.nome_guerra, 'Usuário deletado') AS usuario, count(l.id) AS logins FROM 
+    SELECT day::date AS data_login, COALESCE(pg.nome_abrev || ' ' || u.nome_guerra || ' (' || u.login || ')', 'Usuário deletado') AS usuario, count(l.id) AS logins FROM
     generate_series((now() - interval '$<total:raw> day')::date, now()::date, interval '1 day') AS day
     LEFT JOIN dgeo.login AS l ON l.data_login::date = day.day::date
     LEFT JOIN dgeo.usuario AS u ON u.id = l.usuario_id
     LEFT JOIN dominio.tipo_posto_grad AS pg ON pg.code = u.tipo_posto_grad_id
-    GROUP BY day::date, pg.nome_abrev || ' ' || u.nome_guerra
-    ORDER BY day::date, pg.nome_abrev || ' ' || u.nome_guerra
+    GROUP BY day::date, u.id, pg.nome_abrev, u.nome_guerra, u.login
+    ORDER BY day::date, u.id
   `,
 };

@@ -53,8 +53,9 @@ const UserPasswordCard = () => {
   });
 
   const onSubmit: SubmitHandler<UserPasswordChange> = data => {
-    updatePassword(data);
-    reset();
+    // Só limpa o formulário se a troca for bem-sucedida; em caso de erro
+    // (ex.: senha atual incorreta) o usuário não perde o que digitou.
+    updatePassword(data, { onSuccess: () => reset() });
   };
 
   return (

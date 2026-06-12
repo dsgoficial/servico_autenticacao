@@ -36,7 +36,7 @@ class Database implements DatabaseInterface {
       .then(obj => {
         obj.done(); // success, release connection;
       })
-      .catch(errorHandler.critical);
+      .catch(err => errorHandler.critical(err)); // mantém o `this` de errorHandler
 
     this.conn = conn;
   }

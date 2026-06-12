@@ -85,8 +85,13 @@ export const useUsers = () => {
       uuid: string;
       userData: UserUpdateRequest;
     }) => updateUser(uuid, userData),
-    onSuccess: data => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: USERS_KEY });
+      // Invalida também o perfil individual para evitar dados obsoletos
+      // (staleTime) quando um admin edita a própria conta.
+      queryClient.invalidateQueries({
+        queryKey: [USER_PROFILE_KEY, variables.uuid],
+      });
       enqueueSnackbar(data.message || 'Usuário atualizado com sucesso', {
         variant: 'success',
       });

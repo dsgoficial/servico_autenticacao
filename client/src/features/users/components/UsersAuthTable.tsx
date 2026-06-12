@@ -1,5 +1,5 @@
 // Path: features\users\components\UsersAuthTable.tsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Table } from '@/components/ui/Table';
 import { useUsers } from '@/hooks/useUsers';
 import { User } from '@/types/user';
@@ -14,7 +14,14 @@ import { MouseEvent } from 'react';
 
 const UsersAuthTable = () => {
   const { users, isLoading } = useUsers();
-  const { selectedUsers, selectUsers } = useUserStore();
+  const { selectedUsers, selectUsers, clearSelection } = useUserStore();
+
+  // A seleção é global (zustand); limpa ao entrar e sair desta tela para
+  // não vazar para a tabela de gerência nem persistir após operações.
+  useEffect(() => {
+    clearSelection();
+    return () => clearSelection();
+  }, [clearSelection]);
 
   // Filter out admin users for this view
   const nonAdminUsers = users.filter(user => !user.administrador);
