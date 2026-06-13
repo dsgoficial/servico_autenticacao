@@ -13,6 +13,9 @@
     "build": "tsc",
     "type-check": "tsc -p tsconfig.json --noEmit",
     "type-check:watch": "tsc -p tsconfig.test.json --noEmit --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint \"src/**/*.ts\"",
     "lint-full": "npm run type-check && npm run lint",
     "knip": "knip",
@@ -58,13 +61,15 @@
     "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
+    "@vitest/coverage-v8": "^2.1.9",
     "eslint": "^9.22.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.3",
     "knip": "^5.45.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vitest": "^2.1.9"
   },
   "license": "MIT"
 }
