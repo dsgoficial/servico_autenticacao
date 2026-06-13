@@ -75,18 +75,20 @@ try {
         new Error(details)
       )
     );
+  } else {
+    // Handle other types of errors
+    errorHandler.critical(
+      new AppError(
+        'Erro inesperado ao validar configuração.',
+        HttpCode.InternalError,
+        error instanceof Error ? error : new Error(String(error))
+      )
+    );
   }
-  
-  // Handle other types of errors
-  errorHandler.critical(
-    new AppError(
-      'Erro inesperado ao validar configuração.',
-      HttpCode.InternalError,
-      error instanceof Error ? error : new Error(String(error))
-    )
-  );
-  
-  // This will never execute due to errorHandler.critical, but TypeScript needs it
+
+  // errorHandler.critical agenda process.exit(1) de forma assíncrona; o throw
+  // abaixo interrompe a avaliação do módulo de forma síncrona e garante que
+  // `config` nunca seja exportado não inicializado.
   throw new Error('Configuration validation failed');
 }
 

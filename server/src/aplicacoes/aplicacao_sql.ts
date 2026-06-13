@@ -21,7 +21,7 @@ export const SQL = {
     `,
 
   CHECK_APLICACAO_EXISTS: `
-      SELECT id FROM dgeo.aplicacao WHERE nome = $<nome> OR nome_abrev = $<nomeAbrev>
+      SELECT id FROM dgeo.aplicacao WHERE nome = $<nome> OR nome_abrev = $<nomeAbrev> LIMIT 1
     `,
 
   INSERT_APLICACAO: `

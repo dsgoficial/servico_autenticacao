@@ -12,6 +12,17 @@ interface UsuarioLogin {
   uuid: string;
 }
 
+// Erro de violação de unicidade do PostgreSQL (constraint UNIQUE de login). O
+// CHECK_USER_EXISTS é best-effort; sob concorrência duas requisições podem
+// passar a checagem e a segunda violar a constraint — traduzimos o 23505 para
+// um 400 amigável em vez de vazar um 500.
+const PG_UNIQUE_VIOLATION = '23505';
+
+const isUniqueViolation = (err: unknown): boolean =>
+  typeof err === 'object' &&
+  err !== null &&
+  (err as { code?: string }).code === PG_UNIQUE_VIOLATION;
+
 const controller = {
   resetaSenhaUsuarios: async (usuariosUUID: string[]): Promise<void> => {
     await db.conn.tx(async t => {
@@ -70,7 +81,28 @@ const controller = {
     usuariosUUID: string[],
     ativo: boolean,
   ): Promise<void> => {
-    await db.conn.none(SQL.UPDATE_USER_AUTHORIZATION, { usuariosUUID, ativo });
+    await db.conn.tx(async t => {
+      // Mesmo padrão de resetaSenhaUsuarios: identifica os não-admin alvo e
+      // reporta os UUIDs não processados (inexistentes ou administradores) em
+      // vez de retornar sucesso silencioso quando nada é atualizado. A
+      // transação garante atomicidade (tudo ou nada).
+      const usuarios = (await t.any(SQL.GET_NON_ADMIN_USERS, {
+        usuariosUUID,
+      })) as UsuarioLogin[];
+
+      const naoProcessados = usuariosUUID.filter(
+        uuid => !usuarios.some(u => u.uuid === uuid),
+      );
+
+      if (naoProcessados.length > 0) {
+        throw new AppError(
+          `Os seguintes usuários não foram encontrados ou são administradores: ${naoProcessados.join(', ')}`,
+          HttpCode.BadRequest,
+        );
+      }
+
+      await t.none(SQL.UPDATE_USER_AUTHORIZATION, { usuariosUUID, ativo });
+    });
   },
 
   getTipoPostoGrad: async (): Promise<TipoPostoGrad[]> => {
@@ -109,29 +141,39 @@ const controller = {
 
     const hash = await bcrypt.hash(senha, 10);
 
-    if (uuid) {
-      await db.conn.none(SQL.CREATE_USER_WITH_UUID, {
-        login,
-        hash,
-        nome,
-        nomeGuerra,
-        tipoPostoGradId,
-        tipoTurnoId,
-        ativo,
-        administrador,
-        uuid,
-      });
-    } else {
-      await db.conn.none(SQL.CREATE_USER, {
-        login,
-        hash,
-        nome,
-        nomeGuerra,
-        tipoPostoGradId,
-        tipoTurnoId,
-        ativo,
-        administrador,
-      });
+    try {
+      if (uuid) {
+        await db.conn.none(SQL.CREATE_USER_WITH_UUID, {
+          login,
+          hash,
+          nome,
+          nomeGuerra,
+          tipoPostoGradId,
+          tipoTurnoId,
+          ativo,
+          administrador,
+          uuid,
+        });
+      } else {
+        await db.conn.none(SQL.CREATE_USER, {
+          login,
+          hash,
+          nome,
+          nomeGuerra,
+          tipoPostoGradId,
+          tipoTurnoId,
+          ativo,
+          administrador,
+        });
+      }
+    } catch (err) {
+      if (isUniqueViolation(err)) {
+        throw new AppError(
+          'Usuário com esse login já existe',
+          HttpCode.BadRequest,
+        );
+      }
+      throw err;
     }
   },
 
@@ -150,7 +192,10 @@ const controller = {
       // Verifica e atualiza na mesma transação para evitar corrida entre a
       // checagem do "último administrador" e o UPDATE. O alvo é identificado
       // pelo uuid do path (linha realmente editada), não pelo login do body.
-      if (!administrador) {
+      // Dispara tanto ao rebaixar (administrador=false) quanto ao desativar
+      // (ativo=false): como login/verifyAdmin exigem `ativo IS TRUE`, desativar
+      // o último admin também causaria lockout administrativo.
+      if (!administrador || !ativo) {
         const outroAdministrador = await t.oneOrNone(
           SQL.CHECK_OTHER_ADMIN_EXISTS,
           { uuid },
@@ -248,7 +293,7 @@ const controller = {
     });
 
     if (!usuario) {
-      throw new AppError('Usuário não encontrado', HttpCode.BadRequest);
+      throw new AppError('Usuário não encontrado', HttpCode.NotFound);
     }
 
     return usuario;
@@ -279,14 +324,24 @@ const controller = {
 
     const hash = await bcrypt.hash(senha, 10);
 
-    await db.conn.none(SQL.CREATE_REGULAR_USER, {
-      login,
-      hash,
-      nome,
-      nomeGuerra,
-      tipoPostoGradId,
-      tipoTurnoId,
-    });
+    try {
+      await db.conn.none(SQL.CREATE_REGULAR_USER, {
+        login,
+        hash,
+        nome,
+        nomeGuerra,
+        tipoPostoGradId,
+        tipoTurnoId,
+      });
+    } catch (err) {
+      if (isUniqueViolation(err)) {
+        throw new AppError(
+          'Usuário com esse login já existe',
+          HttpCode.BadRequest,
+        );
+      }
+      throw err;
+    }
   },
 };
 

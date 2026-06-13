@@ -11,6 +11,16 @@ import {
   UsuarioLoginCount,
 } from './dashboard_types.js';
 
+// Formata um Date como 'YYYY-MM-DD' usando os componentes LOCAIS. As colunas
+// DATE do Postgres chegam como Date à meia-noite local; usar toISOString()
+// (UTC) deslocaria o dia em -1 em fusos com offset positivo.
+const toLocalDateString = (d: Date): string => {
+  const ano = d.getFullYear();
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  const dia = String(d.getDate()).padStart(2, '0');
+  return `${ano}-${mes}-${dia}`;
+};
+
 const controller = {
   getUsuariosLogados: async (): Promise<UsuarioLogado[]> => {
     return db.conn.any<UsuarioLogado>(SQL.GET_USUARIOS_LOGADOS);
@@ -31,26 +41,30 @@ const controller = {
   },
 
   getLoginsDia: async (total = 14): Promise<LoginDia[]> => {
-    const result = await db.conn.any<LoginDia>(SQL.GET_LOGINS_DIA, {
-      total: total - 1,
-    });
-    result.forEach(r => {
-      r.logins = +r.logins;
-    });
+    // data_login vem como Date (coluna DATE) e logins como string (count);
+    // normaliza para o contrato declarado em LoginDia (data_login: string,
+    // logins: number), com a data no fuso local.
+    const result = await db.conn.any<{ data_login: Date; logins: string }>(
+      SQL.GET_LOGINS_DIA,
+      { total: total - 1 },
+    );
 
-    return result;
+    return result.map(r => ({
+      data_login: toLocalDateString(r.data_login),
+      logins: +r.logins,
+    }));
   },
 
   getLoginsMes: async (total = 12): Promise<LoginMes[]> => {
-    const result = await db.conn.any<LoginMes>(SQL.GET_LOGINS_MES, {
-      total: total - 1,
-    });
+    const result = await db.conn.any<{ data_login: Date; logins: string }>(
+      SQL.GET_LOGINS_MES,
+      { total: total - 1 },
+    );
 
-    result.forEach(r => {
-      r.logins = +r.logins;
-    });
-
-    return result;
+    return result.map(r => ({
+      data_login: toLocalDateString(r.data_login),
+      logins: +r.logins,
+    }));
   },
 
   getLoginsAplicacoes: async (
@@ -73,10 +87,10 @@ const controller = {
 
     const resultDict: { [key: string]: LoginAplicacao } = {};
     dados.forEach(d => {
-      const dateKey = d.data_login.toISOString();
+      const dateKey = toLocalDateString(d.data_login);
       if (!(dateKey in resultDict)) {
         resultDict[dateKey] = {
-          data: d.data_login.toISOString().split('T')[0],
+          data: dateKey,
           outros: 0,
         };
         aplicacoesFixed.forEach(a => {
@@ -111,10 +125,10 @@ const controller = {
 
     const resultDict: { [key: string]: LoginUsuario } = {};
     dados.forEach(d => {
-      const dateKey = d.data_login.toISOString();
+      const dateKey = toLocalDateString(d.data_login);
       if (!(dateKey in resultDict)) {
         resultDict[dateKey] = {
-          data: d.data_login.toISOString().split('T')[0],
+          data: dateKey,
           outros: 0,
         };
         usuariosFixed.forEach(u => {

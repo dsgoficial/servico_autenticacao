@@ -1,7 +1,6 @@
 // Path: database\db.ts
 import pgPromise from 'pg-promise';
 import promise from 'bluebird';
-import { errorHandler } from '../utils/index.js';
 import config from '../config.js';
 import { DatabaseInterface } from './database_types.js';
 
@@ -31,12 +30,12 @@ class Database implements DatabaseInterface {
 
     const conn = this.pgp(cn);
 
-    await conn
-      .connect()
-      .then(obj => {
-        obj.done(); // success, release connection;
-      })
-      .catch(err => errorHandler.critical(err)); // mantém o `this` de errorHandler
+    // Testa a conexão e só expõe `this.conn` em caso de sucesso. Se a conexão
+    // falhar, o erro é propagado para o init() (index.ts), que loga e encerra
+    // via errorHandler.critical — evitando seguir a inicialização com uma
+    // conexão inválida e sem chamar critical em dois lugares.
+    const obj = await conn.connect();
+    obj.done(); // sucesso, libera a conexão de teste
 
     this.conn = conn;
   }

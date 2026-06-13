@@ -7,9 +7,11 @@ const totalQuery = z.object({
     .string()
     .optional()
     .transform(val => (val ? Number(val) : undefined))
-    .refine(val => val === undefined || (!isNaN(val) && val > 0), {
-      message: 'Total must be a positive number',
-    }),
+    .refine(
+      val =>
+        val === undefined || (Number.isInteger(val) && val > 0 && val <= 366),
+      { message: 'Total must be a positive integer up to 366' },
+    ),
 });
 
 const totalMaxQuery = z.object({
@@ -17,16 +19,20 @@ const totalMaxQuery = z.object({
     .string()
     .optional()
     .transform(val => (val ? Number(val) : undefined))
-    .refine(val => val === undefined || (!isNaN(val) && val > 0), {
-      message: 'Total must be a positive number',
-    }),
+    .refine(
+      val =>
+        val === undefined || (Number.isInteger(val) && val > 0 && val <= 366),
+      { message: 'Total must be a positive integer up to 366' },
+    ),
   max: z
     .string()
     .optional()
     .transform(val => (val ? Number(val) : undefined))
-    .refine(val => val === undefined || (!isNaN(val) && val > 0), {
-      message: 'Max must be a positive number',
-    }),
+    .refine(
+      val =>
+        val === undefined || (Number.isInteger(val) && val > 0 && val <= 100),
+      { message: 'Max must be a positive integer up to 100' },
+    ),
 });
 
 // Infer TypeScript types from schemas

@@ -34,11 +34,12 @@ class ErrorHandler implements ErrorHandlerInterface {
   critical(err: Error | AppError, res: Response | null = null): void {
     this.log(err, res);
     // Aguarda o flush dos transports (winston/DailyRotateFile é assíncrono)
-    // antes de encerrar, para não perder o log crítico. Fallback de 2s caso
-    // o evento 'finish' não dispare.
+    // antes de encerrar, para não perder o log crítico. O timer de 2s é um
+    // fallback que garante o process.exit(1) caso o evento 'finish' não
+    // dispare — por isso NÃO usamos unref(): o timer precisa manter o event
+    // loop vivo até a saída, senão o processo poderia terminar com código 0.
     const exit = (): void => process.exit(1);
     const timer = setTimeout(exit, 2000);
-    timer.unref?.();
     logger.on('finish', () => {
       clearTimeout(timer);
       exit();
